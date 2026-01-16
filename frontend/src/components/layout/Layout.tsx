@@ -1,13 +1,17 @@
-import { Outlet } from 'react-router-dom';
-import { Navbar } from './Navbar';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
-export const Layout = () => {
+interface LayoutProps {
+  children: React.ReactNode;
+  showFooter?: boolean;
+}
+
+export function Layout({ children, showFooter = true }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="pt-16">
-        <Outlet />
-      </main>
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">{children}</main>
+      {showFooter && <Footer />}
     </div>
   );
-};
+}

@@ -76,7 +76,7 @@ private void loadTemplates() {
                 <p><strong>Vendeur:</strong> {{seller_name}}</p>
                 <p><strong>Acheteur:</strong> {{buyer_name}}</p>
                 <p><strong>Détails du véhicule:</strong> {{vehicle_details}}</p>
-                <p><strong>Prix de vente:</strong> {{sale_price}} €</p>
+                <p><strong>Prix de vente:</strong> {{sale_price}} FCFA</p>
                 <p><strong>Date de vente:</strong> {{sale_date}}</p>
                 {{vehicle_category}}
                 {{first_registration}}
@@ -102,7 +102,7 @@ private void loadTemplates() {
                 <p><strong>Client:</strong> {{client_info}}</p>
                 <p><strong>Véhicules commandés:</strong></p>
                 {{vehicle_list}}
-                <p><strong>Montant total:</strong> {{total_amount}} €</p>
+                <p><strong>Montant total:</strong> {{total_amount}} FCFA</p>
                 <p><strong>Date de commande:</strong> {{order_date}}</p>
                 {{vehicle_category}}
                 {{helmet_included}}
@@ -128,9 +128,9 @@ private void loadTemplates() {
                 <p><strong>Date:</strong> {{invoice_date}}</p>
                 <h3>Détails des articles:</h3>
                 {{items_table}}
-                <p><strong>Sous-total:</strong> {{subtotal}} €</p>
-                <p><strong>TVA ({{tax_rate}}):</strong> {{taxes}} €</p>
-                <h3><strong>Total à payer:</strong> {{total}} €</h3>
+                <p><strong>Sous-total:</strong> {{subtotal}} FCFA</p>
+                <p><strong>TVA ({{tax_rate}}):</strong> {{taxes}} FCFA</p>
+                <h3><strong>Total à payer:</strong> {{total}} FCFA</h3>
                 <p><strong>Mode de paiement:</strong> {{payment_method}}</p>
             </body>
             </html>

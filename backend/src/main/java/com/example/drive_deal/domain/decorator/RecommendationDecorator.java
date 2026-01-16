@@ -59,7 +59,7 @@ public class RecommendationDecorator extends VehicleDisplayDecorator {
             recHtml.append("    <div class=\"recommendation-item\">\n");
             recHtml.append("      <h5>").append(rec.get("model")).append("</h5>\n");
             recHtml.append("      <p>").append(rec.get("reason")).append("</p>\n");
-            recHtml.append("      <p><strong>").append(rec.get("price")).append(" €</strong></p>\n");
+            recHtml.append("      <p><strong>").append(rec.get("price")).append(" FCFA</strong></p>\n");
             recHtml.append("    </div>\n");
         }
         

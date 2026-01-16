@@ -34,11 +34,11 @@ public class OptionsDecorator extends VehicleDisplayDecorator {
             options.add("Capteurs de stationnement");
             
             if (car.getHasSunroof() != null && !car.getHasSunroof()) {
-                options.add("Toit ouvrant électrique (+1,200€)");
+                options.add("Toit ouvrant électrique (+1,200FCFA)");
             }
             
             if (car.getDoors() != null && car.getDoors() == 3) {
-                options.add("5 portes (+800€)");
+                options.add("5 portes (+800FCFA)");
             }
         } 
         else if (getVehicle() instanceof ScooterEntity) {
@@ -48,7 +48,7 @@ public class OptionsDecorator extends VehicleDisplayDecorator {
             options.add("Antivol intégré");
             
             if (scooter.getHasTopCase() != null && !scooter.getHasTopCase()) {
-                options.add("Top-case (+150€)");
+                options.add("Top-case (+150FCFA)");
             }
         }
         

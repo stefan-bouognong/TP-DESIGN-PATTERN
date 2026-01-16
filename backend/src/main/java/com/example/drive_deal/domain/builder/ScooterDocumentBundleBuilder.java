@@ -121,9 +121,9 @@ public class ScooterDocumentBundleBuilder extends DocumentBundleBuilder {
             itemsTable.append("<tr>")
                 .append("<td>").append(model).append("</td>")
                 .append("<td>").append(item.getQuantity()).append("</td>")
-                .append("<td>").append(item.getUnitPrice()).append("€</td>")
+                .append("<td>").append(item.getUnitPrice()).append("FCFA</td>")
                 .append("<td>").append(item.getUnitPrice().multiply(
-                    new java.math.BigDecimal(item.getQuantity()))).append("€</td>")
+                    new java.math.BigDecimal(item.getQuantity()))).append("FCFA</td>")
                 .append("</tr>");
         }
         

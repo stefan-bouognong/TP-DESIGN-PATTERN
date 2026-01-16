@@ -84,7 +84,7 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
             vehicleList.append("<li>")
                 .append(item.getVehicle().getModel())
                 .append(" x").append(item.getQuantity())
-                .append(" - ").append(item.getUnitPrice()).append("€")
+                .append(" - ").append(item.getUnitPrice()).append("FCFA")
                 .append("</li>");
         }
         vehicleList.append("</ul>");
@@ -114,9 +114,9 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
             itemsTable.append("<tr>")
                 .append("<td>").append(item.getVehicle().getModel()).append("</td>")
                 .append("<td>").append(item.getQuantity()).append("</td>")
-                .append("<td>").append(item.getUnitPrice()).append("€</td>")
+                .append("<td>").append(item.getUnitPrice()).append("FCFA</td>")
                 .append("<td>").append(item.getUnitPrice().multiply(
-                    new java.math.BigDecimal(item.getQuantity()))).append("€</td>")
+                    new java.math.BigDecimal(item.getQuantity()))).append("FCFA</td>")
                 .append("</tr>");
         }
         

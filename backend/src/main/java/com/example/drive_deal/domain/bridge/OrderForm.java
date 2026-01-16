@@ -37,8 +37,8 @@ public class OrderForm extends Form {
             
             for (OrderItemEntity item : order.getItems()) {
                 String itemLabel = item.getVehicle().getModel() + " x" + item.getQuantity();
-                String itemValue = item.getUnitPrice() + " € (Total: " + 
-                    item.getUnitPrice().multiply(new java.math.BigDecimal(item.getQuantity())) + " €)";
+                String itemValue = item.getUnitPrice() + " FCFA (Total: " + 
+                    item.getUnitPrice().multiply(new java.math.BigDecimal(item.getQuantity())) + " FCFA)";
                 builder.append(renderer.renderField("item_" + item.getId(), itemLabel, itemValue));
             }
         }
@@ -47,7 +47,7 @@ public class OrderForm extends Form {
         if (includeFinancialDetails) {
             builder.append(renderer.renderSection("Détails financiers"));
             builder.append(renderer.renderField("totalAmount", "Montant total", 
-                order.getTotalAmount() + " €"));
+                order.getTotalAmount() + " FCFA"));
             
             // Informations spécifiques au type de commande
             if (order instanceof com.example.drive_deal.entity.CashOrderEntity) {

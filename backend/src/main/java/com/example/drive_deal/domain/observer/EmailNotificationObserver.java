@@ -140,7 +140,7 @@ public class EmailNotificationObserver implements Observer {
                 html.append("<p><strong>Véhicule:</strong> ").append(event.getData("vehicleName")).append("</p>");
                 html.append("<p><strong>ID:</strong> ").append(event.getData("vehicleId")).append("</p>");
                 if (event.getData("price") != null) {
-                    html.append("<p><strong>Prix:</strong> ").append(event.getData("price")).append(" €</p>");
+                    html.append("<p><strong>Prix:</strong> ").append(event.getData("price")).append(" FCFA</p>");
                 }
                 break;
                 
@@ -155,7 +155,7 @@ public class EmailNotificationObserver implements Observer {
                 html.append("<p><strong>Commande #:</strong> ").append(event.getData("orderId")).append("</p>");
                 html.append("<p><strong>Client:</strong> ").append(event.getData("customerEmail")).append("</p>");
                 if (event.getData("amount") != null) {
-                    html.append("<p><strong>Montant:</strong> ").append(event.getData("amount")).append(" €</p>");
+                    html.append("<p><strong>Montant:</strong> ").append(event.getData("amount")).append(" FCFA</p>");
                 }
                 break;
                 

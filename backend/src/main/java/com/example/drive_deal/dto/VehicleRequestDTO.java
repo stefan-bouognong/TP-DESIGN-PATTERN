@@ -12,4 +12,6 @@ public class VehicleRequestDTO {
     private BigDecimal price;
     private String color;
     private Integer year;
+    private String brand;       
+    private String name;        
 }

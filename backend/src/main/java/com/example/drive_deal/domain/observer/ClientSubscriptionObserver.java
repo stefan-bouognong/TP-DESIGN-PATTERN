@@ -178,7 +178,7 @@ public class ClientSubscriptionObserver implements Observer {
                         <div class="vehicle-card">
                             <p><strong>Type:</strong> %s</p>
                             <p><strong>Marque:</strong> %s</p>
-                            <p><strong>Prix:</strong> %s €</p>
+                            <p><strong>Prix:</strong> %s FCFA</p>
                         </div>
                         <p>Ce véhicule correspond à vos préférences d'abonnement.</p>
                         <a href="https://votre-site.com/vehicles" class="cta-button">
@@ -219,9 +219,9 @@ public class ClientSubscriptionObserver implements Observer {
                     <div class="content">
                         <span class="promo-badge">-%s%%</span>
                         <h3>%s</h3>
-                        <p class="old-price">Ancien prix: %s €</p>
-                        <p class="new-price">Nouveau prix: %s €</p>
-                        <p>Économisez %s € !</p>
+                        <p class="old-price">Ancien prix: %s FCFA</p>
+                        <p class="new-price">Nouveau prix: %s FCFA</p>
+                        <p>Économisez %s FCFA !</p>
                         <a href="https://votre-site.com/promotions" class="cta-button">
                             Profiter de l'offre
                         </a>

@@ -61,54 +61,54 @@ Réponse attendue (200):
 4.3 TEST ÉVÉNEMENT VÉHICULE AJOUTÉ
 Endpoint: POST {{base_url}}/api/observer/trigger/vehicle-added
 Données d'entrée: Aucune (données hardcodées dans le test)
-Véhicule de test: Tesla Model 3 Performance, ELECTRIC_CAR, 59990€
+Véhicule de test: Tesla Model 3 Performance, ELECTRIC_CAR, 59990FCFA
 Réponse attendue (200):
 {
 "success": true,
 "event": "VEHICLE_ADDED",
 "vehicle": "Tesla Model 3 Performance",
-"price": "59990 €",
+"price": "59990 FCFA",
 "message": "Événement VEHICLE_ADDED déclenché avec succès",
 "timestamp": "2024-01-15T10:32:00",
 "expectedResult": "2 clients notifiés (Jean & Entreprise)"
 }
 Résultat attendu:
-- Email envoyé à jean.dupont@email.com (abonné NEW_VEHICLES, filtre ELECTRIC_CAR 20k-50k€)
+- Email envoyé à jean.dupont@email.com (abonné NEW_VEHICLES, filtre ELECTRIC_CAR 20k-50kFCFA)
 - Email envoyé à entreprise.xyz@email.com (abonné CATALOG_UPDATES, tous types)
 - Pas d'email à marie.martin@email.com (abonnée aux scooters seulement)
 - Log dans les fichiers
 4.4 TEST ÉVÉNEMENT PROMOTION
 Endpoint: POST {{base_url}}/api/observer/trigger/vehicle-promotion
 Données d'entrée: Aucune
-Promotion de test: BMW X5, 78900€ → 69990€ (-11.3%)
+Promotion de test: BMW X5, 78900FCFA → 69990FCFA (-11.3%)
 Réponse attendue (200):
 {
 "success": true,
 "event": "VEHICLE_ON_SALE",
 "vehicle": "BMW X5 xDrive40i",
-"oldPrice": "78900 €",
-"newPrice": "69990 €",
+"oldPrice": "78900 FCFA",
+"newPrice": "69990 FCFA",
 "discount": "11.3%",
-"savings": "8910 €",
+"savings": "8910 FCFA",
 "message": "Événement VEHICLE_ON_SALE déclenché avec succès",
 "timestamp": "2024-01-15T10:33:00",
 "expectedResult": "1 client notifié (Jean)"
 }
 Résultat attendu:
-- Email envoyé à jean.dupont@email.com (abonné PROMOTIONS, filtre CAR 10k-80k€)
+- Email envoyé à jean.dupont@email.com (abonné PROMOTIONS, filtre CAR 10k-80kFCFA)
 - Pas d'email à marie.martin@email.com (abonnée PRICE_DROPS mais pour scooters)
 - Pas d'email à entreprise.xyz@email.com (abonné CATALOG_UPDATES seulement)
 4.5 TEST ÉVÉNEMENT COMMANDE
 Endpoint: POST {{base_url}}/api/observer/trigger/order-created
 Données d'entrée: Aucune
-Commande de test: ID 5001, client.fidele@email.com, 59990€, Tesla Model 3
+Commande de test: ID 5001, client.fidele@email.com, 59990FCFA, Tesla Model 3
 Réponse attendue (200):
 {
 "success": true,
 "event": "ORDER_CREATED",
 "orderId": 5001,
 "customer": "client.fidele@email.com",
-"amount": "59990 €",
+"amount": "59990 FCFA",
 "vehicle": "Tesla Model 3 Performance",
 "message": "Événement ORDER_CREATED déclenché avec succès",
 "timestamp": "2024-01-15T10:34:00",
@@ -400,10 +400,10 @@ Réponse attendue (200):
 SCÉNARIO A: FILTRAGE PAR TYPE DE VÉHICULE
 ---------------------------------------------------
 Données:
-- Client Jean: abonné NEW_VEHICLES (ELECTRIC_CAR, CAR, 20k-50k€)
-- Client Marie: abonné NEW_VEHICLES (SCOOTER, 5k-15k€)
+- Client Jean: abonné NEW_VEHICLES (ELECTRIC_CAR, CAR, 20k-50kFCFA)
+- Client Marie: abonné NEW_VEHICLES (SCOOTER, 5k-15kFCFA)
 - Client Entreprise: abonné CATALOG_UPDATES (tous types)
-Événement: Nouveau scooter Yamaha NMAX à 8500€
+Événement: Nouveau scooter Yamaha NMAX à 8500FCFA
 Résultat attendu:
 ✓ Email à Marie (correspond à ses filtres)
 ✓ Email à Entreprise (abonné à tout)
@@ -411,13 +411,13 @@ Résultat attendu:
 SCÉNARIO B: FILTRAGE PAR PRIX
 ---------------------------------------------------
 Données:
-- Client Jean: abonné PROMOTIONS (CAR, 10k-80k€)
-- Promotion BMW X5 à 69990€ (dans la plage)
-- Promotion Ferrari à 250000€ (hors plage)
+- Client Jean: abonné PROMOTIONS (CAR, 10k-80kFCFA)
+- Promotion BMW X5 à 69990FCFA (dans la plage)
+- Promotion Ferrari à 250000FCFA (hors plage)
 Résultat pour BMW X5:
-✓ Email à Jean (69990€ dans 10k-80k€)
+✓ Email à Jean (69990FCFA dans 10k-80kFCFA)
 Résultat pour Ferrari:
-✗ Pas d'email à Jean (250000€ > 80000€)
+✗ Pas d'email à Jean (250000FCFA > 80000FCFA)
 SCÉNARIO C: DÉSABONNEMENT
 ---------------------------------------------------
 Étapes:
@@ -438,22 +438,22 @@ SCÉNARIO D: ERREUR SYSTÈME
 CLIENT JEAN (ID: 1):
 --------------------
 ✅ Devrait recevoir:
-- Nouveaux véhicules ELECTRIC_CAR ou CAR entre 20k-50k€
-- Promotions CAR entre 10k-80k€
-- Baisses de prix CAR/ELECTRIC_CAR entre 15k-60k€ (si configuré)
+- Nouveaux véhicules ELECTRIC_CAR ou CAR entre 20k-50kFCFA
+- Promotions CAR entre 10k-80kFCFA
+- Baisses de prix CAR/ELECTRIC_CAR entre 15k-60kFCFA (si configuré)
 ❌ Ne devrait PAS recevoir:
 - Scooters ou motos
-- Véhicules < 20k€ ou > 50k€ (pour nouveaux véhicules)
-- Véhicules < 10k€ ou > 80k€ (pour promotions)
+- Véhicules < 20kFCFA ou > 50kFCFA (pour nouveaux véhicules)
+- Véhicules < 10kFCFA ou > 80kFCFA (pour promotions)
 - Notifications de commande (sauf si admin)
 CLIENT MARIE (ID: 2):
 --------------------
 ✅ Devrait recevoir:
-- Nouveaux scooters entre 5k-15k€
-- Baisses de prix scooters 3k-20k€
+- Nouveaux scooters entre 5k-15kFCFA
+- Baisses de prix scooters 3k-20kFCFA
 ❌ Ne devrait PAS recevoir:
 - Voitures ou véhicules électriques
-- Véhicules < 5k€ ou > 15k€ (pour nouveaux véhicules)
+- Véhicules < 5kFCFA ou > 15kFCFA (pour nouveaux véhicules)
 - Promotions (non abonnée)
 CLIENT ENTREPRISE (ID: 3):
 -------------------------

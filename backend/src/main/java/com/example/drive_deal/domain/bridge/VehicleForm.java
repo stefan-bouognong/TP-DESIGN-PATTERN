@@ -26,7 +26,7 @@ public class VehicleForm extends Form {
         
         // Champs de base
         builder.append(renderer.renderField("model", "Modèle", vehicle.getModel()));
-        builder.append(renderer.renderField("price", "Prix", vehicle.getPrice().toString() + " €"));
+        builder.append(renderer.renderField("price", "Prix", vehicle.getPrice().toString() + " FCFA"));
         builder.append(renderer.renderField("color", "Couleur", vehicle.getColor()));
         builder.append(renderer.renderField("year", "Année", vehicle.getYear().toString()));
         

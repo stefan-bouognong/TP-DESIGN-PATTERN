@@ -20,35 +20,57 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final CorsConfigurationSource corsConfigurationSource;
 
+    // @Bean
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+    //     http
+    //         // Configuration CORS - doit être avant les autres configurations
+    //         .cors(cors -> cors.configurationSource(corsConfigurationSource))
+    //         // Désactiver CSRF car on utilise JWT (stateless)
+    //         .csrf(csrf -> csrf.disable())
+    //         // Configuration de session stateless (pas de session serveur)
+    //         .sessionManagement(session ->
+    //             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    //         )
+    //         // Configuration des autorisations
+    //         .authorizeHttpRequests(auth -> auth
+    //             // Autoriser les requêtes OPTIONS (preflight CORS)
+    //             .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+    //             .requestMatchers("/api/auth/**").permitAll()
+    //             .requestMatchers("/api/vehicles/**").permitAll()
+    //             .requestMatchers("/api/clients/**").permitAll()
+    //             .requestMatchers("/api/admin/**").hasRole("ADMIN")
+    //             .anyRequest().authenticated()
+    //         )
+    //         // Ajouter le filtre JWT avant le filtre d'authentification par défaut
+    //         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+    //     return http.build();
+    // }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
-            // Configuration CORS - doit être avant les autres configurations
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            // Désactiver CSRF car on utilise JWT (stateless)
             .csrf(csrf -> csrf.disable())
-            // Configuration de session stateless (pas de session serveur)
-            .sessionManagement(session ->
+            .sessionManagement(session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            // Configuration des autorisations
             .authorizeHttpRequests(auth -> auth
-                // Autoriser les requêtes OPTIONS (preflight CORS)
-                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/vehicles/**").permitAll()
-                .requestMatchers("/api/clients/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                // POUR MODE DEVELOPPEMENT UNIQUEMENT
+                .anyRequest().permitAll()
+                // Si tu veux quand même garder quelques règles pour tester le rôle ADMIN plus tard :
+                // .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                // .anyRequest().permitAll()
             )
-            // Ajouter le filtre JWT avant le filtre d'authentification par défaut
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+        
 
-    // ✅ SEULE BONNE FAÇON EN SPRING SECURITY 7
+    
+    //  SEULE BONNE FAÇON EN SPRING SECURITY 7
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {

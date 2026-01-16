@@ -51,11 +51,11 @@ public class SaleDecorator extends VehicleDisplayDecorator {
         
         // Remplacer le prix par le prix soldé
         saleHtml = saleHtml.replace(
-            String.format("<strong>Prix:</strong> %s €", originalPrice),
+            String.format("<strong>Prix:</strong> %s FCFA", originalPrice),
             String.format(
-                "<strong>Prix:</strong> <span class=\"original-price\">%s €</span>\n" +
-                "  <span class=\"sale-price\">%s €</span>\n" +
-                "  <span class=\"discount-info\">(Économisez %s €)</span>",
+                "<strong>Prix:</strong> <span class=\"original-price\">%s FCFA</span>\n" +
+                "  <span class=\"sale-price\">%s FCFA</span>\n" +
+                "  <span class=\"discount-info\">(Économisez %s FCFA)</span>",
                 originalPrice,
                 salePrice.setScale(2, BigDecimal.ROUND_HALF_UP),
                 discountAmount.setScale(2, BigDecimal.ROUND_HALF_UP)

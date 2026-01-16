@@ -15,7 +15,7 @@ public abstract class VehicleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;          // ✅ AJOUTÉ
+    private String name;          //  AJOUTÉ
     private String model;
     private String brand;         // (souvent utile)
     private BigDecimal price;
@@ -53,14 +53,16 @@ public abstract class VehicleEntity {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }          // ✅
+    public String getName() { return name; }          
     public void setName(String name) { this.name = name; }
 
     public String getModel() { return model; }
     public void setModel(String model) { this.model = model; }
 
     public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
+    public void setBrand(String brand) {
+    this.brand = brand;
+}
 
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }

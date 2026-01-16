@@ -70,7 +70,7 @@ public class CatalogEventService {
         // Enregistrer l'événement
         recordEvent(event);
         
-        log.info("🚗 Événement publié: VEHICLE_ADDED - {} (ID: {}, Prix: {}€)", 
+        log.info("🚗 Événement publié: VEHICLE_ADDED - {} (ID: {}, Prix: {}FCFA)", 
                 vehicleName, vehicleId, price);
     }
     
@@ -115,7 +115,7 @@ public class CatalogEventService {
         // Enregistrer l'événement
         recordEvent(event);
         
-        log.info("🔥 Événement publié: VEHICLE_ON_SALE - {} (ID: {}, Ancien: {}€, Nouveau: {}€, Réduction: {}%)", 
+        log.info("🔥 Événement publié: VEHICLE_ON_SALE - {} (ID: {}, Ancien: {}FCFA, Nouveau: {}FCFA, Réduction: {}%)", 
                 vehicleName, vehicleId, oldPrice, newPrice, discount);
     }
     
@@ -140,7 +140,7 @@ public class CatalogEventService {
         
         CatalogEvent event = new CatalogEvent(
             EventType.VEHICLE_PRICE_CHANGED,
-            "Prix modifié: " + vehicleName + " (" + oldPrice + "€ → " + newPrice + "€)",
+            "Prix modifié: " + vehicleName + " (" + oldPrice + "FCFA → " + newPrice + "FCFA)",
             data
         );
         
@@ -160,7 +160,7 @@ public class CatalogEventService {
         // Enregistrer l'événement
         recordEvent(event);
         
-        log.info("💰 Événement publié: VEHICLE_PRICE_CHANGED - {} (ID: {}, {}€ → {}€)", 
+        log.info("💰 Événement publié: VEHICLE_PRICE_CHANGED - {} (ID: {}, {}FCFA → {}FCFA)", 
                 vehicleName, vehicleId, oldPrice, newPrice);
     }
     
@@ -236,7 +236,7 @@ public class CatalogEventService {
         // Enregistrer l'événement
         recordEvent(event);
         
-        log.info("✅ Événement publié: ORDER_CREATED - #{} (Client: {}, Montant: {}€)", 
+        log.info("✅ Événement publié: ORDER_CREATED - #{} (Client: {}, Montant: {}FCFA)", 
                 orderId, customerEmail, totalAmount);
     }
     

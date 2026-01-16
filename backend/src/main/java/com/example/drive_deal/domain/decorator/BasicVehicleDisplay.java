@@ -51,7 +51,7 @@ public class BasicVehicleDisplay implements VehicleDisplay {
             "<div class=\"vehicle-card basic\" data-vehicle-id=\"%d\">\n" +
             "  <h3>%s</h3>\n" +
             "  <div class=\"vehicle-info\">\n" +
-            "    <p><strong>Prix:</strong> %s €</p>\n" +
+            "    <p><strong>Prix:</strong> %s FCFA</p>\n" +
             "    <p><strong>Couleur:</strong> %s</p>\n" +
             "    <p><strong>Année:</strong> %s</p>\n" +
             "  </div>\n" +
