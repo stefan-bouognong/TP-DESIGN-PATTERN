@@ -1,0 +1,169 @@
+==========================================
+ENDPOINTS BUILDER - LIASSE DE DOCUMENTS
+==========================================
+
+BASE URL: http://localhost:8080/api/document-bundles
+
+--------------------------------------------------------------------
+ENDPOINT 1: Créer une liasse complète (Builder)
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/document-bundles/complete
+
+REQUEST BODY (JSON):
+{
+  "orderId": 1,
+  "bundleType": "COMPLETE"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "orderId": 1,
+  "clientId": 1,
+  "bundleName": "Car Document Bundle for Order #1",
+  "documentCount": 4,
+  "completed": true,
+  "downloadPath": "/downloads/bundle_order_1.zip",
+  "documentTypes": [
+    "REGISTRATION_REQUEST",
+    "TRANSFER_CERTIFICATE",
+    "ORDER_FORM",
+    "INVOICE"
+  ]
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Créer une liasse minimale
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/document-bundles/minimal
+
+REQUEST BODY (JSON):
+{
+  "orderId": 2,
+  "bundleType": "MINIMAL"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "orderId": 2,
+  "clientId": 2,
+  "bundleName": "Bundle Minimal - Order #2",
+  "documentCount": 1,
+  "completed": false,
+  "downloadPath": null,
+  "documentTypes": ["ORDER_FORM"]
+}
+
+--------------------------------------------------------------------
+ENDPOINT 3: Créer une liasse d'immatriculation
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/document-bundles/registration
+
+REQUEST BODY (JSON):
+{
+  "orderId": 3
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "orderId": 3,
+  "clientId": 1,
+  "bundleName": "Registration Bundle - Order #3",
+  "documentCount": 2,
+  "completed": false,
+  "downloadPath": null,
+  "documentTypes": [
+    "REGISTRATION_REQUEST",
+    "TRANSFER_CERTIFICATE"
+  ]
+}
+
+--------------------------------------------------------------------
+ENDPOINT 4: Obtenir les infos d'une liasse existante
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/document-bundles/order/{orderId}
+
+RESPONSE 200 OK (JSON) - orderId=1:
+{
+  "orderId": 1,
+  "clientId": 1,
+  "bundleName": "Existing Bundle - Order #1",
+  "documentCount": 4,
+  "completed": true,
+  "downloadPath": "/downloads/bundle_order_1.zip",
+  "documentTypes": [...]
+}
+
+--------------------------------------------------------------------
+ENDPOINT 5: Générer le téléchargement
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/document-bundles/{orderId}/download
+
+RESPONSE 200 OK (JSON) - orderId=1:
+"/downloads/order_1_bundle.zip"
+
+--------------------------------------------------------------------
+ENDPOINT 6: Exemple - Commande de scooter
+--------------------------------------------------------------------
+REQUEST BODY (JSON) pour un scooter:
+{
+  "orderId": 4,
+  "bundleType": "COMPLETE"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "orderId": 4,
+  "clientId": 3,
+  "bundleName": "Scooter Document Bundle for Order #4",
+  "documentCount": 4,
+  "completed": true,
+  "downloadPath": "/downloads/bundle_order_4.zip",
+  "documentTypes": [...]
+  // Note: Les documents contiendront des infos spécifiques aux scooters
+}
+
+====================================================================
+DIFFÉRENCES ENTRE BUILDERS
+====================================================================
+
+CAR BUILDER (CarDocumentBundleBuilder):
+- TVA: 20%
+- Catégorie: M1
+- Infos techniques: portes, toit ouvrant
+- Mentions: "Automobile"
+
+SCOOTER BUILDER (ScooterDocumentBundleBuilder):
+- TVA: 10% (réduite)
+- Catégorie: L
+- Infos techniques: vitesse max, top-case
+- Mentions: "Casque obligatoire", "Permis requis"
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Liasse complète pour une voiture
+curl -X POST http://localhost:8080/api/document-bundles/complete \
+  -H "Content-Type: application/json" \
+  -d '{"orderId": 1}'
+
+# 2. Liasse minimale
+curl -X POST http://localhost:8080/api/document-bundles/minimal \
+  -H "Content-Type: application/json" \
+  -d '{"orderId": 2}'
+
+# 3. Vérifier une liasse
+curl -X GET http://localhost:8080/api/document-bundles/order/1
+
+# 4. Téléchargement
+curl -X POST http://localhost:8080/api/document-bundles/1/download
+
+# 5. Liasse pour scooter
+curl -X POST http://localhost:8080/api/document-bundles/complete \
+  -H "Content-Type: application/json" \
+  -d '{"orderId": 4}'

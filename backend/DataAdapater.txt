@@ -1,0 +1,235 @@
+==========================================
+TESTS ADAPTER - CONVERSION PDF
+==========================================
+
+PRÉ-REQUIS:
+1. Avoir créé des documents HTML via Builder/Singleton
+2. Vérifier qu'un document HTML existe avec ID=1
+
+--------------------------------------------------------------------
+TEST 1: Vérifier qu'un document HTML existe
+--------------------------------------------------------------------
+METHOD: GET
+URL: http://localhost:8080/api/documents/order/1
+
+ATTENDU: Liste des documents HTML pour la commande 1
+NOTE: Note l'ID d'un document HTML (ex: documentId=1)
+
+--------------------------------------------------------------------
+TEST 2: Convertir un document HTML en PDF
+--------------------------------------------------------------------
+METHOD: POST
+URL: http://localhost:8080/api/pdf/convert
+
+REQUEST BODY (JSON):
+{
+  "documentId": 1,
+  "saveToDatabase": true,
+  "customFileName": "bon_commande_1.pdf"
+}
+
+RÉPONSE ATTENDUE (200 OK):
+{
+  "documentId": 1,
+  "originalTitle": "Bon de Commande - 1",
+  "pdfFileName": "bon_commande_1.pdf",
+  "fileSize": 15234,
+  "downloadUrl": "/api/pdf/download/1",
+  "savedToDatabase": true
+}
+
+--------------------------------------------------------------------
+TEST 3: Télécharger le PDF généré
+--------------------------------------------------------------------
+METHOD: GET
+URL: http://localhost:8080/api/pdf/download/1
+
+ATTENDU:
+- Status: 200 OK
+- Content-Type: application/pdf
+- Téléchargement du fichier PDF
+
+--------------------------------------------------------------------
+TEST 4: Prévisualiser le PDF dans le navigateur
+--------------------------------------------------------------------
+METHOD: GET
+URL: http://localhost:8080/api/pdf/preview/1
+
+ATTENDU:
+- Le PDF s'affiche directement dans le navigateur
+- Pas de téléchargement automatique
+
+--------------------------------------------------------------------
+TEST 5: Convertir plusieurs documents en batch
+--------------------------------------------------------------------
+METHOD: POST
+URL: http://localhost:8080/api/pdf/convert/batch
+
+REQUEST BODY (JSON):
+{
+  "documentIds": [1, 2, 3],
+  "createZip": false
+}
+
+RÉPONSE ATTENDUE:
+{
+  "totalDocuments": 3,
+  "successfulConversions": 3,
+  "failedConversions": 0,
+  "convertedDocuments": [
+    {
+      "documentId": 1,
+      "originalTitle": "Bon de Commande - 1",
+      "pdfFileName": "document_1.pdf",
+      "fileSize": 15234,
+      "downloadUrl": "/api/pdf/download/1",
+      "savedToDatabase": true
+    },
+    // ... autres documents
+  ],
+  "zipDownloadUrl": null
+}
+
+--------------------------------------------------------------------
+TEST 6: Convertir tous les documents d'une commande
+--------------------------------------------------------------------
+METHOD: POST
+URL: http://localhost:8080/api/pdf/convert/order/1
+
+ATTENDU:
+- Conversion de tous les documents HTML de la commande 1
+- Création d'un ZIP si plusieurs documents
+
+--------------------------------------------------------------------
+TEST 7: Vérifier le statut d'un document
+--------------------------------------------------------------------
+METHOD: GET
+URL: http://localhost:8080/api/pdf/status/1
+
+ATTENDU: "PDF available for download"
+
+--------------------------------------------------------------------
+TEST 8: Erreur - Document non trouvé
+--------------------------------------------------------------------
+METHOD: POST
+URL: http://localhost:8080/api/pdf/convert
+
+REQUEST BODY (JSON):
+{
+  "documentId": 999,
+  "saveToDatabase": true
+}
+
+ATTENDU: 400 Bad Request
+{
+  "timestamp": "...",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Document not found: 999"
+}
+
+--------------------------------------------------------------------
+TEST 9: Erreur - Document déjà au format PDF
+--------------------------------------------------------------------
+(Convertir d'abord document 1 en PDF, puis réessayer)
+
+METHOD: POST
+URL: http://localhost:8080/api/pdf/convert
+
+REQUEST BODY (JSON):
+{
+  "documentId": 1,
+  "saveToDatabase": true
+}
+
+ATTENDU: 400 Bad Request
+"Document is already PDF format"
+
+====================================================================
+SCRIPT CURL COMPLET POUR TESTER
+====================================================================
+
+#!/bin/bash
+BASE_URL="http://localhost:8080"
+
+echo "=== TEST ADAPTER PDF ==="
+
+# 1. Vérifier les documents existants
+echo "1. Lister les documents de la commande 1:"
+curl -X GET "$BASE_URL/api/documents/order/1"
+
+# 2. Convertir un document (remplacer DOC_ID par un ID réel)
+DOC_ID=1
+echo -e "\n2. Convertir document $DOC_ID en PDF:"
+curl -X POST "$BASE_URL/api/pdf/convert" \
+  -H "Content-Type: application/json" \
+  -d "{\"documentId\": $DOC_ID, \"saveToDatabase\": true}"
+
+# 3. Télécharger le PDF
+echo -e "\n3. Télécharger le PDF:"
+curl -X GET "$BASE_URL/api/pdf/download/$DOC_ID" \
+  --output "document_$DOC_ID.pdf" \
+  -v
+
+# 4. Prévisualiser
+echo -e "\n4. Prévisualiser PDF (dans navigateur, ouvrir l'URL):"
+echo "$BASE_URL/api/pdf/preview/$DOC_ID"
+
+# 5. Batch conversion
+echo -e "\n5. Conversion batch:"
+curl -X POST "$BASE_URL/api/pdf/convert/batch" \
+  -H "Content-Type: application/json" \
+  -d '{"documentIds": [1,2,3], "createZip": false}'
+
+# 6. Convertir toute une commande
+ORDER_ID=1
+echo -e "\n6. Convertir tous les documents de la commande $ORDER_ID:"
+curl -X POST "$BASE_URL/api/pdf/convert/order/$ORDER_ID"
+
+echo -e "\n=== TESTS TERMINÉS ==="
+
+====================================================================
+DONNÉES DE TEST À CRÉER AVANT
+====================================================================
+
+Pour tester proprement, crée ces données d'abord :
+
+1. Créer une commande avec plusieurs véhicules:
+POST /api/orders
+{
+  "clientId": 1,
+  "orderType": "CASH",
+  "items": [
+    {"vehicleId": 1, "quantity": 1},
+    {"vehicleId": 3, "quantity": 2}
+  ],
+  "shippingAddress": "123 Test St"
+}
+
+2. Générer la liasse de documents:
+POST /api/document-bundles/complete
+{
+  "orderId": 1
+}
+
+3. Vérifier les documents créés:
+GET /api/documents/order/1
+
+Tu auras alors des documents HTML avec IDs comme: 1, 2, 3, 4
+(Order Form, Registration Request, Transfer Certificate, Invoice)
+
+====================================================================
+VÉRIFICATION DU PATTERN ADAPTER
+====================================================================
+
+Points à vérifier:
+1. ✔️ HtmlDocument existe (Adaptee)
+2. ✔️ PdfDocument interface existe (Target)
+3. ✔️ PdfDocumentAdapter convertit HTML→PDF (Adapter)
+4. ✔️ Client (PdfService) utilise PdfDocument sans connaître la conversion
+5. ✔️ Possibilité de changer de librairie PDF (iText/OpenPDF/Mock)
+
+Test réussi si:
+- Le PDF est généré sans erreur
+- Le contenu HTML est bien converti
+- Le client n'a pas à gérer la conversion manuellement

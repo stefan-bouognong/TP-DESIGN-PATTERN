@@ -1,0 +1,89 @@
+# pour creer un admin 
+
+http://localhost:8080/api/auth/register-admin
+
+
+pour connecter un admin 
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "admin@drivedreal.com",
+  "password": "admin123"
+}
+
+
+==========================================
+
+pour creer un client 
+
+http://localhost:8080/api/clients
+
+
+{
+  "email": "john.doe@gmail.com",
+  "password": "password123",
+  "name": "Doe",
+  "phone": "+237690112233",
+  "address": "Yaoundé, Cameroun",
+  "firstName": "John",
+  "lastName": "Doe",
+  "nationality": "Cameroonian",
+  "clientType": "INDIVIDUAL"
+}
+
+pour connecter un client 
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "john.doe@gmail.com",
+  "password": "password123",
+}
+
+
+pour une campany
+
+http://localhost:8080/api/clients
+
+
+{
+  "email": "contact@afritech.com",
+  "password": "securePass2025",
+  "name": "Afritech Solutions",
+  "phone": "+237699887766",
+  "address": "Douala, Bonanjo",
+  "companyId": "CM-AFT-2025",
+  "vatNumber": "VAT-CM-998877",
+  "clientType": "COMPANY"
+}
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "contact@afritech.com",
+  "password": "securePass2025",
+}
+
+
+
+http://localhost:8080/api/clients
+Filiale d’entreprise (COMPANY avec parent)
+{
+  "email": "subsidiary@afritech.com",
+  "password": "subsidiaryPass",
+  "name": "Afritech Logistics",
+  "phone": "+237655443322",
+  "address": "Bafoussam",
+  "companyId": "CM-AFT-LOG-01",
+  "vatNumber": "VAT-CM-554433",
+  "clientType": "COMPANY",
+  "parentCompanyId": 1
+}
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "subsidiary@afritech.com",
+  "password": "subsidiaryPass",
+}

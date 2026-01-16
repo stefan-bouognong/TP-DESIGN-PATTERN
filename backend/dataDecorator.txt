@@ -1,0 +1,171 @@
+==========================================
+ENDPOINTS DECORATOR - AFFICHAGE DES VÉHICULES
+==========================================
+
+BASE URL: http://localhost:8080/api/catalog
+
+--------------------------------------------------------------------
+ENDPOINT 1: Catalogue de base
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/catalog/vehicles
+
+RÉPONSE 200 OK (JSON):
+{
+  "vehicles": [
+    {
+      "vehicleId": 1,
+      "model": "Tesla Model 3",
+      "displayHtml": "<div class=\"vehicle-card basic\">...</div>",
+      "displayType": "BASIC",
+      "decoratorCount": 0,
+      "attributes": {
+        "vehicleId": 1,
+        "model": "Tesla Model 3",
+        "price": 45000.00,
+        "hasAnimations": false,
+        "hasSaleBadge": false,
+        "hasOptions": false
+      }
+    }
+  ],
+  "viewType": "BASIC",
+  "totalVehicles": 1,
+  "hasAnimations": false,
+  "hasSaleItems": false
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Catalogue amélioré (avec animations et options)
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/catalog/vehicles/enhanced
+
+RÉPONSE: Même structure mais avec animations et options
+
+--------------------------------------------------------------------
+ENDPOINT 3: Véhicule décoré personnalisé
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/catalog/vehicle/{id}/decorate
+
+REQUEST BODY (JSON):
+{
+  "decorators": ["ANIMATION", "SALE", "OPTIONS"],
+  "includeAnimations": true,
+  "includeSaleBadge": true,
+  "showOptions": true,
+  "showRecommendations": false,
+  "theme": "modern"
+}
+
+RÉPONSE 200 OK:
+{
+  "vehicleId": 1,
+  "model": "Tesla Model 3",
+  "displayHtml": "<div class=\"vehicle-card animated ...\">...</div>",
+  "displayType": "BASIC+ANIMATION+SALE+OPTIONS",
+  "decoratorCount": 3,
+  "attributes": {
+    "vehicleId": 1,
+    "model": "Tesla Model 3",
+    "price": 45000.00,
+    "hasAnimations": true,
+    "animationType": "fade-slide",
+    "hasSaleBadge": true,
+    "discountPercentage": 15.00,
+    "salePrice": 38250.00,
+    "hasOptions": true,
+    "availableOptions": ["Sièges en cuir", "Système audio premium", ...]
+  }
+}
+
+--------------------------------------------------------------------
+ENDPOINT 4: Véhicule avec toutes les décorations
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/catalog/vehicle/{id}/decorated
+
+RÉPONSE: Véhicule avec ANIMATION + SALE + OPTIONS + RECOMMENDATION
+
+--------------------------------------------------------------------
+ENDPOINT 5: Véhicules en solde
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/catalog/vehicles/sale
+
+RÉPONSE: Liste des véhicules avec badge de solde (20% de réduction)
+
+--------------------------------------------------------------------
+ENDPOINT 6: Décoration par lot
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/catalog/decorate/batch
+
+REQUEST BODY (JSON):
+{
+  "vehicleIds": [1, 2, 3],
+  "decorators": ["ANIMATION", "OPTIONS"]
+}
+
+RÉPONSE: Liste des véhicules décorés
+
+====================================================================
+PATTERN DECORATOR EXPLICATION
+====================================================================
+
+Component: VehicleDisplay (interface)
+ConcreteComponent: BasicVehicleDisplay (affichage de base)
+Decorator: VehicleDisplayDecorator (classe abstraite)
+ConcreteDecorators: AnimationDecorator, SaleDecorator, OptionsDecorator, RecommendationDecorator
+
+Le pattern Decorator permet:
+1. Ajouter dynamiquement des fonctionnalités (animations, badges, options)
+2. Composition flexible: Animation + Sale + Options, etc.
+3. Respect du principe OCP: nouveaux décorateurs sans modifier l'existant
+4. Alternative à l'héritage multiple
+
+====================================================================
+EXEMPLE D'UTILISATION EN CODE
+====================================================================
+
+// 1. Affichage de base
+VehicleDisplay basic = new BasicVehicleDisplay(vehicle);
+
+// 2. Ajout d'animations
+VehicleDisplay animated = new AnimationDecorator(basic);
+
+// 3. Ajout d'un badge de solde
+VehicleDisplay onSale = new SaleDecorator(animated, 15.00, "PROMO");
+
+// 4. Ajout des options
+VehicleDisplay withOptions = new OptionsDecorator(onSale);
+
+// Résultat: véhicule avec animations + badge 15% + options
+String html = withOptions.display();
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Catalogue de base
+curl -X GET "http://localhost:8080/api/catalog/vehicles"
+
+# 2. Catalogue amélioré
+curl -X GET "http://localhost:8080/api/catalog/vehicles/enhanced"
+
+# 3. Véhicule décoré
+curl -X POST "http://localhost:8080/api/catalog/vehicle/1/decorate" \
+  -H "Content-Type: application/json" \
+  -d '{"decorators":["ANIMATION","SALE"]}'
+
+# 4. Véhicule avec toutes décorations
+curl -X GET "http://localhost:8080/api/catalog/vehicle/1/decorated"
+
+# 5. Véhicules en solde
+curl -X GET "http://localhost:8080/api/catalog/vehicles/sale"
+
+# 6. Décoration par lot
+curl -X POST "http://localhost:8080/api/catalog/decorate/batch" \
+  -H "Content-Type: application/json" \
+  -d '{"vehicleIds":[1,2,3],"decorators":["ANIMATION","OPTIONS"]}'

@@ -1,0 +1,251 @@
+==========================================
+ENDPOINTS FACTORY METHOD - COMMANDES
+==========================================
+
+BASE URL: http://localhost:8080/api/orders
+
+--------------------------------------------------------------------
+ENDPOINT 1: Créer une commande cash avec plusieurs véhicules
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/orders
+
+REQUEST BODY (JSON):
+{
+  "clientId": 1,
+  "orderType": "CASH",
+  "items": [
+    {
+      "vehicleId": 1,
+      "quantity": 2
+    },
+    {
+      "vehicleId": 3,
+      "quantity": 1
+    }
+  ],
+  "shippingAddress": "123 Main St, Paris, France",
+  "billingAddress": "456 Business Ave, Paris, France"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 1,
+  "clientId": 1,
+  "clientName": "John Smith",
+  "orderType": "CASH",
+  "status": "PENDING",
+  "totalAmount": 93500.00,
+  "orderDate": "2024-12-18T10:30:00",
+  "shippingAddress": "123 Main St, Paris, France",
+  "billingAddress": "456 Business Ave, Paris, France",
+  "items": [
+    {
+      "id": 1,
+      "vehicleId": 1,
+      "vehicleModel": "Tesla Model 3",
+      "vehicleType": "ElectricCar",
+      "quantity": 2,
+      "unitPrice": 45000.00,
+      "subTotal": 90000.00
+    },
+    {
+      "id": 2,
+      "vehicleId": 3,
+      "vehicleModel": "Niu NQi GT",
+      "vehicleType": "Scooter",
+      "quantity": 1,
+      "unitPrice": 3500.00,
+      "subTotal": 3500.00
+    }
+  ],
+  "cashDiscount": 5.0,
+  "paid": false,
+  "months": null,
+  "interestRate": null,
+  "creditStatus": null,
+  "approved": null,
+  "monthlyPayment": null
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Créer une commande crédit
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/orders
+
+REQUEST BODY (JSON):
+{
+  "clientId": 2,
+  "orderType": "CREDIT",
+  "items": [
+    {
+      "vehicleId": 2,
+      "quantity": 3
+    }
+  ],
+  "creditDetails": {
+    "months": 36,
+    "interestRate": 4.5
+  },
+  "shippingAddress": "500 Corporate Blvd, Business City"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 2,
+  "clientId": 2,
+  "clientName": "AutoGroup Corp",
+  "orderType": "CREDIT",
+  "status": "PENDING",
+  "totalAmount": 75000.00,
+  "orderDate": "2024-12-18T10:35:00",
+  "shippingAddress": "500 Corporate Blvd, Business City",
+  "billingAddress": "500 Corporate Blvd, Business City",
+  "items": [
+    {
+      "id": 3,
+      "vehicleId": 2,
+      "vehicleModel": "Toyota Corolla",
+      "vehicleType": "GasolineCar",
+      "quantity": 3,
+      "unitPrice": 25000.00,
+      "subTotal": 75000.00
+    }
+  ],
+  "cashDiscount": null,
+  "paid": null,
+  "months": 36,
+  "interestRate": 4.5,
+  "creditStatus": "PENDING",
+  "approved": false,
+  "monthlyPayment": null
+}
+
+--------------------------------------------------------------------
+ENDPOINT 3: Approuver une commande crédit
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/orders/{id}/approve-credit
+
+RESPONSE 200 OK (JSON) - id=2:
+{
+  "id": 2,
+  "clientId": 2,
+  "clientName": "AutoGroup Corp",
+  "orderType": "CREDIT",
+  "status": "PENDING",
+  "totalAmount": 80156.25, // Avec intérêts
+  "orderDate": "2024-12-18T10:35:00",
+  "shippingAddress": "500 Corporate Blvd, Business City",
+  "billingAddress": "500 Corporate Blvd, Business City",
+  "items": [...],
+  "cashDiscount": null,
+  "paid": null,
+  "months": 36,
+  "interestRate": 4.5,
+  "creditStatus": "APPROVED",
+  "approved": true,
+  "monthlyPayment": 2237.67
+}
+
+--------------------------------------------------------------------
+ENDPOINT 4: Changer le statut d'une commande
+--------------------------------------------------------------------
+METHOD: PUT
+URL: /api/orders/{id}/status
+
+REQUEST BODY (JSON) - id=1:
+{
+  "status": "SHIPPED"
+}
+
+RESPONSE 200 OK (JSON):
+{
+  "id": 1,
+  "clientId": 1,
+  "clientName": "John Smith",
+  "orderType": "CASH",
+  "status": "SHIPPED",
+  "totalAmount": 93500.00,
+  "orderDate": "2024-12-18T10:30:00",
+  ... // Reste identique
+}
+
+--------------------------------------------------------------------
+ENDPOINT 5: Obtenir une commande
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/orders/{id}
+
+RESPONSE 200 OK (JSON) - id=1:
+{
+  "id": 1,
+  "clientId": 1,
+  "clientName": "John Smith",
+  "orderType": "CASH",
+  "status": "SHIPPED",
+  ... // Détails complets
+}
+
+--------------------------------------------------------------------
+ENDPOINT 6: Lister les commandes d'un client
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/orders/client/{clientId}
+
+RESPONSE 200 OK (JSON) - clientId=1:
+[
+  {
+    "id": 1,
+    "clientId": 1,
+    "clientName": "John Smith",
+    "orderType": "CASH",
+    "status": "SHIPPED",
+    "totalAmount": 93500.00,
+    "orderDate": "2024-12-18T10:30:00",
+    // Résumé (pas tous les détails)
+  }
+]
+
+--------------------------------------------------------------------
+ENDPOINT 7: Erreur - Type de commande invalide
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/orders
+
+REQUEST BODY (JSON):
+{
+  "clientId": 1,
+  "orderType": "LEASE",
+  "items": [...]
+}
+
+RESPONSE 400 BAD REQUEST:
+{
+  "timestamp": "2024-12-18T10:40:00.000Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid order type: LEASE",
+  "path": "/api/orders"
+}
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Créer commande cash
+curl -X POST http://localhost:8080/api/orders \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientId": 1,
+    "orderType": "CASH",
+    "items": [
+      {"vehicleId": 1, "quantity": 1},
+      {"vehicleId": 3, "quantity": 2}
+    ],
+    "shippingAddress": "10 Rue de la Paix, 75002 Paris"
+  }'
+
+# 2. Créer commande créd
+

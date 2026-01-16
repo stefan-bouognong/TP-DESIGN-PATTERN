@@ -1,0 +1,227 @@
+==========================================
+ENDPOINTS COMPOSITE - CLIENTS
+==========================================
+
+BASE URL: http://localhost:8080/api/clients
+
+--------------------------------------------------------------------
+ENDPOINT 1: Créer un client individuel
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/clients
+
+REQUEST BODY (JSON):
+{
+  "clientType": "INDIVIDUAL",
+  "name": "John Smith",
+  "email": "john.smith@email.com",
+  "phone": "+1234567890",
+  "address": "123 Main St, City",
+  "firstName": "John",
+  "lastName": "Smith",
+  "nationality": "French"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 1,
+  "name": "John Smith",
+  "email": "john.smith@email.com",
+  "phone": "+1234567890",
+  "address": "123 Main St, City",
+  "clientType": "INDIVIDUAL",
+  "firstName": "John",
+  "lastName": "Smith",
+  "nationality": "French",
+  "companyId": null,
+  "vatNumber": null,
+  "parentCompanyId": null,
+  "fleetDiscount": null
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Créer une société mère
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/clients
+
+REQUEST BODY (JSON):
+{
+  "clientType": "COMPANY",
+  "name": "AutoGroup Corp",
+  "email": "contact@autogroup.com",
+  "phone": "+1987654321",
+  "address": "500 Corporate Blvd, Business City",
+  "companyId": "12345678901234",
+  "vatNumber": "FR12345678901"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 2,
+  "name": "AutoGroup Corp",
+  "email": "contact@autogroup.com",
+  "phone": "+1987654321",
+  "address": "500 Corporate Blvd, Business City",
+  "clientType": "COMPANY",
+  "firstName": null,
+  "lastName": null,
+  "nationality": null,
+  "companyId": "12345678901234",
+  "vatNumber": "FR12345678901",
+  "parentCompanyId": null,
+  "fleetDiscount": 5.0
+}
+
+--------------------------------------------------------------------
+ENDPOINT 3: Ajouter une filiale à une société
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/clients/company/{parentId}/add
+
+REQUEST BODY (JSON) - parentId=2:
+{
+  "clientType": "COMPANY",
+  "name": "AutoGroup North Subsidiary",
+  "email": "north@autogroup.com",
+  "phone": "+1555123456",
+  "address": "100 North St, Northern City",
+  "companyId": "98765432109876",
+  "vatNumber": "FR98765432109"
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 3,
+  "name": "AutoGroup North Subsidiary",
+  "email": "north@autogroup.com",
+  "phone": "+1555123456",
+  "address": "100 North St, Northern City",
+  "clientType": "COMPANY",
+  "firstName": null,
+  "lastName": null,
+  "nationality": null,
+  "companyId": "98765432109876",
+  "vatNumber": "FR98765432109",
+  "parentCompanyId": 2,
+  "fleetDiscount": 5.0
+}
+
+--------------------------------------------------------------------
+ENDPOINT 4: Obtenir la structure hiérarchique d'une société
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/clients/{id}/structure
+
+RESPONSE 200 OK (JSON) - id=2:
+{
+  "companyId": 2,
+  "companyName": "AutoGroup Corp",
+  "email": "contact@autogroup.com",
+  "totalSubsidiaries": 1,
+  "fleetDiscount": 10.0,
+  "subsidiaries": [
+    {
+      "companyId": 3,
+      "companyName": "AutoGroup North Subsidiary",
+      "email": "north@autogroup.com",
+      "totalSubsidiaries": 0,
+      "fleetDiscount": 5.0,
+      "subsidiaries": []
+    }
+  ]
+}
+
+--------------------------------------------------------------------
+ENDPOINT 5: Lister les filiales directes
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/clients/company/{parentId}/subsidiaries
+
+RESPONSE 200 OK (JSON) - parentId=2:
+[
+  {
+    "id": 3,
+    "name": "AutoGroup North Subsidiary",
+    "email": "north@autogroup.com",
+    "phone": "+1555123456",
+    "address": "100 North St, Northern City",
+    "clientType": "COMPANY",
+    "companyId": "98765432109876",
+    "vatNumber": "FR98765432109",
+    "parentCompanyId": 2,
+    "fleetDiscount": 5.0
+  }
+]
+
+--------------------------------------------------------------------
+ENDPOINT 6: Erreur - Type client invalide
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/clients
+
+REQUEST BODY (JSON):
+{
+  "clientType": "GOVERNMENT",
+  "name": "Test",
+  "email": "test@test.com"
+}
+
+RESPONSE 400 BAD REQUEST:
+{
+  "timestamp": "2024-12-18T11:30:00.000Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid client type: GOVERNMENT",
+  "path": "/api/clients"
+}
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Créer un client individuel
+curl -X POST http://localhost:8080/api/clients \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientType": "INDIVIDUAL",
+    "name": "Marie Dupont",
+    "email": "marie.dupont@email.com",
+    "phone": "+33612345678",
+    "address": "45 Rue de Paris, 75001 Paris",
+    "firstName": "Marie",
+    "lastName": "Dupont",
+    "nationality": "French"
+  }'
+
+# 2. Créer une société mère
+curl -X POST http://localhost:8080/api/clients \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientType": "COMPANY",
+    "name": "Vehicle Masters SA",
+    "email": "info@vehicle-masters.com",
+    "phone": "+33123456789",
+    "address": "1 Avenue des Champs-Élysées, 75008 Paris",
+    "companyId": "55210012345678",
+    "vatNumber": "FR44552100123"
+  }'
+
+# 3. Ajouter une filiale (remplacer {parentId})
+curl -X POST http://localhost:8080/api/clients/company/2/add \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientType": "COMPANY",
+    "name": "Vehicle Masters Lyon",
+    "email": "lyon@vehicle-masters.com",
+    "phone": "+33412345678",
+    "address": "10 Rue de la République, 69002 Lyon",
+    "companyId": "98765432100001",
+    "vatNumber": "FR44987654321"
+  }'
+
+# 4. Obtenir la structure
+curl -X GET http://localhost:8080/api/clients/2/structure
+
+# 5. Lister les filiales
+curl -X GET http://localhost:8080/api/clients/company/2/subsidiaries

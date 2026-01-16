@@ -1,0 +1,144 @@
+==========================================
+ENDPOINTS BRIDGE - FORMULAIRES HTML/WIDGETS
+==========================================
+
+BASE URL: http://localhost:8080/api/forms
+
+--------------------------------------------------------------------
+ENDPOINT 1: Rendre un formulaire générique
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/forms/render
+
+REQUEST BODY (JSON):
+{
+  "formType": "VEHICLE",
+  "entityId": 1,
+  "rendererType": "HTML",
+  "includeDetails": true
+}
+
+RÉPONSE 200 OK (JSON):
+{
+  "formType": "VEHICLE",
+  "rendererType": "HTML",
+  "title": "Formulaire Véhicule - Tesla Model 3",
+  "content": "<!DOCTYPE html>...", // HTML complet
+  "entityId": 1,
+  "mimeType": "text/html",
+  "fieldCount": 8
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Formulaire véhicule en HTML
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/forms/vehicle/{id}/html
+
+RÉPONSE: 
+- Content-Type: text/html
+- Body: HTML complet du formulaire
+- S'affiche directement dans le navigateur
+
+--------------------------------------------------------------------
+ENDPOINT 3: Formulaire véhicule en Widgets (JSON)
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/forms/vehicle/{id}/widget
+
+RÉPONSE:
+{
+  "form": {
+    "title": "Formulaire Véhicule - Tesla Model 3",
+    "type": "widget_form",
+    "widgets": [
+      {
+        "type": "text_field",
+        "id": "model",
+        "label": "Modèle",
+        "value": "Tesla Model 3",
+        "editable": false
+      },
+      // ... autres widgets
+    ]
+  }
+}
+
+--------------------------------------------------------------------
+ENDPOINT 4: Formulaire client en HTML
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/forms/client/{id}/html
+
+RÉPONSE: HTML du formulaire client
+
+--------------------------------------------------------------------
+ENDPOINT 5: Formulaire commande en HTML
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/forms/order/{id}/html
+
+RÉPONSE: HTML du formulaire commande
+
+--------------------------------------------------------------------
+ENDPOINT 6: Rendu dynamique avec options
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/forms/dynamic?formType=VEHICLE&entityId=1&renderer=WIDGET
+
+REQUEST BODY (JSON optionnel):
+{
+  "includeTechnicalDetails": true,
+  "includeFinancialDetails": false,
+  "theme": "dark",
+  "compactMode": true
+}
+
+RÉPONSE: Formulaire au format spécifié
+
+--------------------------------------------------------------------
+ENDPOINT 7: Liste des renderers disponibles
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/forms/renderers
+
+RÉPONSE: ["HTML", "WIDGET"]
+
+====================================================================
+PATTERN BRIDGE EXPLICATION
+====================================================================
+
+Abstraction: Form (VehicleForm, ClientForm, OrderForm)
+Implementor: FormRenderer (HtmlFormRenderer, WidgetFormRenderer)
+
+Le pattern Bridge permet de:
+1. Découpler l'abstraction (le formulaire) de son implémentation (le rendu)
+2. Changer dynamiquement le renderer (HTML ↔ Widgets)
+3. Ajouter de nouveaux renderers sans modifier les forms existants
+4. Éviter l'explosion de classes (VehicleFormHTML, VehicleFormWidget, etc.)
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Formulaire véhicule HTML
+curl -X GET "http://localhost:8080/api/forms/vehicle/1/html"
+
+# 2. Formulaire véhicule Widgets
+curl -X GET "http://localhost:8080/api/forms/vehicle/1/widget"
+
+# 3. Formulaire client HTML
+curl -X GET "http://localhost:8080/api/forms/client/1/html"
+
+# 4. Rendu générique
+curl -X POST "http://localhost:8080/api/forms/render" \
+  -H "Content-Type: application/json" \
+  -d '{"formType":"ORDER","entityId":1,"rendererType":"HTML"}'
+
+# 5. Rendu dynamique avec options
+curl -X POST "http://localhost:8080/api/forms/dynamic?formType=VEHICLE&entityId=1&renderer=WIDGET" \
+  -H "Content-Type: application/json" \
+  -d '{"includeTechnicalDetails":false}'
+
+# 6. Liste des renderers
+curl -X GET "http://localhost:8080/api/forms/renderers"

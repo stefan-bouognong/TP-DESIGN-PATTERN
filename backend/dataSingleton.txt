@@ -1,0 +1,139 @@
+==========================================
+ENDPOINTS SINGLETON - LIASSE VIERGE DE DOCUMENTS
+==========================================
+
+BASE URL: http://localhost:8080/api/documents
+
+--------------------------------------------------------------------
+ENDPOINT 1: Générer un document spécifique
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/documents/generate
+
+REQUEST BODY (JSON):
+{
+  "documentType": "ORDER_FORM",
+  "orderId": 1,
+  "customData": {
+    "{{additional_note}}": "Livraison express demandée"
+  }
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 1,
+  "type": "ORDER_FORM",
+  "title": "Bon de Commande - 1",
+  "content": "<!DOCTYPE html>...", // HTML généré
+  "format": "HTML",
+  "orderId": 1,
+  "clientId": 1,
+  "generatedAt": "2024-12-18T11:00:00",
+  "fileName": "document_1_ORDER_FORM.html"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Générer la liasse complète d'une commande
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/documents/order/{orderId}/bundle
+
+RESPONSE 200 OK (JSON) - orderId=1:
+[
+  {
+    "id": 1,
+    "type": "ORDER_FORM",
+    "title": "Bon de Commande - 1",
+    "content": "...",
+    "format": "HTML",
+    "orderId": 1,
+    "clientId": 1,
+    "generatedAt": "2024-12-18T11:00:00",
+    "fileName": "document_1_ORDER_FORM.html"
+  },
+  {
+    "id": 2,
+    "type": "REGISTRATION_REQUEST",
+    "title": "Demande d'Immatriculation - 1",
+    "content": "...",
+    "format": "HTML",
+    "orderId": 1,
+    "clientId": 1,
+    "generatedAt": "2024-12-18T11:00:01",
+    "fileName": "document_1_REGISTRATION_REQUEST.html"
+  },
+  {
+    "id": 3,
+    "type": "TRANSFER_CERTIFICATE",
+    "title": "Certificat de Cession - 1",
+    "content": "...",
+    "format": "HTML",
+    "orderId": 1,
+    "clientId": 1,
+    "generatedAt": "2024-12-18T11:00:02",
+    "fileName": "document_1_TRANSFER_CERTIFICATE.html"
+  }
+]
+
+--------------------------------------------------------------------
+ENDPOINT 3: Obtenir les documents d'une commande
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/documents/order/{orderId}
+
+RESPONSE 200 OK (JSON) - orderId=1:
+[
+  {
+    "id": 1,
+    "type": "ORDER_FORM",
+    "title": "Bon de Commande - 1",
+    "content": "...",
+    "format": "HTML",
+    "orderId": 1,
+    "clientId": 1,
+    "generatedAt": "2024-12-18T11:00:00",
+    "fileName": "document_1_ORDER_FORM.html"
+  },
+  // ... autres documents
+]
+
+--------------------------------------------------------------------
+ENDPOINT 4: Obtenir un template vierge
+--------------------------------------------------------------------
+METHOD: GET
+URL: /api/documents/template/{type}
+
+RESPONSE 200 OK (JSON) - type=ORDER_FORM:
+{
+  "type": "ORDER_FORM",
+  "title": "Bon de Commande",
+  "content": "<!DOCTYPE html>...",
+  "placeholders": {
+    "{{order_id}}": "",
+    "{{client_info}}": "",
+    "{{vehicle_list}}": "",
+    "{{total_amount}}": "",
+    "{{order_date}}": ""
+  }
+}
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Générer un bon de commande
+curl -X POST http://localhost:8080/api/documents/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "documentType": "ORDER_FORM",
+    "orderId": 1
+  }'
+
+# 2. Générer la liasse complète
+curl -X POST http://localhost:8080/api/documents/order/1/bundle
+
+# 3. Obtenir les templates
+curl -X GET http://localhost:8080/api/documents/template/ORDER_FORM
+
+# 4. Lister les documents d'une commande
+curl -X GET http://localhost:8080/api/documents/order/1

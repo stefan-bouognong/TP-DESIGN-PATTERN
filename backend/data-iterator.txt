@@ -1,0 +1,51 @@
+### Variables
+@baseUrl = http://localhost:8080
+
+### 1. Test création itérateur séquentiel
+POST {{baseUrl}}/api/iterator/create
+Content-Type: application/json
+
+{
+  "type": "SEQUENTIAL"
+}
+
+### 2. Parcours séquentiel (simple)
+GET {{baseUrl}}/api/iterator/sequential?limit=5
+
+### 3. Parcours avec filtres
+POST {{baseUrl}}/api/iterator/filtered
+Content-Type: application/json
+
+{
+  "vehicleTypes": ["ELECTRIC_CAR", "CAR"],
+  "minPrice": 30000,
+  "maxPrice": 60000,
+  "inStock": true
+}
+
+### 4. Pagination
+POST {{baseUrl}}/api/iterator/paginated?page=1&size=3
+Content-Type: application/json
+
+{
+  "onSale": true
+}
+
+### 5. Recherche avancée
+POST {{baseUrl}}/api/iterator/search
+Content-Type: application/json
+
+{
+  "searchKeyword": "Tesla",
+  "vehicleTypes": ["ELECTRIC_CAR"],
+  "minPrice": 40000
+}
+
+### 6. Test du pattern Iterator
+POST {{baseUrl}}/api/iterator/test
+
+### 7. Statistiques d'itération
+GET {{baseUrl}}/api/iterator/stats
+
+### 8. Itérateurs actifs
+GET {{baseUrl}}/api/iterator/active

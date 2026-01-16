@@ -1,0 +1,267 @@
+==========================================
+ENDPOINTS ABSTRACT FACTORY - VÉHICULES
+==========================================
+
+BASE URL: http://localhost:8080/api/vehicles
+
+--------------------------------------------------------------------
+ENDPOINT 1: Créer un véhicule électrique (voiture)
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "ELECTRIC",
+  "vehicleType": "CAR",
+  "model": "Tesla Model 3",
+  "price": 45000.00,
+  "color": "Red",
+  "year": 2024
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 1,
+  "type": "CAR",
+  "energyType": "ELECTRIC",
+  "model": "Tesla Model 3",
+  "price": 45000.00,
+  "color": "Red",
+  "year": 2024,
+  "description": "ElectricCar Tesla Model 3 - $45000.00"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 2: Créer un véhicule essence (voiture)
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "GASOLINE",
+  "vehicleType": "CAR",
+  "model": "Toyota Corolla",
+  "price": 25000.00,
+  "color": "Blue",
+  "year": 2024
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 2,
+  "type": "CAR",
+  "energyType": "GASOLINE",
+  "model": "Toyota Corolla",
+  "price": 25000.00,
+  "color": "Blue",
+  "year": 2024,
+  "description": "GasolineCar Toyota Corolla - $25000.00"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 3: Créer un scooter électrique
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "ELECTRIC",
+  "vehicleType": "SCOOTER",
+  "model": "Niu NQi GT",
+  "price": 3500.00,
+  "color": "Black",
+  "year": 2024
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 3,
+  "type": "SCOOTER",
+  "energyType": "ELECTRIC",
+  "model": "Niu NQi GT",
+  "price": 3500.00,
+  "color": "Black",
+  "year": 2024,
+  "description": "Scooter Niu NQi GT - $3500.00"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 4: Créer un scooter essence
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "GASOLINE",
+  "vehicleType": "SCOOTER",
+  "model": "Vespa Primavera",
+  "price": 4500.00,
+  "color": "White",
+  "year": 2024
+}
+
+RESPONSE 201 CREATED (JSON):
+{
+  "id": 4,
+  "type": "SCOOTER",
+  "energyType": "GASOLINE",
+  "model": "Vespa Primavera",
+  "price": 4500.00,
+  "color": "White",
+  "year": 2024,
+  "description": "Scooter Vespa Primavera - $4500.00"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 5: Erreur - Type de factory invalide
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "HYDROGEN",
+  "vehicleType": "CAR",
+  "model": "Test",
+  "price": 30000.00,
+  "color": "Green",
+  "year": 2024
+}
+
+RESPONSE 400 BAD REQUEST:
+{
+  "timestamp": "2024-12-18T10:30:00.000Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid factory type: HYDROGEN",
+  "path": "/api/vehicles"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 6: Erreur - Type de véhicule invalide
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "ELECTRIC",
+  "vehicleType": "TRUCK",
+  "model": "Test",
+  "price": 50000.00,
+  "color": "Yellow",
+  "year": 2024
+}
+
+RESPONSE 400 BAD REQUEST:
+{
+  "timestamp": "2024-12-18T10:35:00.000Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid vehicle type: TRUCK",
+  "path": "/api/vehicles"
+}
+
+--------------------------------------------------------------------
+ENDPOINT 7: Validation - Prix négatif
+--------------------------------------------------------------------
+METHOD: POST
+URL: /api/vehicles
+
+REQUEST BODY (JSON):
+{
+  "factoryType": "ELECTRIC",
+  "vehicleType": "CAR",
+  "model": "Test",
+  "price": -100.00,
+  "color": "Red",
+  "year": 2024
+}
+
+RESPONSE 400 BAD REQUEST:
+{
+  "timestamp": "2024-12-18T10:40:00.000Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Price must be positive",
+  "path": "/api/vehicles"
+}
+
+====================================================================
+CURL COMMANDS FOR TESTING
+====================================================================
+
+# 1. Voiture électrique
+curl -X POST http://localhost:8080/api/vehicles \
+  -H "Content-Type: application/json" \
+  -d '{
+    "factoryType": "ELECTRIC",
+    "vehicleType": "CAR",
+    "model": "Tesla Model S",
+    "price": 85000.00,
+    "color": "White",
+    "year": 2024
+  }'
+
+# 2. Scooter essence
+curl -X POST http://localhost:8080/api/vehicles \
+  -H "Content-Type: application/json" \
+  -d '{
+    "factoryType": "GASOLINE",
+    "vehicleType": "SCOOTER",
+    "model": "Yamaha NMAX",
+    "price": 3000.00,
+    "color": "Gray",
+    "year": 2024
+  }'
+
+# 3. Erreur type invalide
+curl -X POST http://localhost:8080/api/vehicles \
+  -H "Content-Type: application/json" \
+  -d '{
+    "factoryType": "INVALID",
+    "vehicleType": "CAR",
+    "model": "Test",
+    "price": 10000.00,
+    "color": "Red",
+    "year": 2024
+  }'
+
+====================================================================
+DATABASE SCHEMA
+====================================================================
+
+Table: vehicles
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| id             | bigint           | NO   | PRI | NULL    | auto_increment |
+| vehicle_type   | varchar(31)      | NO   |     | NULL    |                |
+| model          | varchar(255)     | YES  |     | NULL    |                |
+| price          | decimal(19,2)    | YES  |     | NULL    |                |
+| color          | varchar(255)     | YES  |     | NULL    |                |
+| year           | int              | YES  |     | NULL    |                |
+| doors          | int              | YES  |     | NULL    |                |
+| has_sunroof    | bit(1)           | YES  |     | NULL    |                |
+| has_top_case   | bit(1)           | YES  |     | NULL    |                |
+| max_speed      | int              | YES  |     | NULL    |                |
+| battery_capacity | int           | YES  |     | NULL    |                |
+| range          | int              | YES  |     | NULL    |                |
+| fuel_tank_capacity | int        | YES  |     | NULL    |                |
+| fuel_type      | varchar(255)     | YES  |     | NULL    |                |
++----------------+------------------+------+-----+---------+----------------+
+
+====================================================================
+NOTES
+====================================================================
+1. factoryType accepte: ELECTRIC, GASOLINE
+2. vehicleType accepte: CAR, SCOOTER
+3. Le prix doit être positif
+4. L'année doit être raisonnable (ex: 2000-2030)
+5. La réponse inclut toujours l'ID généré par la base de données
+6. Le champ "description" est généré par le pattern Abstract Factory
+7. Le champ "energyType" est déterminé par la factory utilisée
