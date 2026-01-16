@@ -7,12 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Loader2, User, Building } from 'lucide-react';
 import { toast } from 'sonner';
-import { ClientRequest, registerAndLoginClient } from '@/api/clients.service';
+import { ClientRequest, registerAndLoginClient} from '@/api/clients.service';
 import { useAuth } from '@/contexts/AuthContext';
 import { countries } from '@/data/countries';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export function RegisterForm({ onOpenChange, onSuccess }: { onOpenChange?: (open: boolean) => void; onSuccess?: () => void }) {
-  const { register } = useAuth(); // On utilise register du contexte
+  const register = useAuthStore((state) => state.register);
   const navigate = useNavigate();
 
   const [customerType, setCustomerType] = useState<'individual' | 'company'>('individual');

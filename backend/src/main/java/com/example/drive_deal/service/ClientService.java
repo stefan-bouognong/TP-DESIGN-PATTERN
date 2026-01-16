@@ -11,7 +11,7 @@ import com.example.drive_deal.dto.CompanyStructureDTO;
 import com.example.drive_deal.entity.*;
 import com.example.drive_deal.repository.ClientRepository;
 import com.example.drive_deal.repository.UserRepository;
-
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +29,14 @@ public class ClientService {
     private final UserRepository userRepository;
     private final ClientAdapter clientAdapter;
     private final PasswordEncoder passwordEncoder;
+   // ou mapping manuel
 
+        public ClientResponseDTO getClientById(Long id) {
+        ClientEntity client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client avec l'id " + id + " introuvable"));
+
+        return mapToResponseDTO(client);
+    }
     // ======================
     // CRÉATION CLIENT + USER
     // ======================

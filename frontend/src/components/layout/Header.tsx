@@ -1,12 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/contexts/CartContext';
+
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useCartStore } from '@/contexts/CartContext';
 
 export function Header() {
-  const { itemCount } = useCart();
+  // const itemCount  = useCartStore((state) => state.itemCount);
+  const items = useCartStore((state) => state.items);
+  const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+  console.log('Header items:', items);
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   

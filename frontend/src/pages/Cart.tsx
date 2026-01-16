@@ -1,12 +1,14 @@
 import { Layout } from '@/components/layout/Layout';
 import { CartItemCard } from '@/components/cart/CartItem';
 import { CartSummary } from '@/components/cart/CartSummary';
-import { useCart } from '@/contexts/CartContext';
 import { Badge } from '@/components/ui/badge';
 import { Clock } from 'lucide-react';
+import { useCartStore } from '@/contexts/CartContext';
 
 export default function Cart() {
-  const { items, history, historyIndex } = useCart();
+  const items = useCartStore(state => state.items)
+  const history = useCartStore(state => state.history)
+  const historyIndex = useCartStore(state => state.historyIndex)
 
   return (
     <Layout>

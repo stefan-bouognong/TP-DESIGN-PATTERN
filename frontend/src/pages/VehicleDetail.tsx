@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useCart } from '@/contexts/CartContext';
+
 import { useState, useEffect } from 'react';
 import { vehiclesService, VehicleResponse } from '@/api/vehicles.service';
 import {
@@ -18,13 +18,14 @@ import {
   Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCartStore } from '@/contexts/CartContext';
 
 // Si tu as un type VehicleOption, garde-le ; sinon on le commente pour l'instant
 // interface VehicleOption { ... }
 
 export default function VehicleDetail() {
   const { id } = useParams<{ id: string }>();
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const [vehicle, setVehicle] = useState<VehicleResponse | null>(null);
   const [loading, setLoading] = useState(true);

@@ -7,8 +7,11 @@ import com.example.drive_deal.entity.User;
 import com.example.drive_deal.repository.UserRepository;
 import com.example.drive_deal.security.JwtService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,49 +29,60 @@ public class AuthController {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-        try {
-            // Vérifier si l'utilisateur existe
-            User user = userRepository.findByEmail(request.getEmail())
-                    .orElse(null);
-            
-            if (user == null) {
-                return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(
+   @PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    try {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of(
                             "error", "Email ou mot de passe incorrect",
                             "message", "Aucun compte trouvé avec cet email"
-                        ));
-            }
-
-            // Authentifier l'utilisateur
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
-
-            // Générer le token JWT
-            String jwt = jwtService.generateToken(user);
-
-            // Retourner la réponse avec le token
-            return ResponseEntity.ok(new AuthResponse(jwt, user.getRole().name(), "Connexion réussie"));
-        } catch (org.springframework.security.authentication.BadCredentialsException e) {
-            // Gérer les erreurs d'authentification (mauvais mot de passe)
-            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
-                    .body(Map.of(
-                        "error", "Email ou mot de passe incorrect",
-                        "message", "Le mot de passe fourni est incorrect. Vérifiez votre saisie."
-                    ));
-        } catch (Exception e) {
-            // Gérer les autres erreurs
-            e.printStackTrace(); // Pour le débogage
-            return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of(
-                        "error", "Erreur lors de la connexion",
-                        "message", e.getMessage() != null ? e.getMessage() : "Une erreur inattendue s'est produite"
                     ));
         }
-    }
 
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        String jwt = jwtService.generateToken(user);
+
+        // 🔹 IDs demandés
+        Long userId = user.getId();
+        Long clientId = user.getClient() != null
+                ? user.getClient().getId()
+                : null;
+
+        return ResponseEntity.ok(
+                new AuthResponse(
+                        jwt,
+                        userId,
+                        clientId,
+                        user.getRole().name(),
+                        "Connexion réussie"
+                )
+        );
+
+    } catch (BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(
+                        "error", "Email ou mot de passe incorrect",
+                        "message", "Mot de passe incorrect"
+                ));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "error", "Erreur lors de la connexion",
+                        "message", e.getMessage()
+                ));
+    }
+}
     // Endpoint pour créer un admin (à utiliser une seule fois ou sécuriser)
     @PostMapping("/register-admin")
     public ResponseEntity<String> registerAdmin() {

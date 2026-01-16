@@ -18,7 +18,13 @@ import java.util.List;
 public class ClientController {
     
     private final ClientService clientService;
-    
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClientResponseDTO> getClientById(@PathVariable Long id) {
+        ClientResponseDTO response = clientService.getClientById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO request) {
         ClientResponseDTO response = clientService.createClient(request);

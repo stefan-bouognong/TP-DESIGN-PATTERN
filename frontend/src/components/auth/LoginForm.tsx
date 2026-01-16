@@ -7,13 +7,17 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { authService } from '@/api/auth.service';
 import { ClientResponse } from '@/api/clients.service';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface LoginFormProps {
   onSuccess?: () => void;
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  const { register, isLoading } = useAuth(); // on utilise register pour mettre à jour le contexte
+  const login = useAuthStore((state) => state.login);
+  const user = useAuthStore((state) => state.user);
+  const isLoading = useAuthStore((state) => state.isLoading);
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,41 +31,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
     try {
       // Appel API login
-      const response = await authService.login({ email, password });
-      const { token, role } = response.data;
+      const response = await login( email, password );
+      
 
-      // Récupérer les infos client/admin si besoin
-      let userData: ClientResponse | null = null;
+      // console.log('test response', response)
+     
 
-      if (role === 'CLIENT') {
-        // Ici tu peux éventuellement appeler une API pour récupérer le client complet
-        // Exemple : GET /clients/me
-        // Pour simplifier, on stocke juste email + role
-        userData = {
-          id: 0, // temporaire
-          name: email,
-          email,
-          phone: '',
-          address: '',
-          clientType: 'INDIVIDUAL',
-          firstName: null,
-          lastName: null,
-          nationality: null,
-          companyId: null,
-          vatNumber: null,
-          parentCompanyId: null,
-          fleetDiscount: null,
-        };
-      }
-
-      // Stocker le token dans localStorage
-      localStorage.setItem('token', token);
-
-      // Mettre à jour le contexte Auth
-      register({
-        ...userData,
-        token,
-      });
+      console.log('Utilisateur connecté :', user);
 
       toast.success('Connexion réussie');
       onSuccess?.();

@@ -3,16 +3,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Trash2, Plus, Minus, Settings } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useCartStore} from '@/contexts/CartContext';
 
 interface CartItemProps {
   item: CartItemType;
 }
 
 export function CartItemCard({ item }: CartItemProps) {
-  const { removeFromCart, updateOptions } = useCart();
+  const removeFromCart= useCartStore((state) => state.removeFromCart);
+  const  updateOptions  = useCartStore((state) => state.updateOptions);
   const [showOptions, setShowOptions] = useState(false);
 
   const formatPrice = (price: number) =>

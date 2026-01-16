@@ -1,3 +1,4 @@
+import { get } from 'http';
 import { authService } from './auth.service';
 import api from './index.service';
 
@@ -61,6 +62,10 @@ export const clientsService = {
   // Créer un client (individuel ou entreprise)
   createClient: (data: ClientRequest) => 
     api.post<ClientResponse>('/clients', data),
+
+  // obtenir un client par id
+  getClientById: (id: number) =>
+    api.get<ClientResponse>(`/clients/${id}`),
 
   // Ajouter une filiale à une société
   addSubsidiary: (parentId: number, data: Omit<CompanyClient, 'parentCompanyId'>) => 

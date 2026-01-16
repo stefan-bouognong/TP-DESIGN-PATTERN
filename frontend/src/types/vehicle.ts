@@ -65,3 +65,15 @@ export interface VehicleResponse {
   range?: number;
   fuelTankCapacity?: number;
 }
+export interface VehicleOption {
+  id: string           // identifiant unique de l’option
+  name: string         // nom de l’option, ex: "Toit ouvrant"
+  price: number        // prix supplémentaire de l’option
+  description?: string // description facultative de l’option
+}
+
+export interface CartItem {
+  vehicle: Vehicle              // le véhicule complet
+  quantity: number              // nombre d’exemplaires
+  selectedOptions?: VehicleOption[] // options choisies pour ce véhicule
+}

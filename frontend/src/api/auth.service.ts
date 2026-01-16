@@ -15,6 +15,8 @@ export interface AuthResponse {
   token: string;
   email: string;
   role: string;
+  clientId?: number;
+  userId?: number;
   // Ajoutez d'autres champs selon votre réponse API
 }
 

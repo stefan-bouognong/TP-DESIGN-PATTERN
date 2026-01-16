@@ -1,31 +1,30 @@
-import { useCart } from '@/contexts/CartContext';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Undo2, Redo2, Trash2, ShoppingBag } from 'lucide-react';
-import { countries } from '@/data/mockVehicles';
-import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Undo2, Redo2, Trash2, ShoppingBag } from 'lucide-react'
+import { countries } from '@/data/mockVehicles'
+import { Link } from 'react-router-dom'
+import { useCartStore } from '@/contexts/CartContext'
 
 export function CartSummary() {
-  const {
-    items,
-    subtotal,
-    taxes,
-    total,
-    deliveryCountry,
-    setDeliveryCountry,
-    undo,
-    redo,
-    canUndo,
-    canRedo,
-    clearCart,
-  } = useCart();
+  // Récupération depuis le store Zustand
+  const items = useCartStore(state => state.items)
+  const subtotal = useCartStore(state => state.subtotal)
+  const taxes = useCartStore(state => state.taxes)
+  const total = useCartStore(state => state.total)
+  const deliveryCountry = useCartStore(state => state.deliveryCountry)
+  const setDeliveryCountry = useCartStore(state => state.setDeliveryCountry)
+  const undo = useCartStore(state => state.undo)
+  const redo = useCartStore(state => state.redo)
+  const canUndo = useCartStore(state => state.canUndo)
+  const canRedo = useCartStore(state => state.canRedo)
+  const clearCart = useCartStore(state => state.clearCart)
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'XAF',
       maximumFractionDigits: 0,
-    }).format(price);
+    }).format(price)
 
   if (items.length === 0) {
     return (
@@ -39,7 +38,7 @@ export function CartSummary() {
           <Link to="/catalog">Voir le catalogue</Link>
         </Button>
       </div>
-    );
+    )
   }
 
   return (
@@ -86,7 +85,7 @@ export function CartSummary() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {countries.map((country) => (
+            {countries.map(country => (
               <SelectItem key={country} value={country}>
                 {country}
               </SelectItem>
@@ -120,5 +119,5 @@ export function CartSummary() {
         En commandant, vous acceptez nos conditions générales de vente.
       </p>
     </div>
-  );
+  )
 }

@@ -2,9 +2,10 @@ import { Vehicle } from '@/types/vehicle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Zap, Fuel, Eye } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useCartStore } from '@/contexts/CartContext';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -12,7 +13,8 @@ interface VehicleCardProps {
 }
 
 export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
+
 
   const formatPrice = (price: number) => {
   return new Intl.NumberFormat('fr-CM', {
