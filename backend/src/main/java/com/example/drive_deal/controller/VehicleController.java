@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -89,7 +90,7 @@ public class VehicleController {
     // Ou par prix max (exemple)
     @GetMapping("/price")
     public ResponseEntity<List<VehicleResponseDTO>> getVehiclesByMaxPrice(
-            @RequestParam("max") Double maxPrice) {
+            @RequestParam("max") BigDecimal maxPrice) {
         List<VehicleResponseDTO> vehicles = vehicleService.findByPriceLessThanEqual(maxPrice);
         return ResponseEntity.ok(vehicles);
     }
