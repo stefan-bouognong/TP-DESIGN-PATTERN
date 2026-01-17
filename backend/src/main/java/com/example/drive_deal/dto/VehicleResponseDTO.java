@@ -22,7 +22,8 @@ public class VehicleResponseDTO {
     private String description;
     private String type;
     private LocalDateTime createdAt;
-
+    private String imageUrl;
+    private String videoUrl;
     // =====================
     // Champs CAR
     // =====================

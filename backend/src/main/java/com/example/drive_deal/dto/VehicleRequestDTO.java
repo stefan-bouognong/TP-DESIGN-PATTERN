@@ -13,5 +13,7 @@ public class VehicleRequestDTO {
     private String color;
     private Integer year;
     private String brand;       
-    private String name;        
+    private String name;
+    private String imageUrl;
+    private String videoUrl;        
 }

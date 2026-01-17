@@ -2,11 +2,13 @@ package com.example.drive_deal.controller;
 
 import com.example.drive_deal.dto.VehicleRequestDTO;
 import com.example.drive_deal.dto.VehicleResponseDTO;
+import com.example.drive_deal.entity.VehicleEntity;
 import com.example.drive_deal.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -94,4 +96,5 @@ public class VehicleController {
         List<VehicleResponseDTO> vehicles = vehicleService.findByPriceLessThanEqual(maxPrice);
         return ResponseEntity.ok(vehicles);
     }
+
 }

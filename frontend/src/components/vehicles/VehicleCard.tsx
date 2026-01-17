@@ -40,7 +40,7 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
         {/* Image */}
         <div className="relative h-32 w-48 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
           <img
-            // src={vehicle.images[0]}
+            src={vehicle.imageUrl?? '/placeholder-car.jpg' }
             alt={vehicle.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -99,7 +99,7 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
-          // src={vehicle.images[0]}
+          src={vehicle.imageUrl?? "frgfrgrgthtyhrt6"} 
           alt={vehicle.name}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />

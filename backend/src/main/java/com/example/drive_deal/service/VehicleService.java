@@ -38,9 +38,13 @@ public class VehicleService {
         entity.setBrand(request.getBrand());
         entity.setColor(request.getColor());
         entity.setYear(request.getYear());
+        entity.setImageUrl(request.getImageUrl());
+        entity.setVideoUrl(request.getVideoUrl());
         entity.setAvailable(true);
         entity.setOnSale(false);
         entity.setDescription(vehicle.getDescription());
+
+        
 
         VehicleEntity saved = vehicleRepository.save(entity);
         return mapToResponse(saved);
@@ -85,6 +89,8 @@ public class VehicleService {
         entity.setPrice(request.getPrice());
         entity.setColor(request.getColor());
         entity.setYear(request.getYear());
+        entity.setImageUrl(request.getImageUrl());
+        entity.setVideoUrl(request.getVideoUrl());
         // entity.setAvailable(request.isAvailable());
         // entity.setOnSale(request.isOnSale());
 
@@ -168,6 +174,9 @@ public class VehicleService {
         dto.setDescription(entity.getDescription());
         dto.setType(entity.getType());
         dto.setCreatedAt(entity.getCreatedAt());
+        dto.setImageUrl(entity.getImageUrl());
+        dto.setVideoUrl(entity.getVideoUrl());
+
 
         // ===== CAR =====
         if (entity instanceof GasolineCarEntity car) {

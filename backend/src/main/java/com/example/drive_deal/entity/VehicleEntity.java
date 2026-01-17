@@ -45,6 +45,32 @@ public abstract class VehicleEntity {
         this.createdAt = LocalDateTime.now();
     }
 
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+
+    @Column(name = "video_url", length = 500)
+    private String videoUrl;
+
+
+
+    public String getImageUrl() {
+    return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+
+
     // getters
     public LocalDateTime getCreatedAt() {
         return createdAt;

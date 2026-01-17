@@ -15,7 +15,7 @@ import { Loader2 } from 'lucide-react';
 import { Vehicle } from '@/types/vehicle';
 
 interface VehicleFormProps {
-  onSubmit: (vehicle: any) => void; // À typer précisément selon ton service
+  onSubmit: (vehicle: any) => void;
   onCancel: () => void;
   initialData?: Partial<Vehicle>;
 }
@@ -23,6 +23,10 @@ interface VehicleFormProps {
 export function VehicleForm({ onSubmit, onCancel, initialData }: VehicleFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
@@ -68,7 +72,38 @@ export function VehicleForm({ onSubmit, onCancel, initialData }: VehicleFormProp
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const uploadToCloudinary = async (
+    file: File,
+    resourceType: 'image' | 'video'
+  ): Promise<string> => {
+    const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+    const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+    if (!CLOUDINARY_URL || !UPLOAD_PRESET) {
+      throw new Error('Configuration Cloudinary manquante');
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+    formData.append("cloud_name","dqmsvnt0e")
+    const res = await fetch(`${CLOUDINARY_URL}/${resourceType}/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(text);
+      throw new Error('Erreur upload Cloudinary');
+    }
+
+    const data = await res.json();
+    return data.secure_url;
+  };
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -88,7 +123,7 @@ export function VehicleForm({ onSubmit, onCancel, initialData }: VehicleFormProp
       onSale: formData.onSale,
     };
 
-    let specificData = {};
+    let specificData: any = {};
 
     if (formData.vehicleType === 'CAR') {
       specificData = {
@@ -113,10 +148,35 @@ export function VehicleForm({ onSubmit, onCancel, initialData }: VehicleFormProp
       specificData = { ...specificData, fuelTankCapacity: Number(formData.fuelTankCapacity) };
     }
 
-    const vehicleToSend = { ...baseData, ...specificData };
+    try {
+      let imageUrl: string | undefined;
+      let videoUrl: string | undefined;
 
-    onSubmit(vehicleToSend);
-    setIsSubmitting(false);
+      // if (imageFile) {
+        imageUrl = await uploadToCloudinary(imageFile, 'image');
+        console.log('TESTEDSDSDJKJKJKJ',imageUrl)
+      // }
+
+      if (videoFile) {
+        videoUrl = await uploadToCloudinary(videoFile, 'video');
+      }
+
+      const vehicleToSend = {
+        ...baseData,
+        ...specificData,
+       imageUrl,
+       videoUrl
+      };
+      
+      console.log("VEHICLE TO SEND", vehicleToSend);
+
+      onSubmit(vehicleToSend);
+    } catch (err) {
+      console.error(err);
+      alert('Erreur lors de l’upload média');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (field: string, value: any) => {
@@ -318,6 +378,52 @@ export function VehicleForm({ onSubmit, onCancel, initialData }: VehicleFormProp
             />
           </div>
         )}
+
+        {/* IMAGE */}
+        <div className="col-span-2">
+          <Label>Image du véhicule</Label>
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setImageFile(file);
+                setImagePreview(URL.createObjectURL(file));
+              }
+            }}
+          />
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="mt-2 max-h-48 rounded-md border"
+            />
+          )}
+        </div>
+
+        {/* VIDÉO */}
+        <div className="col-span-2">
+          <Label>Vidéo (optionnelle)</Label>
+          <Input
+            type="file"
+            accept="video/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setVideoFile(file);
+                setVideoPreview(URL.createObjectURL(file));
+              }
+            }}
+          />
+          {videoPreview && (
+            <video
+              src={videoPreview}
+              controls
+              className="mt-2 max-h-56 rounded-md border"
+            />
+          )}
+        </div>
 
         {/* DESCRIPTION */}
         <div className="col-span-2">

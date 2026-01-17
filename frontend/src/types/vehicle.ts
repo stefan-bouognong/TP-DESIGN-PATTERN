@@ -41,6 +41,8 @@ export interface Vehicle {
   batteryCapacity?: number;
   range?: number;
   fuelTankCapacity?: number;
+  imageUrl?: string;
+  videoUrl?: string;
 }
 
 export interface VehicleResponse {

@@ -58,7 +58,11 @@ Réponse attendue (200):
 "subject": "Test Pattern Observer",
 "timestamp": "2024-01-15T10:31:00"
 }
+
+
+
 4.3 TEST ÉVÉNEMENT VÉHICULE AJOUTÉ
+
 Endpoint: POST {{base_url}}/api/observer/trigger/vehicle-added
 Données d'entrée: Aucune (données hardcodées dans le test)
 Véhicule de test: Tesla Model 3 Performance, ELECTRIC_CAR, 59990FCFA
@@ -299,6 +303,10 @@ Cas 2: Client Marie s'abonne aux CATALOG_UPDATES
 "vehicleTypes": ["SCOOTER", "MOTORCYCLE"],
 "emailFrequency": "DAILY_DIGEST"
 }
+
+
+
+
 5.2 DÉSABONNER UN CLIENT
 Endpoint: POST {{base_url}}/api/subscriptions/unsubscribe
 Cas: Client Jean se désabonne des PROMOTIONS
@@ -312,6 +320,8 @@ Réponse attendue (200):
 "success": true,
 "message": "Désabonnement réussi"
 }
+
+
 5.3 PRÉFÉRENCES CLIENT
 Endpoint: GET {{base_url}}/api/subscriptions/client/1/preferences
 Réponse attendue (200):
