@@ -39,11 +39,20 @@ public class VehicleController {
     }
 
     // ───────────────────────────────────────────────
-    //              READ - All vehicles
+    //              READ - All vehicles AVEC FILTRES
     // ───────────────────────────────────────────────
     @GetMapping
-    public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles() {
-        List<VehicleResponseDTO> vehicles = vehicleService.getAllVehicles();
+    public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean available,
+            @RequestParam(required = false) Boolean onSale,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice) {
+        
+        List<VehicleResponseDTO> vehicles = vehicleService.getAllVehicles(
+                search, available, onSale, type, minPrice, maxPrice);
+        
         return ResponseEntity.ok(vehicles);
     }
 
@@ -69,29 +78,29 @@ public class VehicleController {
     }
 
     // ───────────────────────────────────────────────
-    //     Bonus très utiles (souvent ajoutées)
+    //     Endpoints spécifiques (rétrocompatibilité)
     // ───────────────────────────────────────────────
 
-    // Recherche par marque (exemple)
+    // Recherche par marque
     @GetMapping("/brand/{brand}")
     public ResponseEntity<List<VehicleResponseDTO>> getVehiclesByBrand(
             @PathVariable String brand) {
-        List<VehicleResponseDTO> vehicles = vehicleService.findByBrand(brand);
-        return ResponseEntity.ok(vehicles);
+        // Utilise le nouvel endpoint avec seulement le filtre brand
+        return getAllVehicles(brand, null, null, null, null, null);
     }
 
     // Recherche par disponibilité
     @GetMapping("/available")
     public ResponseEntity<List<VehicleResponseDTO>> getAvailableVehicles() {
-        List<VehicleResponseDTO> vehicles = vehicleService.findAvailableVehicles();
-        return ResponseEntity.ok(vehicles);
+        // Utilise le nouvel endpoint avec seulement available=true
+        return getAllVehicles(null, true, null, null, null, null);
     }
 
-    // Ou par prix max (exemple)
+    // Recherche par prix maximum
     @GetMapping("/price")
     public ResponseEntity<List<VehicleResponseDTO>> getVehiclesByMaxPrice(
             @RequestParam("max") BigDecimal maxPrice) {
-        List<VehicleResponseDTO> vehicles = vehicleService.findByPriceLessThanEqual(maxPrice);
-        return ResponseEntity.ok(vehicles);
+        // Utilise le nouvel endpoint avec seulement maxPrice
+        return getAllVehicles(null, null, null, null, null, maxPrice);
     }
 }

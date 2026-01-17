@@ -9,8 +9,8 @@ import { cn } from '@/lib/utils';
 
 export interface FilterState {
   search: string;
-  types: ('automobile' | 'scooter')[];
-  fuelTypes: ('essence' | 'electric' | 'hybrid')[];
+  types: string[];           // Va contenir 'CAR' ou 'SCOOTER'
+  fuelTypes: string[];       // ⚠️ Filtre côté frontend uniquement
   priceRange: [number, number];
   onlyAvailable: boolean;
   onlyPromotion: boolean;
@@ -75,51 +75,88 @@ export function VehicleFilters({
 
   const FiltersContent = () => (
     <div className="space-y-6">
-      {/* Type de véhicule */}
+      {/* Type de véhicule - SEULEMENT 2 CHOIX */}
       <div>
         <h4 className="font-medium mb-3">Type de véhicule</h4>
         <div className="flex flex-wrap gap-2">
-          {[
-            { value: 'automobile' as const, label: 'Automobiles' },
-            { value: 'scooter' as const, label: 'Scooters' },
-          ].map((type) => (
-            <Badge
-              key={type.value}
-              variant={filters.types.includes(type.value) ? 'default' : 'outline'}
-              className={cn(
-                "cursor-pointer transition-colors",
-                filters.types.includes(type.value) && "bg-accent hover:bg-accent/90"
-              )}
-              onClick={() => toggleArrayFilter('types', type.value)}
-            >
-              {type.label}
-            </Badge>
-          ))}
+          {/* CAR = Voiture */}
+          <Badge
+            variant={filters.types.includes('CAR') ? 'default' : 'outline'}
+            className={cn(
+              "cursor-pointer transition-colors",
+              filters.types.includes('CAR') && "bg-accent hover:bg-accent/90"
+            )}
+            onClick={() => toggleArrayFilter('types', 'CAR')}
+          >
+            Voitures
+          </Badge>
+          
+          {/* SCOOTER = Scooter/Moto */}
+          <Badge
+            variant={filters.types.includes('SCOOTER') ? 'default' : 'outline'}
+            className={cn(
+              "cursor-pointer transition-colors",
+              filters.types.includes('SCOOTER') && "bg-accent hover:bg-accent/90"
+            )}
+            onClick={() => toggleArrayFilter('types', 'SCOOTER')}
+          >
+            Scooters
+          </Badge>
         </div>
       </div>
 
-      {/* Carburant */}
+      {/* Carburant - UNIQUEMENT pour affichage, filtre côté frontend */}
       <div>
-        <h4 className="font-medium mb-3">Carburant</h4>
-        <div className="flex flex-wrap gap-2">
-          {[
-            { value: 'electric' as const, label: 'Électrique' },
-            { value: 'essence' as const, label: 'Essence' },
-            { value: 'hybrid' as const, label: 'Hybride' },
-          ].map((fuel) => (
-            <Badge
-              key={fuel.value}
-              variant={filters.fuelTypes.includes(fuel.value) ? 'default' : 'outline'}
-              className={cn(
-                "cursor-pointer transition-colors",
-                filters.fuelTypes.includes(fuel.value) && "bg-accent hover:bg-accent/90"
-              )}
-              onClick={() => toggleArrayFilter('fuelTypes', fuel.value)}
-            >
-              {fuel.label}
-            </Badge>
-          ))}
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-medium">Carburant</h4>
+          {filters.fuelTypes.length > 0 && (
+            <span className="text-xs text-yellow-600 bg-yellow-50 px-2 py-1 rounded">
+              ⚠️ Filtre local
+            </span>
+          )}
         </div>
+        <div className="flex flex-wrap gap-2">
+          {/* Essence */}
+          <Badge
+            variant={filters.fuelTypes.includes('essence') ? 'default' : 'outline'}
+            className={cn(
+              "cursor-pointer transition-colors",
+              filters.fuelTypes.includes('essence') && "bg-accent hover:bg-accent/90"
+            )}
+            onClick={() => toggleArrayFilter('fuelTypes', 'essence')}
+          >
+            Essence
+          </Badge>
+          
+          {/* Électrique */}
+          <Badge
+            variant={filters.fuelTypes.includes('electric') ? 'default' : 'outline'}
+            className={cn(
+              "cursor-pointer transition-colors",
+              filters.fuelTypes.includes('electric') && "bg-accent hover:bg-accent/90"
+            )}
+            onClick={() => toggleArrayFilter('fuelTypes', 'electric')}
+          >
+            Électrique
+          </Badge>
+          
+          {/* Hybride */}
+          <Badge
+            variant={filters.fuelTypes.includes('hybrid') ? 'default' : 'outline'}
+            className={cn(
+              "cursor-pointer transition-colors",
+              filters.fuelTypes.includes('hybrid') && "bg-accent hover:bg-accent/90"
+            )}
+            onClick={() => toggleArrayFilter('fuelTypes', 'hybrid')}
+          >
+            Hybride
+          </Badge>
+        </div>
+        {filters.fuelTypes.length > 0 && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Filtrage effectué après récupération des données
+          </p>
+        )}
       </div>
 
       {/* Prix */}
@@ -135,6 +172,10 @@ export function VehicleFilters({
           step={1000}
           className="mt-2"
         />
+        <div className="flex justify-between text-xs text-muted-foreground mt-2">
+          <span>0€</span>
+          <span>{formatPrice(maxPrice)}</span>
+        </div>
       </div>
 
       {/* Options */}
@@ -171,7 +212,7 @@ export function VehicleFilters({
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Rechercher par marque, modèle... (utilisez ET, OU)"
+            placeholder="Rechercher par marque, modèle..."
             value={filters.search}
             onChange={(e) => updateFilter('search', e.target.value)}
             className="pl-10"

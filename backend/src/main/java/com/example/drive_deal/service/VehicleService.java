@@ -60,12 +60,31 @@ public class VehicleService {
     }
 
     // ───────────────────────────────────────────────
-    // READ - ALL
+    // READ - ALL AVEC FILTRES (MÉTHODE MODIFIÉE)
     // ───────────────────────────────────────────────
     @Transactional(readOnly = true)
-    public List<VehicleResponseDTO> getAllVehicles() {
-        return vehicleRepository.findAll()
-                .stream()
+    public List<VehicleResponseDTO> getAllVehicles(
+            String search,
+            Boolean available,
+            Boolean onSale,
+            String type,
+            BigDecimal minPrice,
+            BigDecimal maxPrice) {
+        
+        // Si aucun filtre n'est spécifié, retourne tous les véhicules
+        if (search == null && available == null && onSale == null && 
+            type == null && minPrice == null && maxPrice == null) {
+            return vehicleRepository.findAll()
+                    .stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        }
+        
+        // Sinon, utilise la nouvelle méthode avec filtres
+        List<VehicleEntity> entities = vehicleRepository.findWithAllFilters(
+                search, available, onSale, type, minPrice, maxPrice);
+        
+        return entities.stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
@@ -103,30 +122,24 @@ public class VehicleService {
     }
 
     // ───────────────────────────────────────────────
-    // SEARCH
+    // SEARCH (méthodes existantes - compatibilité)
     // ───────────────────────────────────────────────
     @Transactional(readOnly = true)
     public List<VehicleResponseDTO> findByBrand(String brand) {
-        return vehicleRepository.findByBrandIgnoreCase(brand)
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        // Utilise la nouvelle méthode avec seulement le filtre brand
+        return getAllVehicles(brand, null, null, null, null, null);
     }
 
     @Transactional(readOnly = true)
     public List<VehicleResponseDTO> findAvailableVehicles() {
-        return vehicleRepository.findByAvailableTrue()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        // Utilise la nouvelle méthode avec seulement available=true
+        return getAllVehicles(null, true, null, null, null, null);
     }
 
     @Transactional(readOnly = true)
     public List<VehicleResponseDTO> findByPriceLessThanEqual(BigDecimal maxPrice) {
-        return vehicleRepository.findByPriceLessThanEqual(maxPrice)
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        // Utilise la nouvelle méthode avec seulement maxPrice
+        return getAllVehicles(null, null, null, null, null, maxPrice);
     }
 
     // ───────────────────────────────────────────────
