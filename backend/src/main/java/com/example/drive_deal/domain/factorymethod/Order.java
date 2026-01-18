@@ -9,7 +9,7 @@ public interface Order {
     Long getId();
     String getOrderType();
     OrderStatus getStatus();
-    BigDecimal getTotalAmount();
+    BigDecimal getSubtotal();
     int getItemCount();
     List<OrderItem> getItems();
     void addItem(OrderItem item);

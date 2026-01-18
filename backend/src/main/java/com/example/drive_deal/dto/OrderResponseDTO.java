@@ -13,8 +13,9 @@ public class OrderResponseDTO {
     private Long clientId;
     private String clientName;
     private String orderType; // "CASH" or "CREDIT"
-    private OrderStatus status;
+    private String status;
     private BigDecimal totalAmount;
+    private BigDecimal subtotal;
     private LocalDateTime orderDate;
     private String shippingAddress;
     private String billingAddress;

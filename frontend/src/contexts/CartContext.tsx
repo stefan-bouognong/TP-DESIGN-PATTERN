@@ -1,7 +1,12 @@
 import { create } from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
 import { CartItem, CartState, Vehicle, VehicleOption } from '@/types/vehicle'
-import { taxRates } from '@/data/mockVehicles'
+import { countriesWithTVA } from '@/data/countriesWithTVA'
+
+const getTVAForCountry = (country: string): number => {
+  const entry = countriesWithTVA.find(c => c.country === country)
+  return entry ? Number(entry.tva) : 0
+}
 
 interface CartStore {
   items: CartItem[]
@@ -12,18 +17,19 @@ interface CartStore {
   addToCart: (vehicle: Vehicle, options?: VehicleOption[]) => void
   removeFromCart: (vehicleId: string) => void
   updateOptions: (vehicleId: string, options: VehicleOption[]) => void
+
+  increaseQuantity: (vehicleId: string) => void
+  decreaseQuantity: (vehicleId: string) => void
+
   clearCart: () => void
   undo: () => void
   redo: () => void
   setDeliveryCountry: (country: string) => void
 
-  canUndo: boolean
-  canRedo: boolean
-
-  subtotal: number
-  taxes: number
-  total: number
-  itemCount: number
+  getSubtotal: () => number
+  getTaxes: () => number
+  getTotal: () => number
+  getItemCount: () => number
 
   saveToHistory: (items: CartItem[]) => void
 }
@@ -37,20 +43,43 @@ export const useCartStore = create<CartStore>()(
         historyIndex: 0,
         deliveryCountry: 'France',
 
+        /* ───────────── CART ACTIONS ───────────── */
+
         addToCart: (vehicle, options = []) => {
           const { items } = get()
-          const existing = items.find(i => i.vehicle.id === vehicle.id)
-          let newItems: CartItem[]
+          const exists = items.some(i => i.vehicle.id === vehicle.id)
 
-          if (existing) {
-            newItems = items.map(i =>
-              i.vehicle.id === vehicle.id
-                ? { ...i, quantity: i.quantity + 1 }
-                : i
-            )
-          } else {
-            newItems = [...items, { vehicle, selectedOptions: options, quantity: 1 }]
-          }
+          // 🚫 Déjà dans le panier → on ne fait rien
+          if (exists) return
+
+          const newItems: CartItem[] = [
+            ...items,
+            { vehicle, selectedOptions: options, quantity: 1 },
+          ]
+
+          set({ items: newItems })
+          get().saveToHistory(newItems)
+        },
+
+        increaseQuantity: (vehicleId) => {
+          const newItems = get().items.map(item =>
+            item.vehicle.id === vehicleId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+
+          set({ items: newItems })
+          get().saveToHistory(newItems)
+        },
+
+        decreaseQuantity: (vehicleId) => {
+          let newItems = get().items.map(item =>
+            item.vehicle.id === vehicleId
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          )
+
+          newItems = newItems.filter(item => item.quantity > 0)
 
           set({ items: newItems })
           get().saveToHistory(newItems)
@@ -64,8 +93,11 @@ export const useCartStore = create<CartStore>()(
 
         updateOptions: (vehicleId, options) => {
           const newItems = get().items.map(i =>
-            i.vehicle.id === vehicleId ? { ...i, selectedOptions: options } : i
+            i.vehicle.id === vehicleId
+              ? { ...i, selectedOptions: options }
+              : i
           )
+
           set({ items: newItems })
           get().saveToHistory(newItems)
         },
@@ -75,45 +107,68 @@ export const useCartStore = create<CartStore>()(
           get().saveToHistory([])
         },
 
+        /* ───────────── HISTORY ───────────── */
+
         undo: () => {
           const { history, historyIndex } = get()
           if (historyIndex > 0) {
-            const newIndex = historyIndex - 1
-            set({ historyIndex: newIndex, items: history[newIndex].items })
+            set({
+              historyIndex: historyIndex - 1,
+              items: history[historyIndex - 1].items,
+            })
           }
         },
 
         redo: () => {
           const { history, historyIndex } = get()
           if (historyIndex < history.length - 1) {
-            const newIndex = historyIndex + 1
-            set({ historyIndex: newIndex, items: history[newIndex].items })
+            set({
+              historyIndex: historyIndex + 1,
+              items: history[historyIndex + 1].items,
+            })
           }
         },
 
-        setDeliveryCountry: (country) => {
-          set({ deliveryCountry: country })
+        setDeliveryCountry: (country) => set({ deliveryCountry: country }),
+
+        /* ───────────── CALCULS ───────────── */
+
+        getSubtotal: () =>
+          get().items.reduce((sum, item) => {
+            const optionsTotal =
+              item.selectedOptions?.reduce((s, o) => s + o.price, 0) ?? 0
+            return sum + (item.vehicle.price + optionsTotal) * item.quantity
+          }, 0),
+
+        getTaxes: () => {
+          const subtotal = get().getSubtotal()
+          const tva = getTVAForCountry(get().deliveryCountry)
+          return (subtotal * tva) / 100
         },
 
-        canUndo: false,
-        canRedo: false,
+        getTotal: () => get().getSubtotal() + get().getTaxes(),
 
-        subtotal: 0,
-        taxes: 0,
-        total: 0,
-        itemCount: 0,
+        getItemCount: () =>
+          get().items.reduce((count, item) => count + item.quantity, 0),
 
-        saveToHistory: (newItems: CartItem[]) => {
+        saveToHistory: (newItems) => {
           const { history, historyIndex } = get()
-          const newState: CartState = { items: newItems, timestamp: new Date() }
           const newHistory = history.slice(0, historyIndex + 1)
-          newHistory.push(newState)
-          set({ history: newHistory, historyIndex: newHistory.length - 1 })
+
+          newHistory.push({
+            items: newItems,
+            timestamp: new Date(),
+          })
+
+          set({
+            history: newHistory,
+            historyIndex: newHistory.length - 1,
+          })
         },
       }),
       {
-        name: 'cart-storage', // clé localStorage
-        partialize: (state) => ({
+        name: 'cart-storage',
+        partialize: state => ({
           items: state.items,
           history: state.history,
           historyIndex: state.historyIndex,
@@ -121,6 +176,6 @@ export const useCartStore = create<CartStore>()(
         }),
       }
     ),
-    { name: 'CartStore' } // Redux DevTools
+    { name: 'CartStore' }
   )
 )

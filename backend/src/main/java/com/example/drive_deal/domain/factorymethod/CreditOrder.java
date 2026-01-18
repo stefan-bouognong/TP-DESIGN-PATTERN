@@ -30,8 +30,8 @@ public class CreditOrder implements Order {
     }
     
     @Override
-    public BigDecimal getTotalAmount() {
-        return entity.getTotalAmount();
+    public BigDecimal getSubtotal() {
+        return entity.getSubtotal();
     }
     
     @Override

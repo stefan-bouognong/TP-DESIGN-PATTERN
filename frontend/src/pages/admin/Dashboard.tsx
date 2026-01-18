@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'XAF',
       maximumFractionDigits: 0,
     }).format(price);
 

@@ -15,8 +15,8 @@ import {
   FileText,
   Clock
 } from 'lucide-react';
-import { OrderResponse } from '@/services/orders.service';
-import { ordersService } from '@/services/orders.service';
+import { OrderResponse } from '@/api/orders.service';
+import { ordersService } from '@/api/orders.service';
 
 export default function OrderSuccess() {
   const { orderId } = useParams<{ orderId: string }>();
@@ -34,8 +34,8 @@ export default function OrderSuccess() {
     if (!orderId) return;
     
     try {
-      const response = await ordersService.getOrder(parseInt(orderId));
-      setOrder(response);
+      const response = await ordersService.getById(parseInt(orderId));
+      setOrder(response.data);
     } catch (error) {
       console.error('Erreur lors du chargement de la commande:', error);
     } finally {
@@ -46,7 +46,7 @@ export default function OrderSuccess() {
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'XAF',
       maximumFractionDigits: 0,
     }).format(price);
 

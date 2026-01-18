@@ -139,8 +139,8 @@ public class OrderService {
         dto.setClientId(entity.getClient().getId());
         dto.setClientName(entity.getClient().getName());
         dto.setOrderType(entity.getClass().getSimpleName().replace("Entity", "").replace("Order", ""));
-        dto.setStatus(entity.getStatus());
-        dto.setTotalAmount(entity.getTotalAmount());
+        dto.setStatus(entity.getStatus().name());
+        dto.setSubtotal(entity.getSubtotal());
         dto.setOrderDate(entity.getOrderDate());
         dto.setShippingAddress(entity.getShippingAddress());
         dto.setBillingAddress(entity.getBillingAddress());
@@ -176,7 +176,7 @@ public class OrderService {
             // Calcul du paiement mensuel
             if (creditOrder.getApproved()) {
                 BigDecimal monthlyRate = BigDecimal.valueOf(creditOrder.getInterestRate() / 12 / 100);
-                BigDecimal numerator = entity.getTotalAmount().multiply(monthlyRate);
+                BigDecimal numerator = entity.getSubtotal().multiply(monthlyRate);
                 BigDecimal denominator = BigDecimal.ONE.subtract(
                     BigDecimal.ONE.divide(BigDecimal.ONE.add(monthlyRate).pow(creditOrder.getMonths()), 10, BigDecimal.ROUND_HALF_UP));
                 dto.setMonthlyPayment(numerator.divide(denominator, 2, BigDecimal.ROUND_HALF_UP));

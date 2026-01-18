@@ -15,14 +15,15 @@ import { OrderSummary } from './checkout/OrderSummary';
 import { EmptyCart } from './checkout/EmptyCart';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useCartStore } from '@/contexts/CartContext';
+import { documentBundlesService } from '@/api/document-bundles.service';
 
 export default function Checkout() {
   const navigate = useNavigate();
 
 const items = useCartStore(state => state.items)
-const subtotal = useCartStore(state => state.subtotal)
-const taxes = useCartStore(state => state.taxes)
-const total = useCartStore(state => state.total)
+const subtotal = useCartStore(state => state.getSubtotal())
+const taxes = useCartStore(state => state.getTaxes())
+const total = useCartStore(state => state.getTotal())
 const deliveryCountry = useCartStore(state => state.deliveryCountry) 
  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
@@ -106,24 +107,37 @@ const deliveryCountry = useCartStore(state => state.deliveryCountry)
     else if (currentStep === 'confirmation') setCurrentStep('payment');
   };
 
-  const handleConfirmOrder = async () => {
+const handleConfirmOrder = async () => {
+  try {
     const order = await createOrder({
       deliveryInfo,
       paymentMethod,
       creditRequest: paymentMethod === 'credit' ? creditRequest : undefined,
     });
 
-    if (order) {
-      // Rediriger vers la page de succès avec l'ID de la commande
-      navigate(`/order-success/${order.id}`, {
-        state: { order }
-      });
-    }
-  };
 
-  if (items.length === 0) {
-    return <EmptyCart />;
+    // if (!order) return;
+
+    // console.log('Order created:', order);
+
+    // 1. Créer la liasse complète APRÈS confirmation
+    await documentBundlesService.createCompleteBundle({
+      orderId: order.data.id,
+      bundleType: 'minimal',
+    });
+
+    toast.success('Commande confirmée et documents générés');
+
+    //  2. Redirection
+    // navigate(`/order`, {
+    //   state: { order },
+    // });
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Erreur ");
   }
+};
 
   return (
     <Layout showFooter={false}>

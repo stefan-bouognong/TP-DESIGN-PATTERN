@@ -1,23 +1,25 @@
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Undo2, Redo2, Trash2, ShoppingBag } from 'lucide-react'
-import { countries } from '@/data/mockVehicles'
+import { Undo2, Redo2, Trash2, ShoppingBag, Plus, Minus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useCartStore } from '@/contexts/CartContext'
+import { countriesWithTVA } from '@/data/countriesWithTVA'
 
 export function CartSummary() {
-  // Récupération depuis le store Zustand
   const items = useCartStore(state => state.items)
-  const subtotal = useCartStore(state => state.subtotal)
-  const taxes = useCartStore(state => state.taxes)
-  const total = useCartStore(state => state.total)
+  const subtotal = useCartStore(state => state.getSubtotal())
+  const total = useCartStore(state => state.getTotal())
   const deliveryCountry = useCartStore(state => state.deliveryCountry)
+
   const setDeliveryCountry = useCartStore(state => state.setDeliveryCountry)
+  const increaseQuantity = useCartStore(state => state.increaseQuantity)
+  const decreaseQuantity = useCartStore(state => state.decreaseQuantity)
+
   const undo = useCartStore(state => state.undo)
   const redo = useCartStore(state => state.redo)
+  const clearCart = useCartStore(state => state.clearCart)
   const canUndo = useCartStore(state => state.canUndo)
   const canRedo = useCartStore(state => state.canRedo)
-  const clearCart = useCartStore(state => state.clearCart)
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', {
@@ -28,13 +30,10 @@ export function CartSummary() {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-8 text-center">
-        <ShoppingBag className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h3 className="font-display text-xl font-semibold mb-2">Votre panier est vide</h3>
-        <p className="text-muted-foreground mb-6">
-          Explorez notre catalogue pour trouver le véhicule de vos rêves.
-        </p>
-        <Button variant="hero" asChild>
+      <div className="rounded-2xl border p-8 text-center">
+        <ShoppingBag className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+        <h3 className="text-xl font-semibold mb-2">Votre panier est vide</h3>
+        <Button asChild>
           <Link to="/catalog">Voir le catalogue</Link>
         </Button>
       </div>
@@ -42,82 +41,83 @@ export function CartSummary() {
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 space-y-6 sticky top-24">
-      {/* Undo/Redo controls */}
-      <div className="flex items-center justify-between">
-        <h3 className="font-display text-lg font-semibold">Résumé</h3>
+    <div className="rounded-2xl border bg-card p-6 space-y-6 sticky top-24">
+
+      {/* HEADER */}
+      <div className="flex justify-between">
+        <h3 className="text-lg font-semibold">Résumé</h3>
         <div className="flex gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={undo}
-            disabled={!canUndo}
-            title="Annuler"
-          >
-            <Undo2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={redo}
-            disabled={!canRedo}
-            title="Rétablir"
-          >
-            <Redo2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={clearCart}
-            className="text-destructive hover:text-destructive"
-            title="Vider le panier"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <Button size="icon" variant="ghost" onClick={undo} disabled={!canUndo}><Undo2 /></Button>
+          <Button size="icon" variant="ghost" onClick={redo} disabled={!canRedo}><Redo2 /></Button>
+          <Button size="icon" variant="ghost" onClick={clearCart}><Trash2 /></Button>
         </div>
       </div>
 
-      {/* Country selection */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">Pays de livraison</label>
-        <Select value={deliveryCountry} onValueChange={setDeliveryCountry}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {countries.map(country => (
-              <SelectItem key={country} value={country}>
-                {country}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* ITEMS */}
+      <div className="space-y-4">
+        {items.map(item => (
+          <div key={item.vehicle.id} className="flex justify-between items-center">
+            <div>
+              <p className="font-medium">{item.vehicle.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {formatPrice(item.vehicle.price)}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => decreaseQuantity(item.vehicle.id)}
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+
+              <span className="w-6 text-center font-semibold">
+                {item.quantity}
+              </span>
+
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => increaseQuantity(item.vehicle.id)}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Totals */}
-      <div className="space-y-3 pt-4 border-t border-border">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Sous-total</span>
+      {/* COUNTRY */}
+      <Select value={deliveryCountry} onValueChange={setDeliveryCountry}>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {countriesWithTVA.map(c => (
+            <SelectItem key={c.country} value={c.country}>
+              {c.country}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {/* TOTAL */}
+      <div className="border-t pt-4 space-y-2">
+        <div className="flex justify-between">
+          <span>Sous-total</span>
           <span>{formatPrice(subtotal)}</span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">TVA ({deliveryCountry})</span>
-          <span>{formatPrice(taxes)}</span>
-        </div>
-        <div className="flex justify-between font-display text-lg font-bold pt-3 border-t border-border">
+        <div className="flex justify-between font-bold text-lg">
           <span>Total TTC</span>
-          <span className="text-accent">{formatPrice(total)}</span>
+          <span>{formatPrice(total)}</span>
         </div>
       </div>
 
-      {/* Checkout button */}
-      <Button variant="hero" size="lg" className="w-full" asChild>
+      <Button className="w-full" asChild>
         <Link to="/checkout">Commander</Link>
       </Button>
-
-      <p className="text-xs text-center text-muted-foreground">
-        En commandant, vous acceptez nos conditions générales de vente.
-      </p>
     </div>
   )
 }

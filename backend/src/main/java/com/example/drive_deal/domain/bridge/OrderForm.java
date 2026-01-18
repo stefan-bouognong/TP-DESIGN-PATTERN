@@ -47,7 +47,7 @@ public class OrderForm extends Form {
         if (includeFinancialDetails) {
             builder.append(renderer.renderSection("Détails financiers"));
             builder.append(renderer.renderField("totalAmount", "Montant total", 
-                order.getTotalAmount() + " FCFA"));
+                order.getSubtotal() + " FCFA"));
             
             // Informations spécifiques au type de commande
             if (order instanceof com.example.drive_deal.entity.CashOrderEntity) {

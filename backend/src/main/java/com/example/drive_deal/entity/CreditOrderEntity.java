@@ -30,9 +30,9 @@ public class CreditOrderEntity extends OrderEntity {
         
         if (Boolean.TRUE.equals(approved)) {
             BigDecimal monthlyRate = BigDecimal.valueOf(interestRate / 12 / 100);
-            BigDecimal interest = getTotalAmount().multiply(monthlyRate)
+            BigDecimal interest = getSubtotal().multiply(monthlyRate)
                 .multiply(BigDecimal.valueOf(months));
-            setTotalAmount(getTotalAmount().add(interest));
+            setTotalAmount(getSubtotal().add(interest));
         }
     }
 }

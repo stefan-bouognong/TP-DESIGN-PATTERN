@@ -101,6 +101,7 @@ export const useAuthStore = create<AuthState>()(
             set({
               user: {
                 id: client.id,
+                clientId: clientId!,
                 email: client.email,
                 phone: client.phone,
                 customerType: client.clientType as CustomerType,

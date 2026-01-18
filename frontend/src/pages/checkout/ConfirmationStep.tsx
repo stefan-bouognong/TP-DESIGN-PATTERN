@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { DeliveryInfo, PaymentMethod, CreditRequest } from '@/types/auth';
-import { CartItem } from '@/contexts/CartContext';
+import { CartItem } from '@/types/vehicle';
 
 interface ConfirmationStepProps {
   deliveryInfo: DeliveryInfo;

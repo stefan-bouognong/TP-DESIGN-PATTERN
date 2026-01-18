@@ -20,8 +20,8 @@ public class CashOrderEntity extends OrderEntity {
     @Override
     public void calculateSubtotal() {
         super.calculateSubtotal();
-        BigDecimal discountAmount = getTotalAmount()
+        BigDecimal discountAmount = getSubtotal()
             .multiply(cashDiscount.divide(BigDecimal.valueOf(100)));
-        setTotalAmount(getTotalAmount().subtract(discountAmount));
+        setTotalAmount(getSubtotal().subtract(discountAmount));
     }
 }

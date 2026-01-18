@@ -123,14 +123,14 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
         // Calculs
         itemsTable.append("</table>");
         data.put("{{items_table}}", itemsTable.toString());
-        data.put("{{subtotal}}", currentOrder.getTotalAmount().toString());
+        data.put("{{subtotal}}", currentOrder.getSubtotal().toString());
         
         // Calcul TVA (exemple: 20%)
-        java.math.BigDecimal tax = currentOrder.getTotalAmount()
+        java.math.BigDecimal tax = currentOrder.getSubtotal()
             .multiply(new java.math.BigDecimal("0.20"));
         data.put("{{taxes}}", tax.toString());
         
-        java.math.BigDecimal total = currentOrder.getTotalAmount().add(tax);
+        java.math.BigDecimal total = currentOrder.getSubtotal().add(tax);
         data.put("{{total}}", total.toString());
         
         document.setContent(documentBundleTemplate.getTemplate(DocumentType.INVOICE)
@@ -155,7 +155,7 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
         data.put("{{order_id}}", currentOrder.getId().toString());
         data.put("{{order_date}}", currentOrder.getOrderDate()
             .format(DateTimeFormatter.ISO_LOCAL_DATE));
-        data.put("{{total_amount}}", currentOrder.getTotalAmount().toString());
+        data.put("{{total_amount}}", currentOrder.getSubtotal().toString());
         
         ClientEntity client = currentOrder.getClient();
         data.put("{{client_name}}", client.getName());

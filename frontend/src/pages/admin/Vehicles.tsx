@@ -85,7 +85,7 @@ export default function AdminVehicles() {
   );
 
   const formatPrice = (p: number) =>
-    new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(p);
+    new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'XAF' }).format(p);
 
   return (
     <AdminLayout>

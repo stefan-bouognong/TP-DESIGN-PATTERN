@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 import { useCartStore } from '@/contexts/CartContext';
 
 export function Header() {
-  // const itemCount  = useCartStore((state) => state.itemCount);
+  const itemCount  = useCartStore((state) => state.getItemCount());
   const items = useCartStore((state) => state.items);
-  const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
-  console.log('Header items:', items);
+  // const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+ 
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
@@ -27,6 +27,7 @@ export function Header() {
         { href: '/', label: 'Accueil' },
         { href: '/catalog', label: 'Catalogue' },
         { href: '/cart', label: 'Panier' },
+        { href: '/orders', label: 'Orders' },
       ];
 
   return (

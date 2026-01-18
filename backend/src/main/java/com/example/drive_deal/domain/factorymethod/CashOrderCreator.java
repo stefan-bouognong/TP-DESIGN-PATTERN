@@ -37,7 +37,6 @@ public class CashOrderCreator extends OrderCreator {
             item.setVehicle(vehicle);
             item.setQuantity(quantity);
             item.setUnitPrice(vehicle.getPrice());
-            
             order.addItem(item);
             
             // Créer l'item du domaine

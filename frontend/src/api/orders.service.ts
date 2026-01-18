@@ -54,6 +54,14 @@ export const ordersService = {
   createOrder: (data: OrderRequest) => 
     api.post<OrderResponse>('/orders', data),
 
+  // Récupérer toutes les commandes
+  getAll: () =>
+    api.get<OrderResponse[]>('/orders'),
+
+  // Récupérer une commande par id
+  getById: (orderId: number) =>
+    api.get<OrderResponse>(`/orders/${orderId}`),
+
   // Approuver une commande crédit
   approveCredit: (orderId: number) => 
     api.post<OrderResponse>(`/orders/${orderId}/approve-credit`),
@@ -61,10 +69,6 @@ export const ordersService = {
   // Changer le statut d'une commande
   updateStatus: (orderId: number, status: string) => 
     api.put<OrderResponse>(`/orders/${orderId}/status`, { status }),
-
-  // Obtenir une commande
-  getOrder: (orderId: number) => 
-    api.get<OrderResponse>(`/orders/${orderId}`),
 
   // Lister les commandes d'un client
   getClientOrders: (clientId: number) => 
