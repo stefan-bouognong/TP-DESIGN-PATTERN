@@ -39,10 +39,11 @@ export default function Catalog() {
         };
 
         const response = await catalogService.getBasicCatalog(params);
-        console.log(response)
+        // console.log('stefan ggggggggggggggggggggyyy',response)
         if (isCurrent) {
           setVehicles(response.data.vehicles);
           setTotalCount(response.data.totalVehicles);
+          console.log(vehicles)
         }
       } catch (err) {
         if (isCurrent) {
@@ -115,7 +116,7 @@ export default function Catalog() {
                   <VehicleCard
                     key={vehicle.vehicleId}
                     vehicle={{
-                      ...vehicle.attributes,
+                      ...vehicle,
                       id: vehicle.vehicleId,
                       // Ajoute name si ton VehicleCard attend vehicle.name
                       name: vehicle.name || vehicle.attributes.name || `${vehicle.attributes.brand || ''} ${vehicle.attributes.model}`,

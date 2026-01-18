@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.drive_deal.entity.ElectricCarEntity;
+import com.example.drive_deal.entity.GasolineCarEntity;
+import com.example.drive_deal.entity.ScooterEntity;
+import com.example.drive_deal.entity.VehicleEntity;
+
 
 @Service
 @RequiredArgsConstructor
@@ -102,18 +107,59 @@ public class CatalogDisplayService {
     }
     
     private DecoratedVehicleDTO buildDecoratedVehicleDTO(VehicleDisplay display) {
+
+        VehicleEntity v = display.getVehicle();
         DecoratedVehicleDTO dto = new DecoratedVehicleDTO();
-        dto.setVehicleId(display.getVehicle().getId());
-        dto.setModel(display.getVehicle().getModel());
+
+        // =============================
+        // INFOS COMMUNES
+        // =============================
+        dto.setVehicleId(v.getId());
+        dto.setName(v.getName());
+        dto.setModel(v.getModel());
+        dto.setBrand(v.getBrand());
+        dto.setPrice(v.getPrice());
+        dto.setYear(v.getYear());
+        dto.setColor(v.getColor());
+        dto.setDescription(v.getDescription());
+        dto.setAvailable(v.isAvailable());
+        dto.setOnSale(v.isOnSale());
+        dto.setImageUrl(v.getImageUrl());
+        dto.setVideoUrl(v.getVideoUrl());
+        dto.setType(v.getType());
+
+        // =============================
+        // POLYMORPHISME
+        // =============================
+        if (v instanceof GasolineCarEntity car) {
+            dto.setDoors(car.getDoors());
+            dto.setHasSunroof(car.getHasSunroof());
+            dto.setFuelTankCapacity(car.getFuelTankCapacity());
+        }
+
+        if (v instanceof ElectricCarEntity car) {
+            dto.setDoors(car.getDoors());
+            dto.setHasSunroof(car.getHasSunroof());
+            dto.setBatteryCapacity(car.getBatteryCapacity());
+            dto.setRange(car.getRange());
+        }
+
+        if (v instanceof ScooterEntity scooter) {
+            dto.setMaxSpeed(scooter.getMaxSpeed());
+            dto.setHasTopCase(scooter.getHasTopCase());
+        }
+
+        // =============================
+        // DÉCORATION
+        // =============================
         dto.setDisplayHtml(display.display());
         dto.setAttributes(display.getDisplayAttributes());
         dto.setDisplayType(display.getDisplayType());
-        
-        // Compter les décorateurs
-        String displayType = display.getDisplayType();
-        int decoratorCount = displayType.split("\\+").length - 1;
+
+        int decoratorCount = display.getDisplayType().split("\\+").length - 1;
         dto.setDecoratorCount(decoratorCount);
-        
+
         return dto;
     }
+
 }
