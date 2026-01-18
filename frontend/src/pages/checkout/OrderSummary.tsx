@@ -32,6 +32,7 @@ export function OrderSummary({
           {items.map((item) => (
             <div key={item.vehicle.id} className="flex items-center gap-3">
               <img
+              src={item.vehicle.imageUrl}
                 alt={item.vehicle.name}
                 className="h-12 w-16 rounded-lg object-cover bg-muted"
               />
