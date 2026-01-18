@@ -9,7 +9,7 @@ import {
 
 import { documentsService } from '@/api/documents.service';
 import { pdfService } from '@/api/pdf.service';
-import { OrderDocument } from '@/types/document';
+import { OrderDocument } from '@/types/documents';
 
 interface OrderDocumentsModalProps {
   orderId: number;
