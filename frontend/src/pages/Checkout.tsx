@@ -33,8 +33,8 @@ const deliveryCountry = useCartStore(state => state.deliveryCountry)
   const [authModalOpen, setAuthModalOpen] = useState(false);
   console.log('User in Checkout:', user);
   const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo>({
-    firstName: user.profile.firstName ,
-    lastName: user.profile.lastName,
+    firstName: user?.profile.firstName ,
+    lastName: user?.profile.lastName,
     address: user?.profile.address || '',
     city: user?.profile.city || '',
     postalCode: user?.profile.postalCode || '',
