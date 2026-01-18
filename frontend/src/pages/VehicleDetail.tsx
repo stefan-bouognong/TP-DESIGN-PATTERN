@@ -23,6 +23,7 @@ import { useCartStore } from '@/contexts/CartContext';
 // Si tu as un type VehicleOption, garde-le ; sinon on le commente pour l'instant
 // interface VehicleOption { ... }
 
+
 export default function VehicleDetail() {
   const { id } = useParams<{ id: string }>();
   const addToCart = useCartStore((state) => state.addToCart);
@@ -30,6 +31,7 @@ export default function VehicleDetail() {
   const [vehicle, setVehicle] = useState<VehicleResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -128,10 +130,23 @@ export default function VehicleDetail() {
           {/* Image + badges */}
           <div className="relative rounded-2xl overflow-hidden bg-muted aspect-[4/3] md:aspect-[5/4] shadow-lg">
             <img
-              src="/placeholder-electric-car-red.jpg" // ← remplace par une vraie URL quand tu auras des images
+              src={vehicle.imageUrl} // ← remplace par une vraie URL quand tu auras des images
               alt={`${vehicle.brand || 'Véhicule'} ${vehicle.model}`}
               className="h-full w-full object-cover"
             />
+
+            {vehicle.videoUrl && (
+              <div className="absolute bottom-4 right-4">
+                <Button
+                  size="sm"
+                  className="bg-black/70 hover:bg-black text-white"
+                  onClick={() => setShowVideo(true)}
+                >
+                  ▶ Voir la vidéo
+                </Button>
+              </div>
+            )}
+
 
             <div className="absolute top-4 left-4 flex flex-wrap gap-2">
               {vehicle.onSale && (
@@ -225,6 +240,29 @@ export default function VehicleDetail() {
           </div>
         </div>
       </div>
+      {showVideo && (
+      <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4">
+        <div className="relative w-full max-w-4xl bg-black rounded-xl overflow-hidden">
+          
+          {/* Bouton fermer */}
+          <button
+            onClick={() => setShowVideo(false)}
+            className="absolute top-3 right-3 z-10 text-white bg-black/60 rounded-full px-3 py-1 hover:bg-black"
+          >
+            ✕
+          </button>
+
+          {/* Vidéo */}
+          <video
+            src={vehicle.videoUrl}
+            controls
+            autoPlay
+            className="w-full h-auto max-h-[80vh]"
+          />
+        </div>
+      </div>
+    )}
+
     </Layout>
   );
 }

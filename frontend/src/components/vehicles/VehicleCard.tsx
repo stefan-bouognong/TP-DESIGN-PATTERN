@@ -6,6 +6,7 @@ import { ShoppingCart, Zap, Fuel, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '@/contexts/CartContext';
+import { useEffect } from 'react';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -30,6 +31,7 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
 
   const isElectric = vehicle.fuelType === 'electric';
   const isScooter = vehicle.type === 'scooter';
+  console.log(vehicle)
 
   if (view === 'list') {
     return (
@@ -40,7 +42,7 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
         {/* Image */}
         <div className="relative h-32 w-48 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
           <img
-            src={vehicle.imageUrl?? '/placeholder-car.jpg' }
+            src={vehicle.imageUrl}
             alt={vehicle.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
