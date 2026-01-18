@@ -37,6 +37,8 @@ export interface VehicleResponse {
   range?: number;
   fuelTankCapacity?: number;
   fuelType?: string;
+  imageUrl?: string;
+  videoUrl?: string;
 }
 
 export interface ErrorResponse {

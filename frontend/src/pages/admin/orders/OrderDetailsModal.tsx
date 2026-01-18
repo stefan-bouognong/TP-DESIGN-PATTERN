@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@/components/ui/modal';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '../../../components/ui/Modal';
 import { Button } from '@/components/ui/button';
 import { OrderResponse } from '@/api/orders.service';
 

@@ -58,7 +58,7 @@ export function CartItemCard({ item }: CartItemProps) {
         {/* Image */}
         <div className="relative w-full sm:w-48 h-40 sm:h-auto flex-shrink-0 bg-muted">
           <img
-            // src={item.vehicle.images[0]}
+            src={item.vehicle.imageUrl}
             alt={item.vehicle.name}
             className="h-full w-full object-cover"
           />
