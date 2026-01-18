@@ -93,7 +93,7 @@ export function Header() {
           </Link>
 
           {/* Logout desktop */}
-          {isAuthenticated && (
+         
             <Button
               variant="destructive"
               size="sm"
@@ -103,7 +103,7 @@ export function Header() {
               <LogOut className="h-4 w-4 mr-2" />
               Se déconnecter
             </Button>
-          )}
+        
 
           {/* Mobile menu button */}
           <Button
