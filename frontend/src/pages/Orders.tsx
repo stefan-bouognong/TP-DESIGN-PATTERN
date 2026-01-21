@@ -17,10 +17,10 @@ export const Orders = () => {
   //  Chargement des commandes
   useEffect(() => {
     const fetchOrders = async () => {
-    //   if (!user?.clientId) return;
+      if (!user?.clientId) return;
 
       try {
-        const response = await ordersService.getClientOrders(5);
+        const response = await ordersService.getClientOrders(user.clientId);
         console.log(response)
         setOrders(response.data);
       } catch (error) {
