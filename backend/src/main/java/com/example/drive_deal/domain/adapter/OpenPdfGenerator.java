@@ -269,7 +269,7 @@ public class OpenPdfGenerator implements PdfGenerator {
         
         PdfPCell labelCell = new PdfPCell(new Paragraph(label + " :", 
             PdfStyleUtils.getLabelFont()));
-        labelCell.setBackgroundColor(PdfStyleUtils.LIGHT_BG);
+        labelCell.setBackgroundColor(PdfStyleUtils.LIGHT_GRAY);
         labelCell.setPadding(8);
         labelCell.setBorderWidth(0);
         
