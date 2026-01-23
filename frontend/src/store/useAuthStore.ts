@@ -7,7 +7,7 @@ import {
 } from '../api/clients.service'
 import { authService } from '../api/auth.service'
 
-export type CustomerType = 'INDIVIDUAL' | 'COMPANY'
+export type CustomerType = 'INDIVIDUAL' | 'COMPANY' | 'ADMIN'
 
 export interface IndividualProfile {
   firstName: string

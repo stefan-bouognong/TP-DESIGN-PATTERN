@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,31 +21,35 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { mockVehicles as initialVehicles } from '@/data/mockVehicles';
 import { Vehicle } from '@/types/vehicle';
 import { Search, Tag, Clock, Percent, Zap, Fuel, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { vehiclesService } from '@/api/vehicles.service';
 
 export default function AdminPromotions() {
   const [search, setSearch] = useState('');
-  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]); // Plus de mock, tableau vide au départ
+  const [loading, setLoading] = useState(true);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [promotionPercent, setPromotionPercent] = useState([10]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Filter vehicles that are eligible for promotion (long in stock or already in promotion)
-  const eligibleVehicles = vehicles.filter(v => 
-    v.status === 'available' && (v.daysInStock >= 30 || v.isPromotion)
+  // Véhicules éligibles : disponibles et (en stock ≥ 30 jours OU déjà en promotion)
+  const eligibleVehicles = vehicles.filter(
+    (v) => v.status === 'available' && (v.daysInStock >= 30 || v.isPromotion)
   );
 
   const filteredVehicles = eligibleVehicles.filter((v) =>
     `${v.name} ${v.brand} ${v.model}`.toLowerCase().includes(search.toLowerCase())
   );
 
-  const activePromotions = vehicles.filter(v => v.isPromotion).length;
-  const longInStock = vehicles.filter(v => v.daysInStock > 60 && !v.isPromotion && v.status === 'available').length;
+  const activePromotions = vehicles.filter((v) => v.isPromotion).length;
+  const longInStock = vehicles.filter(
+    (v) => v.daysInStock > 60 && !v.isPromotion && v.status === 'available'
+  ).length;
+
   const potentialSavings = vehicles
-    .filter(v => v.daysInStock > 60 && !v.isPromotion)
+    .filter((v) => v.daysInStock > 60 && !v.isPromotion)
     .reduce((acc, v) => acc + v.price * 0.1, 0);
 
   const formatPrice = (price: number) =>
@@ -64,12 +68,12 @@ export default function AdminPromotions() {
   const applyPromotion = () => {
     if (!selectedVehicle) return;
 
-    const updatedVehicles = vehicles.map(v => {
+    const updatedVehicles = vehicles.map((v) => {
       if (v.id === selectedVehicle.id) {
         const discount = promotionPercent[0] / 100;
         const originalPrice = v.originalPrice || v.price;
         const newPrice = Math.round(originalPrice * (1 - discount));
-        
+
         return {
           ...v,
           isPromotion: true,
@@ -83,11 +87,13 @@ export default function AdminPromotions() {
 
     setVehicles(updatedVehicles);
     setIsDialogOpen(false);
-    toast.success(`Promotion de ${promotionPercent[0]}% appliquée sur ${selectedVehicle.name}`);
+    toast.success(
+      `Promotion de ${promotionPercent[0]}% appliquée sur ${selectedVehicle.name}`
+    );
   };
 
   const removePromotion = (vehicleId: string) => {
-    const updatedVehicles = vehicles.map(v => {
+    const updatedVehicles = vehicles.map((v) => {
       if (v.id === vehicleId && v.isPromotion) {
         return {
           ...v,
@@ -103,6 +109,38 @@ export default function AdminPromotions() {
     setVehicles(updatedVehicles);
     toast.success('Promotion retirée');
   };
+
+  useEffect(() => {
+    loadVehicles();
+  }, []);
+
+  const loadVehicles = async () => {
+    try {
+      setLoading(true);
+      const response = await vehiclesService.getAllVehicles();
+      const data = Array.isArray(response.data) ? response.data : [];
+      console.log('Véhicules chargés:', data);
+      setVehicles(data);
+    } catch (err) {
+      console.error('Erreur chargement véhicules:', err);
+      toast.error('Impossible de charger les véhicules');
+      setVehicles([]); // En cas d'erreur, on garde un tableau vide
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="p-8">
+          <div className="flex items-center justify-center h-96">
+            <p className="text-muted-foreground">Chargement des véhicules...</p>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
@@ -128,6 +166,7 @@ export default function AdminPromotions() {
               <p className="text-xs text-muted-foreground mt-1">véhicules en promotion</p>
             </CardContent>
           </Card>
+
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
@@ -140,6 +179,7 @@ export default function AdminPromotions() {
               <p className="text-xs text-muted-foreground mt-1">véhicules +60 jours sans promo</p>
             </CardContent>
           </Card>
+
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
@@ -168,7 +208,7 @@ export default function AdminPromotions() {
         {/* Info banner */}
         <div className="mb-6 p-4 rounded-xl bg-muted/50 border border-border">
           <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">💡 Conseil :</strong> Les véhicules affichés ici sont soit déjà en promotion, 
+            <strong className="text-foreground">💡 Conseil :</strong> Les véhicules affichés ici sont soit déjà en promotion,
             soit en stock depuis plus de 30 jours. Les véhicules de plus de 60 jours sont marqués en priorité.
           </p>
         </div>
@@ -195,11 +235,14 @@ export default function AdminPromotions() {
                 </TableRow>
               ) : (
                 filteredVehicles.map((vehicle) => (
-                  <TableRow key={vehicle.id} className={vehicle.daysInStock > 60 && !vehicle.isPromotion ? 'bg-warning/5' : ''}>
+                  <TableRow
+                    key={vehicle.id}
+                    className={vehicle.daysInStock > 60 && !vehicle.isPromotion ? 'bg-warning/5' : ''}
+                  >
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <img
-                          src={vehicle.images[0]}
+                          src={vehicle.imageUrl}
                           alt={vehicle.name}
                           className="h-12 w-16 rounded-lg object-cover bg-muted"
                         />
@@ -270,15 +313,15 @@ export default function AdminPromotions() {
                       <div className="flex justify-end gap-2">
                         {vehicle.isPromotion ? (
                           <>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => openPromotionDialog(vehicle)}
                             >
                               Modifier
                             </Button>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               className="text-destructive hover:text-destructive"
                               onClick={() => removePromotion(vehicle.id)}
@@ -287,8 +330,8 @@ export default function AdminPromotions() {
                             </Button>
                           </>
                         ) : (
-                          <Button 
-                            variant="hero" 
+                          <Button
+                            variant="hero"
                             size="sm"
                             onClick={() => openPromotionDialog(vehicle)}
                           >
@@ -316,7 +359,7 @@ export default function AdminPromotions() {
                 Définissez le pourcentage de réduction pour {selectedVehicle?.name}
               </DialogDescription>
             </DialogHeader>
-            
+
             {selectedVehicle && (
               <div className="space-y-6 py-4">
                 <div className="flex items-center gap-4 p-4 rounded-xl bg-secondary">
@@ -357,13 +400,20 @@ export default function AdminPromotions() {
                     <span className="text-sm text-muted-foreground">Nouveau prix</span>
                     <span className="text-xl font-bold text-accent">
                       {formatPrice(
-                        Math.round((selectedVehicle.originalPrice || selectedVehicle.price) * (1 - promotionPercent[0] / 100))
+                        Math.round(
+                          (selectedVehicle.originalPrice || selectedVehicle.price) *
+                            (1 - promotionPercent[0] / 100)
+                        )
                       )}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Économie client: {formatPrice(
-                      Math.round((selectedVehicle.originalPrice || selectedVehicle.price) * (promotionPercent[0] / 100))
+                    Économie client:{' '}
+                    {formatPrice(
+                      Math.round(
+                        (selectedVehicle.originalPrice || selectedVehicle.price) *
+                          (promotionPercent[0] / 100)
+                      )
                     )}
                   </p>
                 </div>

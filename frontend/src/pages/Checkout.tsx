@@ -129,9 +129,9 @@ const handleConfirmOrder = async () => {
     toast.success('Commande confirmée et documents générés');
 
     //  2. Redirection
-    // navigate(`/order`, {
-    //   state: { order },
-    // });
+    navigate(`/order`, {
+      state: { order },
+    });
 
   } catch (error) {
     console.error(error);

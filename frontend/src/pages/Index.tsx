@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import heroImage from '@/assets/hero-car.jpg';
 import { catalogService } from '@/api/catalog.service';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface FeaturedVehicle {
   id: number;
@@ -58,6 +59,7 @@ export default function Index() {
     []
   );
   const [loading, setLoading] = useState(true);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     const fetchFeaturedVehicles = async () => {
@@ -123,7 +125,7 @@ export default function Index() {
         <div className="container relative z-10 py-20">
           <div className="max-w-2xl animate-fade-in">
             <span className="inline-block px-4 py-2 rounded-full bg-accent/10 text-accent font-medium text-sm mb-6">
-              🚗 Nouvelle collection 2024
+               Nouvelle collection 2024
             </span>
 
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6">
@@ -143,9 +145,11 @@ export default function Index() {
                 </Link>
               </Button>
 
-              <Button variant="heroOutline" size="xl" asChild>
-                <Link to="/admin">Espace Admin</Link>
-              </Button>
+              {user.customerType == 'ADMIN' && (
+                <Button variant="heroOutline" size="xl" asChild>
+                  <Link to="/contact">Nous contacter</Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

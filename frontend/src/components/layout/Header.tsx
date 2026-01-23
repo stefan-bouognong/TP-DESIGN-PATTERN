@@ -11,6 +11,7 @@ export function Header() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const clearCart = useCartStore((state) => state.clearCart)
   const logout = useAuthStore((state) => state.logout)
+  const user = useAuthStore((state) => state.user)
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -85,12 +86,16 @@ export function Header() {
             </Link>
           )}
 
+          {/* Admin/Client space toggle */}
+          {user.customerType == "ADMIN" && (
           <Link to={isAdmin ? '/' : '/admin'}>
             <Button variant="outline" size="sm" className="hidden sm:flex">
               <User className="h-4 w-4 mr-2" />
               {isAdmin ? 'Client' : 'Admin'}
             </Button>
           </Link>
+          )  
+          }
 
           {/* Logout desktop */}
           {isAuthenticated && (
