@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
   { href: '/admin', label: 'Tableau de bord', icon: LayoutDashboard },
   { href: '/admin/vehicles', label: 'Véhicules', icon: Car },
   { href: '/admin/orders', label: 'Commandes', icon: ShoppingCart },
-  { href: '/admin/customers', label: 'Clients', icon: Users },
+  // { href: '/admin/customers', label: 'Clients', icon: Users },
   { href: '/admin/promotions', label: 'Promotions', icon: Tag },
   { href: '/admin/documents', label: 'Documents', icon: FileText },
 ];

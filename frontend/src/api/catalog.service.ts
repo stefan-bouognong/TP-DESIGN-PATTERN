@@ -18,6 +18,7 @@ export interface VehicleDisplayAttributes {
   discountPercentage?: number;
   salePrice?: number;
   availableOptions?: string[];
+  imageUrl?:string;
 }
 
 export interface VehicleDisplayResponse {
@@ -28,6 +29,7 @@ export interface VehicleDisplayResponse {
   displayType: string;
   decoratorCount: number;
   attributes: VehicleDisplayAttributes;
+  imageUrl:string;
 }
 
 export interface CatalogResponse {
