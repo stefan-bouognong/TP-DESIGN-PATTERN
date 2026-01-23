@@ -92,7 +92,7 @@ export default function Index() {
           power: 0, // ou v.power si dispo
           transmission: 'automatic',
         
-          // 🔥🔥🔥 LE POINT CLÉ 🔥🔥🔥
+
           imageUrl: v.imageUrl,
         
           daysInStock: 0,
@@ -147,7 +147,7 @@ export default function Index() {
 
               {user?.customerType == 'ADMIN' ? (
                 <Button variant="heroOutline" size="xl" asChild>
-                  <Link to="/contact">Espace Admininstrateur</Link>
+                  <Link to="/admin">Espace Admininstrateur</Link>
                 </Button>
               ):
                <Button variant="heroOutline" size="xl" asChild>
