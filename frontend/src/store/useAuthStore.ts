@@ -70,12 +70,14 @@ export const useAuthStore = create<AuthState>()(
           set({ isLoading: true })
           try {
             const response = await authService.login({ email, password })
-            const { token, clientId } = response.data
+            const { token, clientId, userId,role } = response.data
             localStorage.setItem('token', token)
 
+            
+            if (clientId) {
             const clientResponse = await clientsService.getClientById(clientId)
             const client = clientResponse.data
-
+            
             const profile =
               client.clientType === 'INDIVIDUAL'
                 ? {
@@ -88,7 +90,7 @@ export const useAuthStore = create<AuthState>()(
                     vatNumber: client.vatNumber || null,
                     parentCompanyId: client.parentCompanyId || null,
                   }
-                : {
+                :  {
                     companyId: client.companyId || null,
                     name: client.name,
                     phone: client.phone,
@@ -97,7 +99,7 @@ export const useAuthStore = create<AuthState>()(
                     parentCompanyId: client.parentCompanyId || null,
                     fleetDiscount: client.fleetDiscount || null,
                   }
-
+                     
             set({
               user: {
                 id: client.id,
@@ -111,7 +113,20 @@ export const useAuthStore = create<AuthState>()(
               },
               isAuthenticated: true,
             })
-
+          } else {
+            set({
+              user: {
+                id: userId,
+                email: email,
+                phone: '',
+                customerType: 'ADMIN',
+                profile: null,
+                createdAt: new Date(),
+                token,
+              },
+              isAuthenticated: true,
+            })
+          }
             return true
           } catch (error) {
             console.error('Login error:', error)

@@ -1,10 +1,11 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ShoppingCart, User, Menu, X, Car, LogOut } from 'lucide-react'
+import { ShoppingCart, User, Menu, X, Car, LogOut, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useCartStore } from '@/contexts/CartContext'
 import { useAuthStore } from '@/store/useAuthStore'
+import { AuthModal } from '../auth/AuthModal'
 
 export function Header() {
   const itemCount = useCartStore((state) => state.getItemCount())
@@ -12,13 +13,17 @@ export function Header() {
   const clearCart = useCartStore((state) => state.clearCart)
   const logout = useAuthStore((state) => state.logout)
   const user = useAuthStore((state) => state.user)
-
+ const [authModalOpen, setAuthModalOpen] = useState(false);
   const location = useLocation()
   const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const isAdmin = location.pathname.startsWith('/admin')
 
+   const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+    
+  };
   const navLinks = isAdmin
     ? [
         { href: '/admin', label: 'Tableau de bord' },
@@ -87,7 +92,7 @@ export function Header() {
           )}
 
           {/* Admin/Client space toggle */}
-          {user.customerType == "ADMIN" && (
+          {user?.customerType == "ADMIN" && (
           <Link to={isAdmin ? '/' : '/admin'}>
             <Button variant="outline" size="sm" className="hidden sm:flex">
               <User className="h-4 w-4 mr-2" />
@@ -98,7 +103,7 @@ export function Header() {
           }
 
           {/* Logout desktop */}
-          {isAuthenticated && (
+          {isAuthenticated ? (
             <Button
               variant="destructive"
               size="sm"
@@ -108,7 +113,17 @@ export function Header() {
               <LogOut className="h-4 w-4 mr-2" />
               Se déconnecter
             </Button>
-          )}
+          ):
+           <Button
+              variant="destructive"
+              size="sm"
+              className="hidden sm:flex"
+              onClick={() => setAuthModalOpen(true)}
+            >
+              <LogIn className="h-4 w-4 mr-2" />
+              Se connecter
+            </Button>
+          }
 
           {/* Mobile menu button */}
           <Button
@@ -158,6 +173,15 @@ export function Header() {
           </nav>
         </div>
       )}
+
+      
+            <AuthModal 
+              open={authModalOpen} 
+              onOpenChange={setAuthModalOpen}
+              defaultTab="login"
+              onSuccess={handleAuthSuccess}
+            />
+         
     </header>
   )
 }

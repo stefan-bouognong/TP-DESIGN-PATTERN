@@ -145,11 +145,15 @@ export default function Index() {
                 </Link>
               </Button>
 
-              {user.customerType == 'ADMIN' && (
+              {user?.customerType == 'ADMIN' ? (
                 <Button variant="heroOutline" size="xl" asChild>
-                  <Link to="/contact">Nous contacter</Link>
+                  <Link to="/contact">Espace Admininstrateur</Link>
                 </Button>
-              )}
+              ):
+               <Button variant="heroOutline" size="xl" asChild>
+                  <Link to="/orders">Voir mes commandes</Link>
+                </Button>
+              }
             </div>
           </div>
         </div>
