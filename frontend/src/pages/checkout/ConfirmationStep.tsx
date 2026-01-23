@@ -89,6 +89,7 @@ export function ConfirmationStep({
             {items.map((item) => (
               <div key={item.vehicle.id} className="flex items-center gap-4 p-3 rounded-xl bg-secondary/30">
                 <img
+                src={item.vehicle.imageUrl}
                   alt={item.vehicle.name}
                   className="h-16 w-20 rounded-lg object-cover bg-muted"
                 />

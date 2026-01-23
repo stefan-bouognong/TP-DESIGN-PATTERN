@@ -34,7 +34,7 @@ public class FormFactory {
         return switch (rendererType.toUpperCase()) {
             case "HTML" -> htmlRenderer;
             case "WIDGET" -> widgetRenderer;
-            default -> htmlRenderer; // Par défaut
+            default -> htmlRenderer; 
         };
     }
     

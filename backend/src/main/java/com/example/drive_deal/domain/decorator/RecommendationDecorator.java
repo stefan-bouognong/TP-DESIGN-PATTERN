@@ -9,7 +9,7 @@ import java.util.*;
 public class RecommendationDecorator extends VehicleDisplayDecorator {
     
     private final List<Map<String, Object>> recommendations;
-    private final String recommendationType; // "SIMILAR", "POPULAR", "UPSELL"
+    private final String recommendationType; 
     
     public RecommendationDecorator(VehicleDisplay decoratedDisplay) {
         super(decoratedDisplay);
@@ -26,7 +26,6 @@ public class RecommendationDecorator extends VehicleDisplayDecorator {
     private List<Map<String, Object>> generateRecommendations() {
         List<Map<String, Object>> recs = new ArrayList<>();
         
-        // Recommandations simulées
         Map<String, Object> rec1 = new HashMap<>();
         rec1.put("id", 9991L);
         rec1.put("model", "Modèle similaire");
@@ -67,7 +66,6 @@ public class RecommendationDecorator extends VehicleDisplayDecorator {
         recHtml.append("  <p class=\"recommendation-note\">Ces véhicules pourraient aussi vous intéresser.</p>\n");
         recHtml.append("</div>\n");
         
-        // Ajouter les recommandations après la carte
         return originalDisplay + recHtml.toString();
     }
     

@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 public class OrderAdapter {
     
     public Order adapt(OrderEntity entity) {
-        // Cette méthode serait utilisée pour charger depuis la base
-        // Implémentation simplifiée
+        
         return null;
     }
 }

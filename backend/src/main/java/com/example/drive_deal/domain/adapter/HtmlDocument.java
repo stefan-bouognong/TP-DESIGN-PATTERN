@@ -1,4 +1,4 @@
-// HtmlDocument.java (version complète)
+// HtmlDocument.java 
 package com.example.drive_deal.domain.adapter;
 
 import com.example.drive_deal.entity.DocumentEntity;

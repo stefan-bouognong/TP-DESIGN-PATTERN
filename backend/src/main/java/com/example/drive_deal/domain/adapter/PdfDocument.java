@@ -1,4 +1,4 @@
-// PdfDocument.java (Target Interface)
+
 package com.example.drive_deal.domain.adapter;
 
 public interface PdfDocument {

@@ -25,7 +25,6 @@ public abstract class DocumentBundleBuilder {
     public abstract void buildOrderForm();
     public abstract void buildInvoice();
     
-    // Méthode template optionnelle
     public void buildCompleteBundle() {
         buildRegistrationRequest();
         buildTransferCertificate();

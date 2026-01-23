@@ -5,7 +5,7 @@ public interface ClientComponent {
     Long getId();
     String getName();
     String getEmail();
-    String getType(); // "INDIVIDUAL" ou "COMPANY"
+    String getType(); 
     void displayInfo(int depth);
-    double calculateFleetDiscount(); // Pour les achats de flotte
+    double calculateFleetDiscount(); 
 }

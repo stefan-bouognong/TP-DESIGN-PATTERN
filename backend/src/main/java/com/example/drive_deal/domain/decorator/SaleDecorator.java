@@ -9,7 +9,7 @@ import java.util.Map;
 public class SaleDecorator extends VehicleDisplayDecorator {
     
     private final BigDecimal discountPercentage;
-    private final String saleType; // "CLEARANCE", "PROMOTION", "SEASONAL"
+    private final String saleType; 
     private final String badgeText;
     
     public SaleDecorator(VehicleDisplay decoratedDisplay) {

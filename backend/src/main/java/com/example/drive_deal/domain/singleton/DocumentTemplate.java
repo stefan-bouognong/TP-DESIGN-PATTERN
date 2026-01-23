@@ -11,8 +11,8 @@ public class DocumentTemplate {
     private String id;
     private DocumentType type;
     private String title;
-    private String content; // Template HTML/XML
-    private Map<String, String> placeholders; // {{client_name}}, {{vehicle_model}}, etc.
+    private String content; 
+    private Map<String, String> placeholders; 
     private LocalDateTime lastUpdated;
     
     public DocumentTemplate(DocumentType type, String title, String content) {

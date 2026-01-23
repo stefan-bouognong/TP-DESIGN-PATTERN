@@ -312,7 +312,7 @@ public class OpenPdfGenerator implements PdfGenerator {
         pdfDoc.add(footer);
     }
     
-    // Méthode pour nettoyer le texte (gardée pour compatibilité)
+    
     private String extractPlainText(String html) {
         if (html == null) return "";
         

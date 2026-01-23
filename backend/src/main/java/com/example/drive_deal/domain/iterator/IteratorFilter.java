@@ -5,13 +5,13 @@ import java.util.List;
 
 @Data
 public class IteratorFilter {
-    private List<String> vehicleTypes;      // ["CAR", "ELECTRIC_CAR", "SCOOTER"]
+    private List<String> vehicleTypes;      
     private Double minPrice;
     private Double maxPrice;
-    private List<String> brands;           // ["Tesla", "BMW", "Yamaha"]
-    private Boolean inStock;               // true = seulement disponibles
-    private Boolean onSale;                // true = seulement en promotion
-    private String searchKeyword;          // Recherche texte
+    private List<String> brands;           
+    private Boolean inStock;               
+    private Boolean onSale;                
+    private String searchKeyword;          
     private Integer minYear;
     private Integer maxYear;
     

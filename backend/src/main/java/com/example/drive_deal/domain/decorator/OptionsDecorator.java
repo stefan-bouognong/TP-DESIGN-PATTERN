@@ -82,7 +82,6 @@ public class OptionsDecorator extends VehicleDisplayDecorator {
             optionsHtml.append("</div>\n");
         }
         
-        // Insérer les options avant la fermeture de la carte
         return originalDisplay.replace("</div>", optionsHtml.toString() + "</div>");
     }
     
@@ -94,10 +93,9 @@ public class OptionsDecorator extends VehicleDisplayDecorator {
         additional.put("optionsCount", availableOptions.size());
         additional.put("showOptionPrices", showPrices);
         
-        // Options compatibles/incompatibles (exemple)
         Map<String, List<String>> compatibility = new HashMap<>();
         compatibility.put("compatible", Arrays.asList("Sièges en cuir", "Système audio premium"));
-        compatibility.put("incompatible", Arrays.asList("Sièges sportifs")); // Exemple
+        compatibility.put("incompatible", Arrays.asList("Sièges sportifs")); 
         additional.put("compatibility", compatibility);
         
         return additional;

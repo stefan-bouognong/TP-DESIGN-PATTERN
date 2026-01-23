@@ -111,7 +111,6 @@ public class FilteredIterator implements CatalogIterator {
     }
 
     public int getOriginalTotal() {
-        // Pour information seulement
-        return -1; // Non disponible dans cette implémentation
+        return -1; 
     }
 }

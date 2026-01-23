@@ -30,7 +30,6 @@ public class VehicleForm extends Form {
         builder.append(renderer.renderField("color", "Couleur", vehicle.getColor()));
         builder.append(renderer.renderField("year", "Année", vehicle.getYear().toString()));
         
-        // Détails techniques si demandés
         if (includeTechnicalDetails && vehicle instanceof com.example.drive_deal.entity.CarEntity) {
             com.example.drive_deal.entity.CarEntity car = (com.example.drive_deal.entity.CarEntity) vehicle;
             builder.append(renderer.renderField("doors", "Nombre de portes", car.getDoors().toString()));

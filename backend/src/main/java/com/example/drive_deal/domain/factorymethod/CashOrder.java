@@ -1,4 +1,4 @@
-// CashOrder.java (correction de getSubtotal())
+// CashOrder.java 
 package com.example.drive_deal.domain.factorymethod;
 
 import com.example.drive_deal.entity.CashOrderEntity;
@@ -31,7 +31,7 @@ public class CashOrder implements Order {
     
     @Override
     public BigDecimal getSubtotal() {
-        return entity.getSubtotal(); // Utilise le getter généré par Lombok
+        return entity.getSubtotal(); 
     }
     
     @Override
@@ -46,7 +46,6 @@ public class CashOrder implements Order {
     
     @Override
     public void addItem(OrderItem item) {
-        // À implémenter selon besoin
     }
     
     @Override

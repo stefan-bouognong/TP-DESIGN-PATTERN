@@ -1,4 +1,4 @@
-// VehicleDisplayFactory.java (CORRIGÉ)
+// VehicleDisplayFactory.java
 package com.example.drive_deal.domain.decorator;
 
 import com.example.drive_deal.entity.VehicleEntity;
@@ -8,8 +8,6 @@ import java.util.List;
 @Component
 public class VehicleDisplayFactory {
     
-    // SUPPRIMER les injections de décorateurs
-    // private final AnimationDecorator animationDecorator; <-- SUPPRIMER
     
     public VehicleDisplayFactory() {
         // Constructeur vide

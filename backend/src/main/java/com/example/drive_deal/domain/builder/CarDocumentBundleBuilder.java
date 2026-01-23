@@ -31,8 +31,8 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
         // Données spécifiques aux voitures
         Map<String, String> data = new HashMap<>();
         data.put("{{vehicle_type}}", "Automobile");
-        data.put("{{engine_power}}", "150CV"); // Exemple
-        data.put("{{co2_emissions}}", "120g/km"); // Exemple
+        data.put("{{engine_power}}", "150CV"); 
+        data.put("{{co2_emissions}}", "120g/km"); 
         
         // Ajouter les données de base
         addBasicOrderData(data);
@@ -48,12 +48,11 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
         DocumentEntity document = createDocument(DocumentType.TRANSFER_CERTIFICATE);
         
         Map<String, String> data = new HashMap<>();
-        data.put("{{vehicle_category}}", "M1"); // Catégorie M1 pour voitures
-        data.put("{{first_registration}}", "2024-01-15"); // Exemple
+        data.put("{{vehicle_category}}", "M1"); 
+        data.put("{{first_registration}}", "2024-01-15"); 
         
         addBasicOrderData(data);
         
-        // Pour les voitures, ajouter des infos techniques
         if (!currentOrder.getItems().isEmpty()) {
             OrderItemEntity item = currentOrder.getItems().get(0);
             if (item.getVehicle() instanceof CarEntity) {

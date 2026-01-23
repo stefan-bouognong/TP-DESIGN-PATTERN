@@ -37,7 +37,7 @@ public class DocumentBundleDirector {
         DocumentBundleBuilder builder = selectBuilder(order);
         
         builder.createNewBundle(order);
-        builder.buildOrderForm(); // Seulement le bon de commande
+        builder.buildOrderForm(); 
         
         DocumentBundle bundle = builder.getBundle();
         bundle.setBundleName("Bundle Minimal - Order #" + order.getId());
@@ -71,7 +71,6 @@ public class DocumentBundleDirector {
         } else if (firstVehicle instanceof ScooterEntity) {
             return scooterBuilder;
         } else {
-            // Par défaut, utiliser le builder voiture
             return carBuilder;
         }
     }

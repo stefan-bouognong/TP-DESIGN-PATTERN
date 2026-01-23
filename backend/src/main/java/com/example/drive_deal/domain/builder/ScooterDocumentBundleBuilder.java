@@ -30,7 +30,7 @@ public class ScooterDocumentBundleBuilder extends DocumentBundleBuilder {
         
         Map<String, String> data = new HashMap<>();
         data.put("{{vehicle_type}}", "Scooter/Deux-roues");
-        data.put("{{engine_power}}", "125cc"); // Exemple pour scooter
+        data.put("{{engine_power}}", "125cc"); 
         data.put("{{requires_license}}", "Permis A1/A2 requis");
         
         addBasicOrderData(data);
@@ -56,7 +56,7 @@ public class ScooterDocumentBundleBuilder extends DocumentBundleBuilder {
         DocumentEntity document = createDocument(DocumentType.TRANSFER_CERTIFICATE);
         
         Map<String, String> data = new HashMap<>();
-        data.put("{{vehicle_category}}", "L"); // Catégorie L pour deux-roues
+        data.put("{{vehicle_category}}", "L"); 
         data.put("{{requires_helmet}}", "Oui, casque homologué obligatoire");
         
         addBasicOrderData(data);
@@ -73,7 +73,7 @@ public class ScooterDocumentBundleBuilder extends DocumentBundleBuilder {
         
         Map<String, String> data = new HashMap<>();
         data.put("{{vehicle_category}}", "Scooter/Deux-roues");
-        data.put("{{helmet_included}}", "Non inclus"); // Optionnel
+        data.put("{{helmet_included}}", "Non inclus"); 
         
         addBasicOrderData(data);
         
@@ -104,7 +104,7 @@ public class ScooterDocumentBundleBuilder extends DocumentBundleBuilder {
         
         Map<String, String> data = new HashMap<>();
         data.put("{{document_type}}", "Facture Scooter");
-        data.put("{{tax_rate}}", "10%"); // TVA réduite pour certains deux-roues
+        data.put("{{tax_rate}}", "10%"); 
         
         addBasicOrderData(data);
         
@@ -131,7 +131,6 @@ public class ScooterDocumentBundleBuilder extends DocumentBundleBuilder {
         data.put("{{items_table}}", itemsTable.toString());
         data.put("{{subtotal}}", currentOrder.getSubtotal().toString());
         
-        // TVA réduite pour scooters (exemple: 10%)
         java.math.BigDecimal tax = currentOrder.getSubtotal()
             .multiply(new java.math.BigDecimal("0.10"));
         data.put("{{taxes}}", tax.toString());
