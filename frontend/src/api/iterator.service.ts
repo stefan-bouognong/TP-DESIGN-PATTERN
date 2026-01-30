@@ -16,6 +16,21 @@ export interface BackendVehicle {
   type: string;
 }
 
+export interface PaginatedResponse {
+  success: boolean;
+  timestamp: string;
+  page: {
+    pageNumber: number;
+    pageSize: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+    content: BackendVehicle[];
+  };
+  message: string;
+}
+
 export interface FilteredIteratorResponse {
   success: boolean;
   timestamp: string;
@@ -23,19 +38,6 @@ export interface FilteredIteratorResponse {
   message: string;
   filters: any;
   count: number;
-}
-
-export interface PaginatedIteratorResponse {
-  success: boolean;
-  timestamp: string;
-  vehicles: BackendVehicle[];
-  message: string;
-  total: number;
-  page: number;
-  size: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
 }
 
 export interface IteratorStatsResponse {
@@ -76,7 +78,7 @@ export const iteratorService = {
       pageNumber: page,
     };
     
-    return api.post<PaginatedIteratorResponse>(
+    return api.post<PaginatedResponse>(
       `/iterator/paginated?page=${page}&size=${size}`,
       safeFilters
     );

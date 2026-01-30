@@ -30,10 +30,14 @@ export const useVehicleIterator = () => {
         );
         
         if (response.data.success) {
-          setVehicles(response.data.vehicles);
-          setTotal(response.data.count);
+          setVehicles(response.data.vehicles || []);
+          setTotal(response.data.count || 0);
           setHasNext(false);
           setHasPrevious(false);
+          setPage(1);
+          setTotalPages(1);
+        } else {
+          setError(response.data.message || 'Erreur filtrage');
         }
       } else if (config.type === 'PAGINATED') {
         const currentPage = config.page || 1;
@@ -43,33 +47,57 @@ export const useVehicleIterator = () => {
           config.filters
         );
         
+        console.log('Réponse paginée complète:', response.data); // Debug
+        
         if (response.data.success) {
-          setVehicles(response.data.vehicles);
-          setTotal(response.data.total);
-          setPage(response.data.page);
-          setTotalPages(response.data.totalPages);
-          setHasNext(response.data.hasNext);
-          setHasPrevious(response.data.hasPrevious);
+          // ICI: utiliser page.content au lieu de vehicles
+          const pageData = response.data.page;
+          setVehicles(pageData?.content || []);
+          setTotal(pageData?.totalElements || 0);
+          setPage(pageData?.pageNumber || 1);
+          setTotalPages(pageData?.totalPages || 1);
+          setHasNext(pageData?.hasNext || false);
+          setHasPrevious(pageData?.hasPrevious || false);
+        } else {
+          setError(response.data.message || 'Erreur pagination');
         }
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erreur lors du chargement');
+      console.error('Erreur détaillée:', err);
+      setError(err.response?.data?.message || err.message || 'Erreur lors du chargement');
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const loadNextPage = useCallback(async (config: IteratorConfig) => {
+  const loadNextPage = useCallback(async (config: IteratorFilterRequest) => {
     if (!hasNext || loading) return;
     
-    const nextConfig = {
-      ...config,
-      type: 'PAGINATED' as const,
-      page: page + 1,
-    };
+    const nextPage = page + 1;
     
-    await loadVehicles(nextConfig);
-  }, [hasNext, loading, page, loadVehicles]);
+    try {
+      setLoading(true);
+      const response = await iteratorService.paginatedIteration(
+        nextPage,
+        12, // taille fixe pour "charger plus"
+        config
+      );
+      
+      if (response.data.success) {
+        const pageData = response.data.page;
+        setVehicles(prev => [...prev, ...(pageData?.content || [])]);
+        setTotal(pageData?.totalElements || 0);
+        setPage(pageData?.pageNumber || nextPage);
+        setTotalPages(pageData?.totalPages || 1);
+        setHasNext(pageData?.hasNext || false);
+        setHasPrevious(pageData?.hasPrevious || false);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erreur chargement');
+    } finally {
+      setLoading(false);
+    }
+  }, [hasNext, loading, page]);
 
   const reset = useCallback(() => {
     setVehicles([]);

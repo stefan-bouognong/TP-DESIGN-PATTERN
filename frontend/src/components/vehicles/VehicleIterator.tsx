@@ -28,7 +28,6 @@ export const VehicleIterator: React.FC<VehicleIteratorProps> = ({
     hasNext,
     loadVehicles,
     loadNextPage,
-    reset,
   } = useVehicleIterator();
 
   useEffect(() => {
@@ -41,7 +40,11 @@ export const VehicleIterator: React.FC<VehicleIteratorProps> = ({
     loadVehicles(config);
   }, [type, filters, pageSize]);
 
-  if (loading && vehicles.length === 0) {
+  // Vérification de sécurité
+  const safeVehicles = vehicles || [];
+  const safeTotal = total || 0;
+
+  if (loading && safeVehicles.length === 0) {
     return (
       <div className={viewMode === 'grid' 
         ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' 
@@ -63,7 +66,7 @@ export const VehicleIterator: React.FC<VehicleIteratorProps> = ({
     );
   }
 
-  if (vehicles.length === 0) {
+  if (safeVehicles.length === 0) {
     return (
       <div className="text-center py-12 px-4 border border-dashed rounded-lg">
         <p className="text-muted-foreground">Aucun véhicule trouvé</p>
@@ -75,7 +78,7 @@ export const VehicleIterator: React.FC<VehicleIteratorProps> = ({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <Badge variant="secondary">
-          {total} véhicule{total !== 1 ? 's' : ''}
+          {safeTotal} véhicule{safeTotal !== 1 ? 's' : ''}
         </Badge>
         <Badge variant="outline">
           {type === 'FILTERED' ? 'Filtré' : 'Paginé'}
@@ -86,7 +89,7 @@ export const VehicleIterator: React.FC<VehicleIteratorProps> = ({
         ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' 
         : 'space-y-4'
       }>
-        {vehicles.map((vehicle) => (
+        {safeVehicles.map((vehicle) => (
           <VehicleCard
             key={vehicle.id}
             vehicle={{
@@ -111,11 +114,7 @@ export const VehicleIterator: React.FC<VehicleIteratorProps> = ({
       {hasNext && (
         <div className="text-center pt-4">
           <Button
-            onClick={() => loadNextPage({
-              type: 'PAGINATED',
-              filters,
-              size: pageSize,
-            })}
+            onClick={() => loadNextPage(filters)}
             disabled={loading}
             variant="outline"
           >
