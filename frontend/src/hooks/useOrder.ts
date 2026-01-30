@@ -34,6 +34,9 @@ export function useOrder() {
     setIsProcessing(true);
 
     try {
+      const totalAmount = useCartStore.getState().getTotal();
+      const taxesAmount = useCartStore.getState().getTaxes();
+
       // Formater l'adresse de livraison
       const shippingAddress = `${deliveryInfo.address}, ${deliveryInfo.postalCode} ${deliveryInfo.city}, ${deliveryInfo.country}`;
       
@@ -42,6 +45,7 @@ export function useOrder() {
         vehicleId: item.vehicle.id,
         quantity: item.quantity,
       }));
+      console.log(orderItems)
 
       // Préparer la requête
       const orderRequest: OrderRequest = {
@@ -50,6 +54,8 @@ export function useOrder() {
         items: orderItems,
         shippingAddress,
         billingAddress: shippingAddress, // Même adresse pour la facturation
+        totalAmount,
+        totalTax:taxesAmount,
       };
 
       // Ajouter les détails de crédit si nécessaire
@@ -60,12 +66,14 @@ export function useOrder() {
         };
       }
 
+      console.log('Order Request:', orderRequest);
+
       // Créer la commande
       const response = await ordersService.createOrder(orderRequest);
 
       // Succès
       toast.success(`Commande créée avec succès !`);
-      clearCart();
+      // clearCart();
       
       return response;
     } catch (error: any) {

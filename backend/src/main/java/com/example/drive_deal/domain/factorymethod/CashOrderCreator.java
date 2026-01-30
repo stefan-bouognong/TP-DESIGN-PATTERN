@@ -43,7 +43,7 @@ public class CashOrderCreator extends OrderCreator {
             orderItems.add(new OrderItemAdapter(item));
         }
         
-        order.calculateSubtotal();
+        // order.calculateTotalAmount();
         return new CashOrder(order, orderItems);
     }
     

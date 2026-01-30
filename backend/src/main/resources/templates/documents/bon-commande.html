@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bon de commande</title>
+    <style>
+        /* ===== Global ===== */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+        }
+
+        .section p {
+            margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .payment-section {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+        }
+
+        .payment-section p {
+            margin: 5px 0;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>BON DE COMMANDE</h1>
+
+    <!-- Infos commande -->
+    <div class="section">
+        <p><span class="label">Commande N° :</span> <span th:text="${data.orderId}"></span></p>
+        <p><span class="label">Date :</span> <span th:text="${#temporals.format(data.orderDate,'dd/MM/yyyy')}"></span></p>
+    </div>
+
+    <!-- Infos client -->
+    <div class="section">
+        <p><span class="label">Client :</span> <span th:text="${data.clientFullName}"></span></p>
+        <p><span class="label">Email :</span> <span th:text="${data.clientEmail}"></span></p>
+        <p><span class="label">Téléphone :</span> <span th:text="${data.clientPhone}"></span></p>
+        <p><span class="label">Adresse :</span> <span th:text="${data.clientAddress}"></span></p>
+        <p><span class="label">Adresse de facturation :</span> <span th:text="${data.billingAddress}"></span></p>
+        <p><span class="label">Adresse de livraison :</span> <span th:text="${data.shippingAddress}"></span></p>
+    </div>
+
+    <!-- Tableau véhicules -->
+    <div class="section">
+        <table>
+            <thead>
+                <tr>
+                    <th>Véhicule</th>
+                    <th>Prix unitaire</th>
+                    <th>Quantité</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${data.items}">
+                    <td th:text="${item.vehicleModel}"></td>
+                    <td th:text="${item.unitPrice}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.unitPrice * item.quantity}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="total">Sous-total : <span th:text="${data.subtotal}"></span></p>
+        <p class="total">Total : <span th:text="${data.totalAmount}"></span></p>
+    </div>
+
+    <!-- Paiement CASH -->
+    <div class="payment-section" th:if="${data.orderType != null and data.orderType.equalsIgnoreCase('CASH')}">
+        <p><strong>Paiement comptant</strong></p>
+        <p>Payé : <span th:text="${data.paid ? 'Oui' : 'Non'}"></span></p>
+        <p>Remise : <span th:text="${data.cashDiscount != null ? data.cashDiscount : 0}"></span></p>
+    </div>
+
+    <!-- Paiement CREDIT -->
+    <div class="payment-section" th:if="${data.orderType != null and data.orderType.equalsIgnoreCase('CREDIT')}">
+        <p><strong>Paiement à crédit</strong></p>
+        <p>Durée : <span th:text="${data.months}"></span> mois</p>
+        <p>Mensualité : <span th:text="${data.monthlyPayment}"></span></p>
+        <p>Taux d'intérêt : <span th:text="${data.interestRate} + '%'"></span></p>
+        <p>Approuvé : <span th:text="${data.approved ? 'Oui' : 'Non'}"></span></p>
+    </div>
+
+</div>
+</body>
+</html>

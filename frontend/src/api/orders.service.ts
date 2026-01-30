@@ -16,6 +16,8 @@ export interface OrderRequest {
   items: OrderItem[];
   shippingAddress: string;
   billingAddress?: string;
+  totalAmount: number; // Montant total TTC de la commande
+  taxesAmount: number; // Montant total de la TVA
   creditDetails?: CreditDetails;
 }
 

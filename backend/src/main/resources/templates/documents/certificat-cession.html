@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificat de cession</title>
+    <style>
+        body { font-family: Arial; font-size: 14px; }
+        h1 { text-align: center; }
+        .section { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>CERTIFICAT DE CESSION</h1>
+
+<div class="section">
+    <p>
+        Je soussigné <strong>DriveDeal</strong>, cède le véhicule au client :
+        <strong th:text="${data.clientName}"></strong>
+    </p>
+</div>
+
+<div class="section">
+    <p><strong>Commande N° :</strong> <span th:text="${data.orderId}"></span></p>
+    <p><strong>Date de cession :</strong>
+        <span th:text="${#temporals.format(data.generatedAt,'dd/MM/yyyy')}"></span>
+    </p>
+</div>
+
+<div class="section">
+    <p>
+        La présente cession est faite conformément à la législation en vigueur.
+    </p>
+</div>
+
+<br><br>
+
+<p>Signature du vendeur :</p>
+<br>
+<p>__________________________</p>
+
+</body>
+</html>

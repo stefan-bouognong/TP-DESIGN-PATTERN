@@ -77,5 +77,6 @@ export interface VehicleOption {
 export interface CartItem {
   vehicle: Vehicle              // le véhicule complet
   quantity: number              // nombre d’exemplaires
+  total_amount: number         // prix total pour cet item (vehicle.price * quantity + options)
   selectedOptions?: VehicleOption[] // options choisies pour ce véhicule
 }

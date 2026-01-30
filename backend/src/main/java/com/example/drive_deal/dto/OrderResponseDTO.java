@@ -12,6 +12,13 @@ public class OrderResponseDTO {
     private Long id;
     private Long clientId;
     private String clientName;
+
+    private String clientFullName;
+    private String clientEmail;
+    private String clientPhone;
+    private String clientAddress;
+
+    private ClientResponseDTO client;
     private String orderType; // "CASH" or "CREDIT"
     private String status;
     private BigDecimal totalAmount;
@@ -31,4 +38,6 @@ public class OrderResponseDTO {
     private String creditStatus;
     private Boolean approved;
     private BigDecimal monthlyPayment;
+
+
 }
