@@ -16,7 +16,6 @@ public class HtmlDocument {
         return entity.getTitle();
     }
     
-    // AJOUTER CETTE MÉTHODE
     public DocumentEntity getEntity() {
         return entity;
     }

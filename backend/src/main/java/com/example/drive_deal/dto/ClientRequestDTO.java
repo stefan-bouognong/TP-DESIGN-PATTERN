@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 public class ClientRequestDTO {
 
-    // 🔐 COMPTE
+    //  COMPTE
     @Email
     private String email;
     private String password;
 
-    // 👤 CLIENT
+    //  CLIENT
     @NotBlank
     private String name;
     private String phone;
