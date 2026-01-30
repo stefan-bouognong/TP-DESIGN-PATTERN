@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/orders/{orderId}/documents")
+@RequestMapping("/api/orders/{orderId}/documents")
 public class DocumentController2 {
 
     private final DocumentService2 documentService;

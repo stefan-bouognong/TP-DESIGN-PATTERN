@@ -6,7 +6,7 @@ export const documentDownloadService = {
     downloadDocument: (orderId: number, type: string) => {
         return api.get(`/orders/${orderId}/documents/${type}`);
     },
-    downloadPdf: (documentId: number) => {
+    downloadPdf: (orderId: number,type: String) => {
         return api.get(`/orders/${orderId}/documents/${type}/pdf`);
     }
 }

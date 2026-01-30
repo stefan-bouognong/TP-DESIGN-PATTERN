@@ -68,6 +68,7 @@ public class DocumentServiceImpl implements DocumentService2 {
         data.setOrderType(order.getOrderType());
         data.setSubtotal(order.getSubtotal());
         data.setTotalAmount(order.getTotalAmount());
+        data.setTotalTax(order.getTotalTax());
         data.setItems(order.getItems() != null ? order.getItems() : List.of());
 
         /* ======================

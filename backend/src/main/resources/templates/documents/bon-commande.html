@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Bon de commande</title>
-    <style>
-        /* ===== Global ===== */
+    <style type="text/css">
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 14px;
@@ -13,6 +12,7 @@
             padding: 0;
             background-color: #f7f7f7;
         }
+
         .container {
             max-width: 900px;
             margin: 30px auto;
@@ -38,9 +38,8 @@
             border-radius: 5px;
         }
 
-        .section p {
-            margin: 5px 0;
-        }
+        .section p { margin: 5px 0; }
+        strong { color: #2c3e50; }
 
         table {
             width: 100%;
@@ -60,9 +59,7 @@
             font-weight: bold;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+        tr:nth-child(even) { background-color: #f9f9f9; }
 
         .total {
             text-align: right;
@@ -78,13 +75,10 @@
             background-color: #ecf0f1;
         }
 
-        .payment-section p {
-            margin: 5px 0;
-        }
+        .payment-section p { margin: 5px 0; }
+        .label { font-weight: bold; }
 
-        .label {
-            font-weight: bold;
-        }
+        br { line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -94,18 +88,20 @@
 
     <!-- Infos commande -->
     <div class="section">
-        <p><span class="label">Commande N° :</span> <span th:text="${data.orderId}"></span></p>
-        <p><span class="label">Date :</span> <span th:text="${#temporals.format(data.orderDate,'dd/MM/yyyy')}"></span></p>
+        <p><span class="label">Commande N° :</span> <span th:text="${data.orderId ?: 'N/A'}"></span></p>
+        <p><span class="label">Date :</span>
+            <span th:text="${data.orderDate != null ? #temporals.format(data.orderDate,'dd/MM/yyyy') : 'N/A'}"></span>
+        </p>
     </div>
 
     <!-- Infos client -->
     <div class="section">
-        <p><span class="label">Client :</span> <span th:text="${data.clientFullName}"></span></p>
-        <p><span class="label">Email :</span> <span th:text="${data.clientEmail}"></span></p>
-        <p><span class="label">Téléphone :</span> <span th:text="${data.clientPhone}"></span></p>
-        <p><span class="label">Adresse :</span> <span th:text="${data.clientAddress}"></span></p>
-        <p><span class="label">Adresse de facturation :</span> <span th:text="${data.billingAddress}"></span></p>
-        <p><span class="label">Adresse de livraison :</span> <span th:text="${data.shippingAddress}"></span></p>
+        <p><span class="label">Client :</span> <span th:text="${data.clientFullName ?: 'N/A'}"></span></p>
+        <p><span class="label">Email :</span> <span th:text="${data.clientEmail ?: 'N/A'}"></span></p>
+        <p><span class="label">Téléphone :</span> <span th:text="${data.clientPhone ?: 'N/A'}"></span></p>
+        <p><span class="label">Adresse :</span> <span th:text="${data.clientAddress ?: 'N/A'}"></span></p>
+        <p><span class="label">Adresse de facturation :</span> <span th:text="${data.billingAddress ?: 'N/A'}"></span></p>
+        <p><span class="label">Adresse de livraison :</span> <span th:text="${data.shippingAddress ?: 'N/A'}"></span></p>
     </div>
 
     <!-- Tableau véhicules -->
@@ -121,30 +117,33 @@
             </thead>
             <tbody>
                 <tr th:each="item : ${data.items}">
-                    <td th:text="${item.vehicleModel}"></td>
-                    <td th:text="${item.unitPrice}"></td>
-                    <td th:text="${item.quantity}"></td>
-                    <td th:text="${item.unitPrice * item.quantity}"></td>
+                    <td th:text="${item.vehicleModel ?: 'N/A'}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.unitPrice ?: 0, 1, 'COMMA', 2, 'POINT')} + ' XFA'"></td>
+                    <td th:text="${item.quantity ?: 0}"></td>
+                    <td th:text="${#numbers.formatDecimal((item.unitPrice ?: 0) * (item.quantity ?: 0), 1, 'COMMA', 2, 'POINT')} + ' XFA'"></td>
                 </tr>
             </tbody>
         </table>
-        <p class="total">Sous-total : <span th:text="${data.subtotal}"></span></p>
-        <p class="total">Total : <span th:text="${data.totalAmount}"></span></p>
+
+        <p class="total">Sous-total : <span th:text="${#numbers.formatDecimal(data.subtotal ?: 0, 1, 'COMMA', 2, 'POINT')} + ' XFA'"></span></p>
+        <p class="total">TVA : <span th:text="${#numbers.formatDecimal((data.totalAmount ?: 0) - (data.subtotal ?: 0), 1, 'COMMA', 2, 'POINT')} + ' XFA'"></span></p>
+        <p class="total">Taux TVA : <span th:text="${(data.totalAmount ?: 0) > 0 ? ((data.totalAmount ?: 0) - (data.subtotal ?: 0)) / (data.totalAmount ?: 1) * 100 : 0} + '%'"></span></p>
+        <p class="total">Total : <span th:text="${#numbers.formatDecimal(data.totalAmount ?: 0, 1, 'COMMA', 2, 'POINT')} + ' XFA'"></span></p>
     </div>
 
     <!-- Paiement CASH -->
     <div class="payment-section" th:if="${data.orderType != null and data.orderType.equalsIgnoreCase('CASH')}">
         <p><strong>Paiement comptant</strong></p>
         <p>Payé : <span th:text="${data.paid ? 'Oui' : 'Non'}"></span></p>
-        <p>Remise : <span th:text="${data.cashDiscount != null ? data.cashDiscount : 0}"></span></p>
+        <p>Remise : <span th:text="${data.cashDiscount ?: 0} + ' XFA'"></span></p>
     </div>
 
     <!-- Paiement CREDIT -->
     <div class="payment-section" th:if="${data.orderType != null and data.orderType.equalsIgnoreCase('CREDIT')}">
         <p><strong>Paiement à crédit</strong></p>
-        <p>Durée : <span th:text="${data.months}"></span> mois</p>
-        <p>Mensualité : <span th:text="${data.monthlyPayment}"></span></p>
-        <p>Taux d'intérêt : <span th:text="${data.interestRate} + '%'"></span></p>
+        <p>Durée : <span th:text="${data.months ?: 0}"></span> mois</p>
+        <p>Mensualité : <span th:text="${#numbers.formatDecimal(data.monthlyPayment ?: 0, 1, 'COMMA', 2, 'POINT')} + ' XFA'"></span></p>
+        <p>Taux d'intérêt : <span th:text="${data.interestRate ?: 0} + '%'"></span></p>
         <p>Approuvé : <span th:text="${data.approved ? 'Oui' : 'Non'}"></span></p>
     </div>
 

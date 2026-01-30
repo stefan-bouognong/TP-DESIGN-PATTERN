@@ -74,6 +74,8 @@ public class OrderService {
         
         // Définir les adresses
         entity.setShippingAddress(request.getShippingAddress());
+        entity.setTotalAmount(request.getTotalAmount());
+        entity.setTotalTax(request.getTotalTax());
         entity.setBillingAddress(request.getBillingAddress() != null ? 
             request.getBillingAddress() : request.getShippingAddress());
         

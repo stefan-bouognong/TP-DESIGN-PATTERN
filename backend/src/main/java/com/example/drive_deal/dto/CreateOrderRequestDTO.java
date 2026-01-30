@@ -22,4 +22,7 @@ public class CreateOrderRequestDTO {
     
     private String shippingAddress;
     private String billingAddress;
+    private java.math.BigDecimal totalAmount;
+    private String deliveryCountry;
+    private java.math.BigDecimal totalTax;
 }

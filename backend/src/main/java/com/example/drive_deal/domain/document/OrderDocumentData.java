@@ -28,6 +28,7 @@ public class OrderDocumentData {
     private String orderType;
     private BigDecimal subtotal;
     private BigDecimal totalAmount;
+    private BigDecimal totalTax;
     private List<OrderItemResponseDTO> items;
 
     // Cash
