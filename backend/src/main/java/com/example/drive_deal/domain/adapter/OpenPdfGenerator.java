@@ -1,4 +1,3 @@
-// OpenPdfGenerator.java - AMÉLIORÉ
 package com.example.drive_deal.domain.adapter;
 
 import com.example.drive_deal.utils.PdfStyleUtils;
