@@ -1,0 +1,73 @@
+===========================================
+ENDPOINTS COMMAND - SOLDE
+===========================================
+
+BASE URL: http://localhost:8080/api/promotions
+
+--------------------------------------------------------------------
+DESCRIPTION : application d'une promotion sur les vehicles datant de plus 0 jour
+--------------------------------------------------------------------
+
+ÉTAPE 1 : Créer le véhicule à solder (Préparation)
+METHOD: POST URL: http://localhost:8080/api/vehicles
+
+REQUEST BODY (JSON):
+
+JSON
+
+{
+  "name": "Tesla Model 3 Promo",
+  "brand": "Tesla",
+  "model": "Model 3",
+  "price": 45000.00,
+  "factoryType": "ELECTRIC",
+  "vehicleType": "CAR",
+  "year": 2024,
+  "color": "Red"
+}
+RESPONSE 201 CREATED (JSON):
+
+
+{
+  "id": 1,
+  "name": "Tesla Model 3 Promo",
+  "type": "CAR",
+  "model": "Model 3",
+  "price": 45000.00,
+  "onSale": false,
+  "createdAt": "2026-01-30T14:00:00",
+  "description": "ElectricCar Model 3 - $45000.00"
+}
+
+
+ÉTAPE 2 : Appliquer la solde via le patron COMMAND
+METHOD: POST URL: /clearance
+
+QUERY PARAMETERS:
+
+days: 0 (On cible les véhicules de 0 jour pour inclure celui créé à l'étape 1)
+
+discount: 0.2 (On applique une remise de 20%)
+
+URL FINALE POSTMAN: http://localhost:8080/api/promotions/clearance?days=0&discount=0.2
+
+RESPONSE 200 OK (TEXT): "Solde appliquée avec succès pour les véhicules de plus de 0 jours."
+
+ÉTAPE 3 : Vérification du résultat (Après Command)
+METHOD: GET URL: http://localhost:8080/api/vehicles/1
+
+RESPONSE 200 OK (JSON):
+
+JSON
+
+{
+  "id": 1,
+  "name": "Tesla Model 3 Promo",
+  "type": "CAR",
+  "model": "Model 3",
+  "price": 36000.00,
+  "onSale": true,
+  "createdAt": "2026-01-30T14:00:00",
+  "description": "ElectricCar Model 3 - $45000.00"
+}
+(NB: Le prix est passé de 45 000.00 à 36 000.00 et onSale est devenu true)
