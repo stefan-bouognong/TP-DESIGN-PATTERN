@@ -15,6 +15,7 @@ public class VehicleResponseDTO {
     private String model;
     private String brand;
     private BigDecimal price;
+    private BigDecimal initialePrice;
     private String color;
     private Integer year;
     private boolean available;

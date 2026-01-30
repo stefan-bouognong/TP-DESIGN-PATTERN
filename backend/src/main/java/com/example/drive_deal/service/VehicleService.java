@@ -43,6 +43,7 @@ public class VehicleService {
         entity.setAvailable(true);
         entity.setOnSale(false);
         entity.setDescription(vehicle.getDescription());
+        entity.setInitialePrice(request.getInitialePrice());
 
         
 
@@ -167,6 +168,7 @@ public class VehicleService {
         dto.setModel(entity.getModel());
         dto.setBrand(entity.getBrand());
         dto.setPrice(entity.getPrice());
+        dto.setInitialePrice(entity.getInitialePrice());
         dto.setColor(entity.getColor());
         dto.setYear(entity.getYear());
         dto.setAvailable(entity.isAvailable());

@@ -104,7 +104,7 @@ export default function AdminPromotions() {
       setLoading(true);
       const response = await vehiclesService.getAllVehicles();
       const data = Array.isArray(response.data) ? response.data : [];
-      
+      console.log("tofsssssssssssss",response)
       // Transforme les données si elles viennent directement de la BD
       const transformedVehicles = data.map((vehicle: any) => {
         // Si les données sont déjà dans le format frontend, on les utilise telles quelles
@@ -302,42 +302,35 @@ export default function AdminPromotions() {
           <div className="mb-6 p-4 rounded-xl bg-muted/50 border border-border">
             <h3 className="font-medium mb-2">Informations de débogage</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <span className="text-muted-foreground">Total véhicules:</span>
-                <span className="ml-2 font-medium">{debugStats.totalVehicles}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Disponibles:</span>
-                <span className="ml-2 font-medium">{debugStats.availableVehicles}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Avec jours calculés:</span>
-                <span className="ml-2 font-medium">{debugStats.vehiclesWithDaysInStock}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">≥ {daysThreshold} jours:</span>
-                <span className="ml-2 font-medium">{debugStats.vehiclesOver5Days}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">En promotion:</span>
-                <span className="ml-2 font-medium">{debugStats.vehiclesOnPromotion}</span>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Éligibles:</span>
-                <span className="ml-2 font-medium">{debugStats.eligibleCount}</span>
-              </div>
-              <div className="col-span-2 md:col-span-3">
-                <span className="text-muted-foreground">Plus ancien véhicule:</span>
-                <span className="ml-2 font-medium">{debugStats.oldestVehicle} jours</span>
-              </div>
+            <div>
+              <span className="text-muted-foreground">Total véhicules:</span>
+              <span className="ml-2 font-medium">{debugStats.totalVehicles}</span>
             </div>
-            <div className="mt-4 p-3 bg-background rounded border">
-              <p className="text-xs font-mono">
-                <strong>Transformation appliquée:</strong> available → status, on_sale → isPromotion, created_at → daysInStock
-              </p>
+            <div>
+              <span className="text-muted-foreground">Disponibles:</span>
+              <span className="ml-2 font-medium">{debugStats.availableVehicles}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Avec jours calculés:</span>
+              <span className="ml-2 font-medium">{debugStats.vehiclesWithDaysInStock}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">≥ {daysThreshold} jours:</span>
+              <span className="ml-2 font-medium">{debugStats.vehiclesOver5Days}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">En promotion:</span>
+              <span className="ml-2 font-medium">{debugStats.vehiclesOnPromotion}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Éligibles:</span>
+              <span className="ml-2 font-medium">{debugStats.eligibleCount}</span>
             </div>
           </div>
+
+          </div>
         )}
+
 
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3 mb-8">
@@ -350,7 +343,7 @@ export default function AdminPromotions() {
             </CardHeader>
             <CardContent>
               <span className="text-2xl font-bold font-display">{activePromotions}</span>
-              <p className="text-xs text-muted-foreground mt-1">véhicules en promotion (on_sale = true)</p>
+              <p className="text-xs text-muted-foreground mt-1"></p>
             </CardContent>
           </Card>
 
@@ -401,10 +394,7 @@ export default function AdminPromotions() {
 
             {/* Info banner */}
             <div className="mb-6 p-4 rounded-xl bg-muted/50 border border-border">
-              <p className="text-sm text-muted-foreground">
-                <strong className="text-foreground">💡 Conseil :</strong> Les véhicules affichés ici sont soit déjà en promotion (on_sale = true),
-                soit en stock depuis plus de {daysThreshold} jours (calculé depuis created_at). Les véhicules de plus de 60 jours sont marqués en priorité.
-              </p>
+
               <p className="text-xs text-muted-foreground mt-2">
                 Affichage de {filteredVehicles.length} véhicule(s) sur {eligibleVehicles.length} éligible(s)
               </p>

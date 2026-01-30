@@ -10,6 +10,7 @@ public class VehicleRequestDTO {
     private String vehicleType; // "CAR" or "SCOOTER"
     private String model;
     private BigDecimal price;
+    private BigDecimal initialePrice;
     private String color;
     private Integer year;
     private String brand;       

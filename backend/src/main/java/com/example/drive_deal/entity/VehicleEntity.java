@@ -19,6 +19,8 @@ public abstract class VehicleEntity {
     private String model;
     private String brand;         // (souvent utile)
     private BigDecimal price;
+    @Column(name = "initiale_price")
+private BigDecimal initialePrice;
     private String color;
     private Integer year;
 
@@ -92,6 +94,9 @@ public abstract class VehicleEntity {
 
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
+   
+    public BigDecimal getInitialePrice(){ return initialePrice;}
+    public void setInitialePrice(BigDecimal initialePrice) { this.initialePrice = initialePrice; }
 
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
