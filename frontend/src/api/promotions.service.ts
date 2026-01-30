@@ -7,15 +7,4 @@ export const promotionsService = {
     return response.data;
   },
 
-  // Optionnel: Endpoint pour appliquer une promotion spécifique à un véhicule
-  applyPromotionToVehicle: async (vehicleId: number, discount: number) => {
-    const response = await api.put(`/vehicles/${vehicleId}/promotion`, { discount });
-    return response.data;
-  },
-
-  // Optionnel: Retirer une promotion d'un véhicule
-  removePromotionFromVehicle: async (vehicleId: number) => {
-    const response = await api.delete(`/vehicles/${vehicleId}/promotion`);
-    return response.data;
-  }
 };

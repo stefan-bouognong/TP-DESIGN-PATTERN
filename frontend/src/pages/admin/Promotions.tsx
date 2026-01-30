@@ -56,7 +56,7 @@ export default function AdminPromotions() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // État pour la commande de clearance
-  const [daysThreshold, setDaysThreshold] = useState(5);
+  const [daysThreshold, setDaysThreshold] = useState(10);
   const [clearanceDiscount, setClearanceDiscount] = useState([20]);
   const [applyingClearance, setApplyingClearance] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
@@ -247,7 +247,7 @@ export default function AdminPromotions() {
     totalVehicles: vehicles.length,
     availableVehicles: vehicles.filter(v => v.status === 'available').length,
     vehiclesWithDaysInStock: vehicles.filter(v => v.daysInStock !== undefined && v.daysInStock !== null).length,
-    vehiclesOver5Days: vehicles.filter(v => (v.daysInStock || 0) >= 5).length,
+    vehiclesOver5Days: vehicles.filter(v => (v.daysInStock || 0) >= 10).length,
     vehiclesOnPromotion: activePromotions,
     eligibleCount: eligibleVehicles.length,
     oldestVehicle: vehicles.length > 0 ? Math.max(...vehicles.map(v => v.daysInStock || 0)) : 0
@@ -528,21 +528,6 @@ export default function AdminPromotions() {
                           <div className="flex justify-end gap-2">
                             {vehicle.isPromotion ? (
                               <>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => openPromotionDialog(vehicle)}
-                                >
-                                  Modifier
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-destructive hover:text-destructive"
-                                  onClick={() => removePromotion(vehicle.id)}
-                                >
-                                  Retirer
-                                </Button>
                               </>
                             ) : (
                               <Button
