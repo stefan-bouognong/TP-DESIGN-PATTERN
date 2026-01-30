@@ -13,4 +13,6 @@ public interface VehicleRepository extends JpaRepository<VehicleEntity, Long> {
     List<VehicleEntity> findByAvailableTrue();
 
     List<VehicleEntity> findByPriceLessThanEqual(BigDecimal price);
+    
+    List<VehicleEntity> findByCreatedAtBeforeAndAvailableTrue(java.time.LocalDateTime date);
 }
