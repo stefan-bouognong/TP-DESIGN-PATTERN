@@ -20,8 +20,8 @@ public class CreditOrderCreator extends OrderCreator {
     public Order createOrder(ClientEntity client, List<Map<String, Object>> vehicleRequests) {
         CreditOrderEntity order = new CreditOrderEntity();
         order.setClient(client);
-        order.setMonths(24); // Par défaut 24 mois
-        order.setInterestRate(3.5); // 3.5% par an
+        order.setMonths(24); 
+        order.setInterestRate(3.5); 
         
         // Créer les items
         List<OrderItem> orderItems = new ArrayList<>();
@@ -43,9 +43,7 @@ public class CreditOrderCreator extends OrderCreator {
             orderItems.add(new OrderItemAdapter(item));
         }
         
-        // Appliquer le discount flotte pour les sociétés
         if (client instanceof CompanyClientEntity) {
-            // Logique de discount composite
             order.calculateSubtotal();
         }
         

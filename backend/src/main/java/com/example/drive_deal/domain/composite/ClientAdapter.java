@@ -1,4 +1,3 @@
-// ClientAdapter.java (fabrique pour créer les composants)
 package com.example.drive_deal.domain.composite;
 
 import com.example.drive_deal.entity.ClientEntity;

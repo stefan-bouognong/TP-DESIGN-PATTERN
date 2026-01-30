@@ -12,7 +12,6 @@ public abstract class Form {
     public abstract String getTitle();
     public abstract String getFormType();
     
-    // Template method pour le rendu standard
     public String renderForm() {
         return renderer.renderHeader(getTitle()) + 
                render() + 

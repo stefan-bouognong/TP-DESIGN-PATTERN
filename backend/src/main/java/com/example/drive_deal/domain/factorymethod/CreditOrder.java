@@ -1,4 +1,4 @@
-// CreditOrder.java (corrigé)
+// CreditOrder.java 
 package com.example.drive_deal.domain.factorymethod;
 
 import com.example.drive_deal.entity.CreditOrderEntity;
@@ -46,7 +46,7 @@ public class CreditOrder implements Order {
     
     @Override
     public void addItem(OrderItem item) {
-        // À implémenter
+        
     }
     
     @Override

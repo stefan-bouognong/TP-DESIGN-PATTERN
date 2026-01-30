@@ -1,4 +1,4 @@
-// SaleDecorator.java (ConcreteDecorator - Ajoute un badge de solde)
+// SaleDecorator.java 
 package com.example.drive_deal.domain.decorator;
 
 import java.math.BigDecimal;

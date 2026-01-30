@@ -1,4 +1,4 @@
-// DocumentTemplate.java (COMPLÈTE)
+// DocumentTemplate.java 
 package com.example.drive_deal.domain.singleton;
 
 import lombok.Data;

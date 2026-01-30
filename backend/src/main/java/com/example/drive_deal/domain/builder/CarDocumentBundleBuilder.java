@@ -34,7 +34,6 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
         data.put("{{engine_power}}", "150CV"); 
         data.put("{{co2_emissions}}", "120g/km"); 
         
-        // Ajouter les données de base
         addBasicOrderData(data);
         
         document.setContent(documentBundleTemplate.getTemplate(DocumentType.REGISTRATION_REQUEST)
@@ -101,7 +100,7 @@ public class CarDocumentBundleBuilder extends DocumentBundleBuilder {
         
         Map<String, String> data = new HashMap<>();
         data.put("{{document_type}}", "Facture Voiture");
-        data.put("{{tax_rate}}", "20%"); // TVA standard
+        data.put("{{tax_rate}}", "20%"); 
         
         addBasicOrderData(data);
         

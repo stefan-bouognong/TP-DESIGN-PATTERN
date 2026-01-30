@@ -55,7 +55,6 @@ public class ClientNotificationService {
     public void processPendingNotifications() {
         log.debug("Vérification des notifications en attente...");
         
-        // Ici, on pourrait implémenter une file d'attente de notifications
-        // pour les clients avec fréquence différente de IMMEDIATE
+        
     }
 }

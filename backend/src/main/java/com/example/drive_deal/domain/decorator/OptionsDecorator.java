@@ -1,4 +1,4 @@
-// OptionsDecorator.java (ConcreteDecorator - Ajoute les options disponibles)
+// OptionsDecorator.java (ConcreteDecorator)
 package com.example.drive_deal.domain.decorator;
 
 import com.example.drive_deal.entity.CarEntity;
@@ -52,7 +52,6 @@ public class OptionsDecorator extends VehicleDisplayDecorator {
             }
         }
         
-        // Options génériques
         options.add("Garantie extension 3 ans");
         options.add("Assurance tous risques");
         options.add("Service de maintenance inclus");

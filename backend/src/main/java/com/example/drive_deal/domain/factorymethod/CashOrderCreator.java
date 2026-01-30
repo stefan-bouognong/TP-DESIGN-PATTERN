@@ -21,9 +21,8 @@ public class CashOrderCreator extends OrderCreator {
     public Order createOrder(ClientEntity client, List<Map<String, Object>> vehicleRequests) {
         CashOrderEntity order = new CashOrderEntity();
         order.setClient(client);
-        order.setCashDiscount(BigDecimal.valueOf(5.0)); // 5% de réduction pour cash
+        order.setCashDiscount(BigDecimal.valueOf(5.0)); 
         
-        // Créer les items
         List<OrderItem> orderItems = new ArrayList<>();
         
         for (Map<String, Object> request : vehicleRequests) {
@@ -39,7 +38,6 @@ public class CashOrderCreator extends OrderCreator {
             item.setUnitPrice(vehicle.getPrice());
             order.addItem(item);
             
-            // Créer l'item du domaine
             orderItems.add(new OrderItemAdapter(item));
         }
         

@@ -10,7 +10,6 @@ public class VehicleDisplayFactory {
     
     
     public VehicleDisplayFactory() {
-        // Constructeur vide
     }
     
     public VehicleDisplay createBasicDisplay(VehicleEntity vehicle) {

@@ -1,4 +1,4 @@
-// RecommendationDecorator.java (ConcreteDecorator - Ajoute des recommandations)
+// RecommendationDecorator.java (ConcreteDecorator )
 package com.example.drive_deal.domain.decorator;
 
 

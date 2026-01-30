@@ -9,8 +9,8 @@ import java.util.List;
 public class DiscountStockCommand implements Command {
 
     private final VehicleRepository repository;
-    private final int daysThreshold; // ex: 90 jours
-    private final double discountPercentage; // ex: 0.20 pour 20%
+    private final int daysThreshold; 
+    private final double discountPercentage; 
 
     public DiscountStockCommand(VehicleRepository repository, int daysThreshold, double discountPercentage) {
         this.repository = repository;
@@ -24,13 +24,12 @@ public class DiscountStockCommand implements Command {
         List<VehicleEntity> oldVehicles = repository.findByCreatedAtBeforeAndAvailableTrue(thresholdDate);
 
         for (VehicleEntity vehicle : oldVehicles) {
-            // Calcul du nouveau prix : prix * (1 - remise)
             BigDecimal currentPrice = vehicle.getPrice();
             BigDecimal discountAmount = currentPrice.multiply(BigDecimal.valueOf(discountPercentage));
             BigDecimal newPrice = currentPrice.subtract(discountAmount);
 
             vehicle.setPrice(newPrice);
-            vehicle.setOnSale(true); // On marque le véhicule comme étant en solde
+            vehicle.setOnSale(true); 
             repository.save(vehicle);
         }
     }

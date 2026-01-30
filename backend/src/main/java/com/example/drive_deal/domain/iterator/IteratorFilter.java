@@ -15,7 +15,6 @@ public class IteratorFilter {
     private Integer minYear;
     private Integer maxYear;
     
-    // Vérifie si un filtre est actif
     public boolean hasTypeFilter() {
         return vehicleTypes != null && !vehicleTypes.isEmpty();
     }
@@ -32,7 +31,6 @@ public class IteratorFilter {
         return searchKeyword != null && !searchKeyword.trim().isEmpty();
     }
     
-    // Vérifie si un véhicule correspond aux filtres
     public boolean matchesVehicle(String vehicleType, Double price, String brand, 
                                  Boolean available, Boolean onSale, Integer year, 
                                  String name, String description) {
@@ -60,7 +58,6 @@ public class IteratorFilter {
             return false;
         }
         
-        // Filtre promotion
         if (onSale != null && this.onSale && !onSale) {
             return false;
         }

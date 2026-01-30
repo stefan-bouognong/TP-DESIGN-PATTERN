@@ -37,7 +37,7 @@ public class ClientLeaf implements ClientComponent {
     
     @Override
     public double calculateFleetDiscount() {
-        return 0.0; // Pas de discount pour les particuliers
+        return 0.0;
     }
     
     public IndividualClientEntity getEntity() {

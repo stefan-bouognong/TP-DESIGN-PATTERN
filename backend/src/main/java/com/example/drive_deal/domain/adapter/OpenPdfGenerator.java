@@ -26,10 +26,8 @@ public class OpenPdfGenerator implements PdfGenerator {
             
             pdfDoc.open();
             
-            // 1. Header stylisé DriveDeal
             pdfDoc.add(createStyledHeader());
             
-            // 2. Analyser le HTML pour déterminer le type de document
             String docType = detectDocumentType(htmlContent);
             String title = extractTitle(htmlContent);
             
@@ -37,16 +35,13 @@ public class OpenPdfGenerator implements PdfGenerator {
                 title = "Document DriveDeal";
             }
             
-            // 3. Titre du document
             Paragraph docTitle = new Paragraph(title, PdfStyleUtils.getTitleFont());
             docTitle.setAlignment(Element.ALIGN_CENTER);
             docTitle.setSpacingAfter(20);
             pdfDoc.add(docTitle);
             
-            // 4. Extraire les données du HTML
             Map<String, String> data = extractDataFromHtml(htmlContent);
             
-            // 5. Générer le contenu selon le type de document
             switch (docType.toLowerCase()) {
                 case "registration":
                 case "demande d'immatriculation":
@@ -64,7 +59,6 @@ public class OpenPdfGenerator implements PdfGenerator {
                     generateGenericContent(pdfDoc, data);
             }
             
-            // 6. Footer avec signature
             addStyledFooter(pdfDoc);
             
             pdfDoc.close();
@@ -118,7 +112,6 @@ public class OpenPdfGenerator implements PdfGenerator {
         if (html == null) return data;
         
         try {
-            // Extraire les paires label/valeur
             Pattern pattern = Pattern.compile(
                 "<span[^>]*class\\s*=\\s*[\"']label[\"'][^>]*>(.*?)</span>\\s*(.*?)(?:</p>|<br|<div)",
                 Pattern.CASE_INSENSITIVE | Pattern.DOTALL
@@ -129,7 +122,6 @@ public class OpenPdfGenerator implements PdfGenerator {
                 String label = matcher.group(1).replaceAll("<[^>]*>", "").trim();
                 String value = matcher.group(2).replaceAll("<[^>]*>", "").trim();
                 
-                // Nettoyer les labels
                 label = label.replace(":", "").trim();
                 
                 if (!label.isEmpty() && !value.isEmpty()) {
@@ -137,7 +129,6 @@ public class OpenPdfGenerator implements PdfGenerator {
                 }
             }
             
-            // Extraire les valeurs des balises p
             pattern = Pattern.compile(
                 "<p>(.*?)</p>", 
                 Pattern.CASE_INSENSITIVE | Pattern.DOTALL
@@ -159,7 +150,6 @@ public class OpenPdfGenerator implements PdfGenerator {
             }
             
         } catch (Exception e) {
-            // En cas d'erreur, on continue avec les données qu'on a
             System.err.println("Erreur extraction données HTML: " + e.getMessage());
         }
         

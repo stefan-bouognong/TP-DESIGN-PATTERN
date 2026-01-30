@@ -1,4 +1,4 @@
-// FormFactory.java (Factory pour créer les forms)
+
 package com.example.drive_deal.domain.bridge;
 
 import com.example.drive_deal.entity.*;

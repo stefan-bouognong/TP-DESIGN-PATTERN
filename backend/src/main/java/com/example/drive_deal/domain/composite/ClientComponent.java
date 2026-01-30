@@ -1,4 +1,3 @@
-// ClientComponent.java (interface du pattern)
 package com.example.drive_deal.domain.composite;
 
 public interface ClientComponent {
