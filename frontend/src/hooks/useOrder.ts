@@ -34,6 +34,9 @@ export function useOrder() {
     setIsProcessing(true);
 
     try {
+      const totalAmount = useCartStore.getState().getTotal();
+      const taxesAmount = useCartStore.getState().getTaxes();
+
       // Formater l'adresse de livraison
       const shippingAddress = `${deliveryInfo.address}, ${deliveryInfo.postalCode} ${deliveryInfo.city}, ${deliveryInfo.country}`;
       
@@ -42,6 +45,7 @@ export function useOrder() {
         vehicleId: item.vehicle.id,
         quantity: item.quantity,
       }));
+      console.log(orderItems)
 
       // Préparer la requête
       const orderRequest: OrderRequest = {
@@ -50,15 +54,19 @@ export function useOrder() {
         items: orderItems,
         shippingAddress,
         billingAddress: shippingAddress, // Même adresse pour la facturation
+        totalAmount,
+        totalTax:taxesAmount,
       };
 
       // Ajouter les détails de crédit si nécessaire
       if (paymentMethod === 'credit' && creditRequest) {
         orderRequest.creditDetails = {
           months: creditRequest.desiredDuration,
-          interestRate: 5.5, // Taux d'intérêt par défaut (à ajuster selon vos besoins)
+          interestRate: 5.5,
         };
       }
+
+      console.log('Order Request:', orderRequest);
 
       // Créer la commande
       const response = await ordersService.createOrder(orderRequest);

@@ -21,6 +21,7 @@ public class DecoratedVehicleDTO {
     private String model;
     private String brand;
     private BigDecimal price;
+    private BigDecimal initialePrice;
     private Integer year;
     private String color;
     private String description;

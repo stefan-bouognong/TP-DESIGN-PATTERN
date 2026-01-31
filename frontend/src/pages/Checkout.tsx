@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 
@@ -27,21 +27,38 @@ const total = useCartStore(state => state.getTotal())
 const deliveryCountry = useCartStore(state => state.deliveryCountry) 
  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  const setDeliveryCountry = useCartStore((state) => state.setDeliveryCountry);
   const { createOrder, isProcessing } = useOrder();
   
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(isAuthenticated ? 'delivery' : 'auth');
   const [authModalOpen, setAuthModalOpen] = useState(false);
   console.log('User in Checkout:', user);
   const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo>({
-    firstName: user?.profile.firstName ,
-    lastName: user?.profile.lastName,
+    firstName: user?.profile.firstName || '',
+    lastName: user?.profile.lastName || '',
     address: user?.profile.address || '',
-    city: user?.profile.city || '',
-    postalCode: user?.profile.postalCode || '',
-    country: user?.profile.nationality ,
+    city: '',
+    postalCode: '',
+    country: user?.profile.nationality || 'France',
     phone: user?.profile.phone || '',
     notes: '',
   });
+
+  useEffect(() => {
+    if (isAuthenticated && user?.profile.nationality) {
+      setDeliveryInfo(prev => ({
+        ...prev,
+        country: user.profile.nationality,
+        firstName: user.profile.firstName || '',
+        lastName: user.profile.lastName || '',
+        address: user.profile.address || '',
+        city: user.profile.city || '',
+        postalCode: user.profile.postalCode || '',
+        phone: user.profile.phone || '',
+      }));
+      setDeliveryCountry(user.profile.nationality);
+    }
+  }, [isAuthenticated, user, setDeliveryCountry]);
         
   
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
@@ -116,9 +133,9 @@ const handleConfirmOrder = async () => {
     });
 
 
-    // if (!order) return;
+    if (!order) return;
 
-    // console.log('Order created:', order);
+    console.log('Order created:', order);
 
     // 1. Créer la liasse complète APRÈS confirmation
     await documentBundlesService.createCompleteBundle({

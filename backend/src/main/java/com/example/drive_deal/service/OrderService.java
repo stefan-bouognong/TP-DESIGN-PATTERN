@@ -74,6 +74,8 @@ public class OrderService {
         
         // Définir les adresses
         entity.setShippingAddress(request.getShippingAddress());
+        entity.setTotalAmount(request.getTotalAmount());
+        entity.setTotalTax(request.getTotalTax());
         entity.setBillingAddress(request.getBillingAddress() != null ? 
             request.getBillingAddress() : request.getShippingAddress());
         
@@ -84,12 +86,30 @@ public class OrderService {
         return mapToResponseDTO(savedOrder);
     }
     
-    @Transactional(readOnly = true)
-    public OrderResponseDTO getOrder(Long id) {
-        OrderEntity order = orderRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Order not found: " + id));
-        return mapToResponseDTO(order);
+  @Transactional(readOnly = true)
+public OrderResponseDTO getOrder(Long id) {
+    OrderEntity order = orderRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Order not found: " + id));
+
+    OrderResponseDTO dto = mapToResponseDTO(order);
+
+    // ===== Remplir le client DTO =====
+    if (order.getClient() != null) {
+        ClientResponseDTO clientDTO = new ClientResponseDTO();
+        clientDTO.setId(order.getClient().getId());
+        clientDTO.setName(order.getClient().getName());
+        clientDTO.setEmail(order.getClient().getEmail());
+        clientDTO.setPhone(order.getClient().getPhone());
+        clientDTO.setAddress(order.getClient().getAddress());
+       
+
+        dto.setClient(clientDTO);
     }
+
+    
+
+    return dto;
+}
     
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> getOrdersByClient(Long clientId) {
@@ -141,6 +161,7 @@ public class OrderService {
         dto.setOrderType(entity.getClass().getSimpleName().replace("Entity", "").replace("Order", ""));
         dto.setStatus(entity.getStatus().name());
         dto.setSubtotal(entity.getSubtotal());
+        dto.setTotalAmount(entity.getTotalAmount());
         dto.setOrderDate(entity.getOrderDate());
         dto.setShippingAddress(entity.getShippingAddress());
         dto.setBillingAddress(entity.getBillingAddress());

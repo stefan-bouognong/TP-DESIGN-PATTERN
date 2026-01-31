@@ -37,13 +37,15 @@ public class CashOrderCreator extends OrderCreator {
             item.setVehicle(vehicle);
             item.setQuantity(quantity);
             item.setUnitPrice(vehicle.getPrice());
+            // item.setItemTax(vehicle.getTotal());
             order.addItem(item);
             
             // Créer l'item du domaine
             orderItems.add(new OrderItemAdapter(item));
         }
+       
         
-        order.calculateSubtotal();
+        order.calculateTotalAmount();
         return new CashOrder(order, orderItems);
     }
     

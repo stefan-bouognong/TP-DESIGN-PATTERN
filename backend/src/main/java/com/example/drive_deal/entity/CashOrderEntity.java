@@ -17,11 +17,11 @@ public class CashOrderEntity extends OrderEntity {
     private Boolean paid = false;
     
     // Recalcul avec discount (CORRIGÉ)
-    @Override
-    public void calculateSubtotal() {
-        super.calculateSubtotal();
-        BigDecimal discountAmount = getSubtotal()
-            .multiply(cashDiscount.divide(BigDecimal.valueOf(100)));
-        setTotalAmount(getSubtotal().subtract(discountAmount));
+     @Override
+    public void calculateTotalAmount() {
+        super.calculateTotalAmount();
+        // BigDecimal discountAmount = getSubtotal()
+        //     .multiply(cashDiscount.divide(BigDecimal.valueOf(100)));
+        // setTotalAmount(getSubtotal().add(discountAmount));
     }
 }

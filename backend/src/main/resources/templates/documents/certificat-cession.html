@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Certificat de cession</title>
+    <style type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+        }
+
+        .section p {
+            margin: 5px 0;
+        }
+
+        strong { color: #2c3e50; }
+
+        .signature { margin-top: 50px; }
+
+        br { line-height: 1.5; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>CERTIFICAT DE CESSION</h1>
+
+    <!-- Infos client -->
+    <div class="section">
+        <p>
+            Je soussigné <strong>DriveDeal</strong>, cède le véhicule au client :
+            <strong th:text="${data.clientFullName ?: 'N/A'}"></strong>
+        </p>
+    </div>
+
+    <!-- Infos commande -->
+    <div class="section">
+        <p><strong>Commande N° :</strong> <span th:text="${data.orderId ?: 'N/A'}"></span></p>
+        <p><strong>Date de cession :</strong>
+            <span th:text="${data.generatedAt != null ? #temporals.format(data.generatedAt,'dd/MM/yyyy') : 'N/A'}"></span>
+        </p>
+    </div>
+
+    <!-- Texte légal -->
+    <div class="section">
+        <p>
+            La présente cession est faite conformément à la législation en vigueur.
+        </p>
+    </div>
+
+    <!-- Signature -->
+    <div class="signature">
+        <p>Signature du vendeur :</p>
+        <br />
+        <p>__________________________</p>
+    </div>
+
+</div>
+</body>
+</html>

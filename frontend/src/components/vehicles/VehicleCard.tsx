@@ -70,9 +70,9 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
 
           <div className="flex items-center justify-between mt-2">
             <div>
-              {vehicle.originalPrice && (
+              {vehicle.price !== vehicle.initialePrice && (
                 <span className="text-sm text-muted-foreground line-through mr-2">
-                  {formatPrice(vehicle.originalPrice)}
+                  {formatPrice(vehicle.initialePrice)}
                 </span>
               )}
               <span className="font-display text-xl font-bold text-accent">
@@ -162,9 +162,9 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
 
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
           <div>
-            {vehicle.originalPrice && (
+            {vehicle.price !== vehicle.initialePrice && (
               <span className="text-sm text-muted-foreground line-through block">
-                {formatPrice(vehicle.originalPrice)}
+                {formatPrice(vehicle.initialePrice)}
               </span>
             )}
             <span className="font-display text-xl font-bold text-accent">

@@ -163,8 +163,8 @@ export default function AdminVehicles() {
                     <TableCell>{formatPrice(v.price)}</TableCell>
                     <TableCell>{v.year}</TableCell>
                     <TableCell>
-                      <Badge variant={v.available ? 'default' : 'secondary'}>
-                        {v.available ? 'Disponible' : 'Indisponible'}
+                      <Badge variant={v.status == "available" ? 'default' : 'secondary'}>
+                        {v.status == "available" ? 'Disponible' : 'Indisponible'}
                       </Badge>
                       {v.onSale && (
                         <Badge className="ml-2 bg-amber-600">En vente</Badge>

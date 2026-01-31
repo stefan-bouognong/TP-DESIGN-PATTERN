@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Demande d'immatriculation</title>
+    <style type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+        }
+
+        .section p {
+            margin: 5px 0;
+        }
+
+        strong {
+            color: #2c3e50;
+        }
+
+        .signature {
+            margin-top: 50px;
+        }
+
+        br { line-height: 1.5; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>DEMANDE D’IMMATRICULATION</h1>
+
+    <!-- Infos demandeur -->
+    <div class="section">
+        <p><strong>Nom du demandeur :</strong> <span th:text="${data.clientFullName ?: 'N/A'}"></span></p>
+        <p><strong>Adresse :</strong> <span th:text="${data.shippingAddress ?: 'N/A'}"></span></p>
+    </div>
+
+    <!-- Infos commande -->
+    <div class="section">
+        <p><strong>Commande N° :</strong> <span th:text="${data.orderId ?: 'N/A'}"></span></p>
+        <p><strong>Date :</strong> 
+            <span th:text="${data.orderDate != null ? #temporals.format(data.orderDate,'dd/MM/yyyy') : 'N/A'}"></span>
+        </p>
+    </div>
+
+    <!-- Texte demande -->
+    <div class="section">
+        <p>
+            Je soussigné(e), <strong th:text="${data.clientFullName ?: 'N/A'}"></strong>,
+            sollicite l’immatriculation du véhicule acquis auprès de DriveDeal.
+        </p>
+    </div>
+
+    <!-- Date et signature -->
+    <div class="signature">
+        <p>Fait le : <span th:text="${data.generatedAt != null ? #temporals.format(data.generatedAt,'dd/MM/yyyy') : 'N/A'}"></span></p>
+        <p>Signature du demandeur :</p>
+        <br />
+        <p>____________________________</p>
+    </div>
+
+</div>
+</body>
+</html>

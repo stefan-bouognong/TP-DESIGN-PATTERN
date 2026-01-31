@@ -13,7 +13,6 @@ import java.util.List;
 import com.example.drive_deal.entity.ElectricCarEntity;
 import com.example.drive_deal.entity.GasolineCarEntity;
 import com.example.drive_deal.entity.ScooterEntity;
-import com.example.drive_deal.entity.VehicleEntity;
 
 
 @Service
@@ -119,6 +118,7 @@ public class CatalogDisplayService {
         dto.setModel(v.getModel());
         dto.setBrand(v.getBrand());
         dto.setPrice(v.getPrice());
+        dto.setInitialePrice(v.getInitialePrice());
         dto.setYear(v.getYear());
         dto.setColor(v.getColor());
         dto.setDescription(v.getDescription());

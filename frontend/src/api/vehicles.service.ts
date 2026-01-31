@@ -20,6 +20,7 @@ export interface VehicleResponse {
   name: string;
   model: string;
   brand?: string;
+  initialePrice?: number;
   price: number;
   color: string;
   year: number;
@@ -57,6 +58,7 @@ export interface VehicleResponseTransformed {
   daysInStock: number;
   promotionPercentage?: number;
   originalPrice?: number;
+  initialePrice?: number;
   color?: string;
   energyType?: string;
   doors?: number;
@@ -179,6 +181,7 @@ function transformVehicleResponse(vehicle: VehicleResponse): VehicleResponseTran
     daysInStock: daysInStock,
     promotionPercentage: promotionPercentage,
     originalPrice: originalPrice,
+    initialePrice: vehicle.initialePrice,
     color: vehicle.color,
     energyType: vehicle.energyType,
     doors: vehicle.doors,

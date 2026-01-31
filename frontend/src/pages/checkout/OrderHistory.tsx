@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
-import { ordersService, OrderResponse } from '@/services/orders.service';
+import { ordersService, OrderResponse } from '@/api/orders.service';
 import { 
   Package, 
   Clock, 
@@ -16,6 +16,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
+
 
 export default function OrdersHistory() {
   const { user } = useAuth();

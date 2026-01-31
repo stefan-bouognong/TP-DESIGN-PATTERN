@@ -98,7 +98,26 @@ public abstract class OrderEntity {
             .map(item -> item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-    
+
+   public void calculateTotalAmount() {
+    // 1️ subtotal
+    BigDecimal total = subtotal != null ? subtotal : BigDecimal.ZERO;
+
+    // 2️ Calculer la taxe (totalTax est en pourcentage)
+    BigDecimal taxAmount = BigDecimal.ZERO;
+    if (totalTax != null) {
+        taxAmount = total.multiply(totalTax).divide(BigDecimal.valueOf(100));
+    }
+
+    // 3️ Ajouter shippingCost et additionalFees
+    total = total.add(taxAmount)
+                 .add(shippingCost != null ? shippingCost : BigDecimal.ZERO)
+                 .add(additionalFees != null ? additionalFees : BigDecimal.ZERO);
+
+
+    // 5️ Affecter le résultat
+    this.totalAmount = total;
+}
     // Getters pour la compatibilité avec Template Method
     public double getCommercialDiscountDouble() {
         return commercialDiscount != null ? commercialDiscount.doubleValue() : 0.0;
@@ -111,6 +130,10 @@ public abstract class OrderEntity {
     public double getSubtotalDouble() {
         return subtotal != null ? subtotal.doubleValue() : 0.0;
     }
+
+    public BigDecimal getTotalAmount() {
+    return totalAmount != null ? totalAmount : BigDecimal.ZERO;
+}
     
     // Méthode pour déterminer si c'est une commande crédit
     public boolean isCreditOrder() {

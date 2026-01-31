@@ -475,7 +475,7 @@ export default function AdminPromotions() {
                           <div>
                             {vehicle.isPromotion && vehicle.originalPrice && (
                               <span className="text-sm text-muted-foreground line-through block">
-                                {formatPrice(vehicle.originalPrice)}
+                                {formatPrice(vehicle.initialePrice)}
                               </span>
                             )}
                             <span className={`font-medium ${vehicle.isPromotion ? 'text-accent' : ''}`}>

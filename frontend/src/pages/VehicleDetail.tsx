@@ -170,7 +170,7 @@ export default function VehicleDetail() {
                 )}
                 {isElectric ? 'Électrique' : 'Thermique'}
               </Badge>
-              {vehicle.available && (
+              {vehicle.status == "available" && (
                 <Badge className="bg-emerald-600 text-white shadow-md px-3 py-1 text-sm">
                   Disponible
                 </Badge>
@@ -218,12 +218,12 @@ export default function VehicleDetail() {
                 <Badge
                   className={cn(
                     "text-base px-4 py-1.5",
-                    vehicle.available
+                    vehicle.status =="available"
                       ? "bg-emerald-600 hover:bg-emerald-700"
                       : "bg-rose-600 hover:bg-rose-700"
                   )}
                 >
-                  {vehicle.available ? 'Disponible' : 'Indisponible'}
+                  {vehicle.status == "available" ? 'Disponible' : 'Indisponible'}
                 </Badge>
               </div>
 
@@ -231,10 +231,10 @@ export default function VehicleDetail() {
                 size="lg"
                 className="w-full h-14 text-base bg-accent"
                 onClick={() => addToCart(vehicle, [])} // options vides pour l'instant
-                disabled={!vehicle.available}
+                disabled={!vehicle.status =="available"}
               >
                 <ShoppingCart className="h-5 w-5 mr-3" />
-                {vehicle.available ? 'Ajouter au panier' : 'Indisponible'}
+                {vehicle.status =="available" ? 'Ajouter au panier' : 'Indisponible'}
               </Button>
             </div>
           </div>

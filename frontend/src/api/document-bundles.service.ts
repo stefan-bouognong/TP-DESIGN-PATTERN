@@ -16,10 +16,13 @@ export interface BundleResponse {
 }
 
 export const documentBundlesService = {
+
+
   // Créer une liasse complète
   createCompleteBundle: (data: BundleRequest) => 
     api.post<BundleResponse>('/document-bundles/complete', data),
 
+  
   // Créer une liasse minimale
   createMinimalBundle: (data: BundleRequest) => 
     api.post<BundleResponse>('/document-bundles/minimal', data),

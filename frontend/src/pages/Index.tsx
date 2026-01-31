@@ -20,6 +20,12 @@ interface FeaturedVehicle {
   name: string;
   model: string;
   price: number;
+  initialePrice?: number;
+  brand: string;
+  type: 'car' | 'scooter';
+  fuelType: 'electric' | 'fuel';
+  year: number;
+  description: string;
   originalPrice?: number;
   isPromotion: boolean;
   discountPercentage?: number;
@@ -76,7 +82,7 @@ export default function Index() {
           model: v.model,
           brand: v.brand,
           description: v.description,
-        
+          initialePrice: v.initialePrice,
           price: v.price,
           originalPrice: v.onSale ? v.price : undefined,
           isPromotion: v.onSale,

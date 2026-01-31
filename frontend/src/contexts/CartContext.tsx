@@ -2,11 +2,14 @@ import { create } from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
 import { CartItem, CartState, Vehicle, VehicleOption } from '@/types/vehicle'
 import { countriesWithTVA } from '@/data/countriesWithTVA'
+import { useAuthStore } from '@/store/useAuthStore'
 
 const getTVAForCountry = (country: string): number => {
   const entry = countriesWithTVA.find(c => c.country === country)
   return entry ? Number(entry.tva) : 0
 }
+
+
 
 interface CartStore {
   items: CartItem[]
@@ -33,15 +36,17 @@ interface CartStore {
 
   saveToHistory: (items: CartItem[]) => void
 }
+// const user = useAuthStore(state=> state.user) // Déplacé pour éviter l'appel de hook au mauvais endroit
 
 export const useCartStore = create<CartStore>()(
+  
   devtools(
     persist(
       (set, get) => ({
         items: [],
         history: [{ items: [], timestamp: new Date() }],
         historyIndex: 0,
-        deliveryCountry: 'France',
+        deliveryCountry: 'France', // Valeur par défaut, sera mise à jour au login
 
         /* ───────────── CART ACTIONS ───────────── */
 
@@ -64,7 +69,7 @@ export const useCartStore = create<CartStore>()(
         increaseQuantity: (vehicleId) => {
           const newItems = get().items.map(item =>
             item.vehicle.id === vehicleId
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: item.quantity + 1,total_amount:item.vehicle.price*(item.quantity + 1) }
               : item
           )
 
