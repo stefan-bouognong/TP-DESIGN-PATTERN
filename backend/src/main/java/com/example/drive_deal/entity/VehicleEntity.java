@@ -30,6 +30,17 @@ private BigDecimal initialePrice;
     @Column(length = 1000)
     private String description;   // utile pour ton filtre
 
+
+    @Column(name = "vehicle_range")
+    private Integer range; // km
+
+    public Integer getRange() {
+        return range;
+    }
+
+    public void setRange(Integer range) {
+        this.range = range;
+    }
     // =======================
     // GETTERS / SETTERS
     // =======================

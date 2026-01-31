@@ -135,6 +135,7 @@ public class CatalogDisplayService {
             dto.setDoors(car.getDoors());
             dto.setHasSunroof(car.getHasSunroof());
             dto.setFuelTankCapacity(car.getFuelTankCapacity());
+            dto.setFuelType(car.getFuelType());
         }
 
         if (v instanceof ElectricCarEntity car) {

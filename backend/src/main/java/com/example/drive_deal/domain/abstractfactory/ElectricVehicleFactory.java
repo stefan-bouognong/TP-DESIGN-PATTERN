@@ -2,6 +2,7 @@
 package com.example.drive_deal.domain.abstractfactory;
 
 import com.example.drive_deal.entity.ElectricCarEntity;
+import com.example.drive_deal.entity.ElectricScooterEntity;
 import com.example.drive_deal.entity.ScooterEntity;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
@@ -23,11 +24,13 @@ public class ElectricVehicleFactory implements VehicleFactory {
 
     @Override
     public Vehicle createScooter(String model, BigDecimal price) {
-        ScooterEntity scooter = new ScooterEntity();
+        ElectricScooterEntity scooter = new ElectricScooterEntity();
         scooter.setModel(model);
         scooter.setPrice(price);
         scooter.setHasTopCase(true);
-        scooter.setMaxSpeed(120);
+        scooter.setBatteryCapacity(15);
+        scooter.setFuelType("Electric");
+        scooter.setRange(100);
         return new VehicleAdapter(scooter);
     }
 }

@@ -29,7 +29,7 @@ export function VehicleCard({ vehicle, view = 'grid' }: VehicleCardProps) {
     addToCart(vehicle);
   };
 
-  const isElectric = vehicle.fuelType === 'electric';
+  const isElectric = vehicle.fuelType && vehicle.fuelType.toUpperCase() === 'ELECTRIC' || vehicle.fuelType === null;
   const isScooter = vehicle.type === 'scooter';
   console.log(vehicle)
 

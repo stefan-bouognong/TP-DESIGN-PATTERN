@@ -23,13 +23,14 @@ interface VehicleFiltersProps {
 const vehicleTypes = [
   { value: 'GASOLINECAR', label: 'Voiture essence' },
   { value: 'ELECTRICCAR', label: 'Voiture électrique' },
-  { value: 'SCOOTER', label: 'Scooter' },
+  { value: 'GASOLINESCOOTER', label: 'Scooter essence' },
+  { value: 'ELECTRICSCOOTER', label: 'Scooter électrique' },
 ];
 
 const fuelTypes = [
   { value: 'Gasoline', label: 'Essence' },
   { value: 'Electric', label: 'Électrique' },
-  { value: 'Diesel', label: 'Diesel' },
+
 ];
 
 export const VehicleFilters: React.FC<VehicleFiltersProps> = ({

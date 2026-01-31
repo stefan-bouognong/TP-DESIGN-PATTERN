@@ -50,6 +50,7 @@ public class DecoratedVehicleDTO {
     // GASOLINE
     // =====================
     private Integer fuelTankCapacity;
+    private String fuelType;
 
     // =====================
     // SCOOTER
