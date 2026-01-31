@@ -154,11 +154,11 @@ export default function AdminVehicles() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">
-                        {v.vehicleType === 'CAR' ? 'Voiture' : 'Scooter'}
+                        {v.type}
                       </Badge>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {v.energyType === 'ELECTRIC' ? 'Électrique' : 'Essence'}
-                      </div>
+                      {/* <div className="text-xs text-muted-foreground mt-1">
+                        {v.fuelType}
+                      </div> */}
                     </TableCell>
                     <TableCell>{formatPrice(v.price)}</TableCell>
                     <TableCell>{v.year}</TableCell>
